@@ -7,28 +7,80 @@
   <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:wght@400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --color-primary-base:   #050560;
-      --color-primary-dark:   #030339;
-      --color-secondary-base: #284CCA;
-      --color-secondary-dark: #182D79;
-      --color-success-base:   #008703;
-      --color-error-base:     #EC131E;
-      --color-white:          #FFFFFF;
-      --color-gray-100:       #F5F5F5;
-      --color-gray-300:       #DDDDDD;
-      --color-gray-700:       #767676;
-      --color-gray-900:       #333333;
-      --color-black:          #191919;
-      --font-body:    'Public Sans', system-ui, sans-serif;
-      --font-display: 'Source Serif 4', Georgia, serif;
+      /* ── Foundation colors ── */
+      --color-primary-light:   #CCCCE5;
+      --color-primary-base:    #050560;
+      --color-primary-dark:    #030339;
+      --color-secondary-light: #D3DEFA;
+      --color-secondary-base:  #284CCA;
+      --color-secondary-dark:  #182D79;
+      --color-white:           #FFFFFF;
+      --color-gray-100:        #F5F5F5;
+      --color-gray-200:        #EEEEEE;
+      --color-gray-300:        #DDDDDD;
+      --color-gray-400:        #C2C2C2;
+      --color-gray-500:        #AAAAAA;
+      --color-gray-700:        #767676;
+      --color-gray-900:        #333333;
+      --color-black:           #191919;
+      --color-success-base:    #008703;
+      --color-success-light:   #E2F2D5;
+      --color-error-base:      #EC131E;
+      --color-error-light:     #F8D9DE;
+
+      /* ── Semantic layer ── */
+      --text-primary:            var(--color-black);
+      --text-secondary:          var(--color-gray-700);
+      --text-link:               var(--color-secondary-base);
+      --text-link-hover:         var(--color-secondary-dark);
+      --color-interactive:       var(--color-secondary-base);
+      --button-primary-bg:       var(--color-primary-base);
+      --button-primary-hover:    var(--color-primary-dark);
+      --button-secondary-bg:     var(--color-secondary-base);
+      --button-secondary-hover:  var(--color-secondary-dark);
+      --border-default:          var(--color-gray-300);
+      --border-focus:            var(--color-interactive);
+      --border-error:            var(--color-error-base);
+      --bg-primary:              var(--color-white);
+      --bg-secondary:            var(--color-gray-100);
+
+      /* ── Motion ── */
+      --duration-open:           220ms;
+      --duration-close:          140ms;
+      --duration-backdrop-close: 180ms;
+      --ease-out:                cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in:                 cubic-bezier(0.4, 0.0, 1, 1);
+
+      /* ── Focus ── */
+      --focus-ring-color:  var(--color-interactive);
+      --focus-ring-width:  3px;
+      --focus-ring-offset: 2px;
+
+      /* ── Disabled ── */
+      --disabled-opacity: 0.4;
+
+      /* ── Typography tokens ── */
+      --font-display:  'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+      --font-body:     'Public Sans', system-ui, -apple-system, sans-serif;
+      --type-body-size:          18px;
+      --type-body-weight:        400;
+      --type-body-line-height:   150%;
+      --type-ui-16-size:         16px;
+      --type-ui-14-size:         14px;
+      --type-button-size:        18px;
+      --type-button-weight:      600;
+      --type-button-line-height: 22px;
+      --type-h1-size:            40px;
+      --type-h2-size:            32px;
+      --type-h3-size:            26px;
+
+      /* ── Spacing ── */
       --space-1: 8px;
       --space-2: 16px;
       --space-3: 24px;
       --space-4: 32px;
       --space-5: 40px;
       --space-6: 48px;
-      --focus-ring-color: var(--color-secondary-base);
-      --focus-ring-width: 3px;
     }
 
     *, *::before, *::after {
@@ -39,11 +91,12 @@
 
     html, body {
       height: 100%;
-      background: var(--color-gray-100);
+      background: var(--bg-secondary);
       font-family: var(--font-body);
-      color: var(--color-gray-900);
-      font-size: 16px;
-      line-height: 1.5;
+      color: var(--text-primary);
+      font-size: var(--type-body-size);
+      font-weight: var(--type-body-weight);
+      line-height: var(--type-body-line-height);
     }
 
     /* ── Layout shell ─────────────────────────────── */
@@ -51,7 +104,7 @@
       max-width: 430px;
       margin: 0 auto;
       min-height: 100vh;
-      background: var(--color-white);
+      background: var(--bg-primary);
       display: flex;
       flex-direction: column;
       position: relative;
@@ -199,7 +252,7 @@
       display: flex;
       flex-direction: column;
       transform: translateX(100%);
-      transition: transform 280ms ease-out;
+      transition: transform var(--duration-open) var(--ease-out);
       will-change: transform;
     }
 
@@ -214,8 +267,8 @@
     /* ── Bottom nav bar (back button) ─────────────── */
     .bottom-nav {
       padding: var(--space-2) var(--space-3);
-      border-top: 1px solid var(--color-gray-300);
-      background: var(--color-white);
+      border-top: 1px solid var(--border-default);
+      background: var(--bg-primary);
       flex-shrink: 0;
       min-height: 56px;
       display: flex;
@@ -225,7 +278,7 @@
     .btn-back {
       background: none;
       border: none;
-      color: var(--color-secondary-base);
+      color: var(--text-link);
       font-family: var(--font-body);
       font-size: 15px;
       font-weight: 500;
@@ -237,19 +290,19 @@
     }
 
     .btn-back:hover {
-      color: var(--color-secondary-dark);
+      color: var(--text-link-hover);
     }
 
     .btn-back:focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
+      outline-offset: var(--focus-ring-offset);
       border-radius: 2px;
     }
 
     /* ── Typography ───────────────────────────────── */
     .screen-header {
       font-family: var(--font-display);
-      font-size: 24px;
+      font-size: var(--type-h3-size);
       font-weight: 400;
       color: var(--color-primary-base);
       line-height: 1.2;
@@ -257,8 +310,8 @@
     }
 
     .screen-subtext {
-      font-size: 15px;
-      color: var(--color-gray-700);
+      font-size: var(--type-ui-16-size);
+      color: var(--text-secondary);
       margin-bottom: var(--space-3);
       line-height: 1.5;
     }
@@ -288,7 +341,7 @@
       height: 100%;
       background: var(--color-primary-base);
       border-radius: 2px;
-      transition: width 300ms ease-out;
+      transition: width var(--duration-open) var(--ease-out);
     }
 
     /* ── Form elements ────────────────────────────── */
@@ -306,22 +359,22 @@
     }
 
     .field label {
-      font-size: 14px;
+      font-size: var(--type-ui-14-size);
       font-weight: 600;
-      color: var(--color-gray-900);
+      color: var(--text-primary);
     }
 
     .field input,
     .field select {
       width: 100%;
       padding: 10px 12px;
-      border: 1.5px solid var(--color-gray-300);
-      border-radius: 6px;
+      border: 1.5px solid var(--border-default);
+      border-radius: 8px;
       font-family: var(--font-body);
-      font-size: 15px;
-      color: var(--color-gray-900);
-      background: var(--color-white);
-      transition: border-color 150ms;
+      font-size: var(--type-ui-16-size);
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      transition: border-color var(--duration-close) var(--ease-out);
       -webkit-appearance: none;
       appearance: none;
     }
@@ -335,13 +388,13 @@
 
     .field input:focus,
     .field select:focus {
+      border-color: var(--border-focus);
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 0;
-      border-color: var(--focus-ring-color);
+      outline-offset: var(--focus-ring-offset);
     }
 
     .field input::placeholder {
-      color: var(--color-gray-700);
+      color: var(--text-secondary);
     }
 
     /* ── Radio group ──────────────────────────────── */
@@ -382,7 +435,7 @@
 
     .radio-option span {
       font-size: 15px;
-      color: var(--color-gray-900);
+      color: var(--text-primary);
     }
 
     .radio-option.selected {
@@ -394,41 +447,43 @@
     .btn {
       display: block;
       width: 100%;
-      padding: 14px var(--space-3);
-      border-radius: 6px;
+      padding: 14px 24px;
+      border-radius: 8px;
       font-family: var(--font-body);
-      font-size: 16px;
-      font-weight: 600;
+      font-size: var(--type-button-size);
+      font-weight: var(--type-button-weight);
+      line-height: var(--type-button-line-height);
       cursor: pointer;
       border: 2px solid transparent;
-      transition: background 150ms, color 150ms, border-color 150ms;
+      transition: background var(--duration-close) var(--ease-out), transform var(--duration-close) var(--ease-out), border-color var(--duration-close) var(--ease-out);
       text-align: center;
     }
 
     .btn:focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
+      outline-offset: var(--focus-ring-offset);
     }
 
     .btn-primary {
-      background: var(--color-primary-base);
+      background: var(--button-primary-bg);
       color: var(--color-white);
-      border-color: var(--color-primary-base);
+      border-color: var(--button-primary-bg);
     }
 
     .btn-primary:hover {
-      background: var(--color-primary-dark);
-      border-color: var(--color-primary-dark);
+      background: var(--button-primary-hover);
+      border-color: var(--button-primary-hover);
+      transform: translateY(-1px);
     }
 
     .btn-secondary {
-      background: var(--color-white);
+      background: var(--bg-primary);
       color: var(--color-primary-base);
       border-color: var(--color-primary-base);
     }
 
     .btn-secondary:hover {
-      background: var(--color-gray-100);
+      background: var(--bg-secondary);
     }
 
     .btn-stack {
@@ -440,16 +495,16 @@
     .btn-note {
       text-align: center;
       font-size: 13px;
-      color: var(--color-gray-700);
+      color: var(--text-secondary);
       margin-top: var(--space-1);
     }
 
     .link-btn {
       background: none;
       border: none;
-      color: var(--color-secondary-base);
+      color: var(--text-link);
       font-family: var(--font-body);
-      font-size: 14px;
+      font-size: var(--type-ui-14-size);
       text-decoration: underline;
       text-underline-offset: 2px;
       cursor: pointer;
@@ -460,19 +515,19 @@
     }
 
     .link-btn:hover {
-      color: var(--color-secondary-dark);
+      color: var(--text-link-hover);
     }
 
     .link-btn:focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
+      outline-offset: var(--focus-ring-offset);
       border-radius: 2px;
     }
 
     /* ── Chip cards (screen 1B-2) ─────────────────── */
     .chip-counter {
-      font-size: 14px;
-      color: var(--color-gray-700);
+      font-size: var(--type-ui-14-size);
+      color: var(--text-secondary);
       margin-bottom: var(--space-2);
       font-weight: 500;
     }
@@ -494,11 +549,11 @@
       gap: 12px;
       padding: 14px var(--space-2);
       border: 2px solid var(--color-primary-base);
-      border-radius: 8px;
+      border-radius: 12px;
       background: var(--color-primary-base);
       color: var(--color-white);
       cursor: pointer;
-      transition: background 150ms, color 150ms, border-color 150ms;
+      transition: background var(--duration-close) var(--ease-out), color var(--duration-close) var(--ease-out), border-color var(--duration-close) var(--ease-out);
       width: 100%;
       text-align: left;
       font-family: var(--font-body);
@@ -510,11 +565,11 @@
 
     .chip-card:focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
+      outline-offset: var(--focus-ring-offset);
     }
 
     .chip-card.unselected {
-      background: var(--color-white);
+      background: var(--bg-primary);
       color: var(--color-primary-base);
       border-color: var(--color-primary-base);
     }
@@ -584,7 +639,7 @@
     /* ── Privacy note ─────────────────────────────── */
     .privacy-note {
       font-size: 13px;
-      color: var(--color-gray-700);
+      color: var(--text-secondary);
       margin-top: var(--space-2);
       margin-bottom: var(--space-3);
     }
@@ -600,8 +655,8 @@
 
     /* ── Result cards ─────────────────────────────── */
     .results-subtitle {
-      font-size: 14px;
-      color: var(--color-gray-700);
+      font-size: var(--type-ui-14-size);
+      color: var(--text-secondary);
       margin-bottom: var(--space-3);
     }
 
@@ -613,8 +668,8 @@
     }
 
     .result-card {
-      border: 1.5px solid var(--color-gray-300);
-      border-radius: 8px;
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
       padding: var(--space-2) var(--space-2);
     }
 
@@ -629,7 +684,7 @@
     .result-card__name {
       font-size: 15px;
       font-weight: 600;
-      color: var(--color-primary-base);
+      color: var(--text-primary);
     }
 
     .badge {
@@ -653,18 +708,18 @@
 
     .result-card__value {
       font-size: 13px;
-      color: var(--color-gray-700);
+      color: var(--text-secondary);
       margin-bottom: 4px;
     }
 
     .result-card__next {
-      font-size: 14px;
-      color: var(--color-gray-900);
+      font-size: var(--type-ui-14-size);
+      color: var(--text-primary);
     }
 
     /* ── Claim section ────────────────────────────── */
     .claim-section {
-      border-top: 1px solid var(--color-gray-300);
+      border-top: 1px solid var(--border-default);
       padding-top: var(--space-3);
       margin-top: var(--space-1);
     }
@@ -698,15 +753,15 @@
     }
 
     .success-body {
-      font-size: 16px;
-      color: var(--color-gray-900);
+      font-size: var(--type-ui-16-size);
+      color: var(--text-primary);
       margin-bottom: var(--space-2);
       max-width: 320px;
     }
 
     .success-ref {
       font-size: 13px;
-      color: var(--color-gray-700);
+      color: var(--text-secondary);
       margin-bottom: var(--space-5);
     }
 
@@ -753,8 +808,8 @@
     }
 
     .landing-body {
-      font-size: 16px;
-      color: var(--color-gray-900);
+      font-size: var(--type-ui-16-size);
+      color: var(--text-primary);
       text-align: center;
       margin-bottom: var(--space-4);
       line-height: 1.55;
