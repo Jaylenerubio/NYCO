@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NYC Health + Affordability Corps Navigator — Option C</title>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:wght@400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
   <style>
-    /* ── Design tokens ─────────────────────────────────────── */
+    /* ── WDP Design Tokens ──────────────────────────────────── */
     :root {
-      /* ── Foundation colors ── */
+      /* Foundation */
       --color-primary-light:   #CCCCE5;
       --color-primary-base:    #050560;
       --color-primary-dark:    #030339;
@@ -26,10 +26,12 @@
       --color-black:           #191919;
       --color-success-base:    #008703;
       --color-success-light:   #E2F2D5;
+      --color-warning-light:   #FFF3CD;
+      --color-warning-dark:    #7a4f00;
       --color-error-base:      #EC131E;
       --color-error-light:     #F8D9DE;
 
-      /* ── Semantic layer ── */
+      /* Semantic */
       --text-primary:            var(--color-black);
       --text-secondary:          var(--color-gray-700);
       --text-link:               var(--color-secondary-base);
@@ -37,45 +39,43 @@
       --color-interactive:       var(--color-secondary-base);
       --button-primary-bg:       var(--color-primary-base);
       --button-primary-hover:    var(--color-primary-dark);
-      --button-secondary-bg:     var(--color-secondary-base);
-      --button-secondary-hover:  var(--color-secondary-dark);
       --border-default:          var(--color-gray-300);
       --border-focus:            var(--color-interactive);
-      --border-error:            var(--color-error-base);
       --bg-primary:              var(--color-white);
       --bg-secondary:            var(--color-gray-100);
 
-      /* ── Motion ── */
+      /* Motion */
       --duration-open:           220ms;
       --duration-close:          140ms;
-      --duration-backdrop-close: 180ms;
       --ease-out:                cubic-bezier(0.16, 1, 0.3, 1);
       --ease-in:                 cubic-bezier(0.4, 0.0, 1, 1);
 
-      /* ── Focus ── */
+      /* Focus */
       --focus-ring-color:  var(--color-interactive);
       --focus-ring-width:  3px;
       --focus-ring-offset: 2px;
 
-      /* ── Disabled ── */
+      /* Disabled */
       --disabled-opacity: 0.4;
 
-      /* ── Typography tokens ── */
-      --font-display:  'Source Serif 4', 'Source Serif Pro', Georgia, serif;
-      --font-body:     'Public Sans', system-ui, -apple-system, sans-serif;
-      --type-body-size:          18px;
-      --type-body-weight:        400;
-      --type-body-line-height:   150%;
+      /* Typography */
+      --font-display: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+      --font-body:    'Public Sans', system-ui, -apple-system, sans-serif;
+
+      --type-h1-size:            40px;
+      --type-h1-line-height:     1.18;
+      --type-h2-size:            32px;
+      --type-h2-line-height:     1.22;
+      --type-h3-size:            26px;
+      --type-body-size:          16px;
+      --type-body-line-height:   1.6;
       --type-ui-16-size:         16px;
       --type-ui-14-size:         14px;
-      --type-button-size:        18px;
+      --type-button-size:        17px;
       --type-button-weight:      600;
-      --type-button-line-height: 22px;
-      --type-h1-size:            40px;
-      --type-h2-size:            32px;
-      --type-h3-size:            26px;
+      --type-button-line-height: 1.3;
 
-      /* ── Spacing ── */
+      /* Spacing */
       --space-1: 8px;
       --space-2: 16px;
       --space-3: 24px;
@@ -84,118 +84,100 @@
       --space-6: 48px;
     }
 
-    /* ── Reset ─────────────────────────────────────────────── */
+    /* ── Reset ──────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
     body {
       font-family: var(--font-body);
       font-size: var(--type-body-size);
-      font-weight: var(--type-body-weight);
       line-height: var(--type-body-line-height);
       color: var(--text-primary);
-      background: var(--bg-secondary);
+      background: #E8E8EE;
       display: flex;
       justify-content: center;
       align-items: flex-start;
       min-height: 100vh;
     }
 
-    /* ── App shell ─────────────────────────────────────────── */
+    /* ── App shell ──────────────────────────────────────────── */
     #app {
       width: 100%;
-      max-width: 430px;
+      max-width: 390px;
       min-height: 100vh;
       background: var(--bg-primary);
-      box-shadow: 0 0 40px rgba(0,0,0,0.12);
+      box-shadow: 0 0 60px rgba(0,0,0,0.18);
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
     }
 
-    /* ── Top bar ───────────────────────────────────────────── */
-    .top-bar {
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      padding: 6px var(--space-2);
+    /* ── Supernav (top thin bar) ────────────────────────────── */
+    .supernav {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-default);
+      padding: 7px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
-      gap: var(--space-1);
     }
-    .top-bar-left {
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-      flex-wrap: wrap;
-    }
-    .free-badge {
-      background: var(--color-success-base);
-      color: var(--color-white);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-    .top-bar-tagline {
-      font-size: 11px;
-      color: rgba(255,255,255,0.85);
-      white-space: nowrap;
+    .supernav-title {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      letter-spacing: 0.01em;
     }
     .lang-toggles {
       display: flex;
-      gap: 4px;
-      flex-shrink: 0;
+      gap: 3px;
     }
     .lang-btn {
       background: none;
-      border: 1px solid rgba(255,255,255,0.4);
-      color: var(--color-white);
+      border: none;
+      color: var(--text-secondary);
       font-family: var(--font-body);
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 500;
-      padding: 2px 5px;
-      border-radius: 4px;
+      padding: 1px 5px;
+      border-radius: 3px;
       cursor: pointer;
       line-height: 1.4;
-      transition: background 0.15s;
+      transition: color 0.15s, background 0.15s;
     }
-    .lang-btn:hover { background: rgba(255,255,255,0.15); }
-    .lang-btn.active { background: rgba(255,255,255,0.25); border-color: white; }
+    .lang-btn:hover { color: var(--text-primary); background: var(--color-gray-200); }
+    .lang-btn.active { color: var(--color-secondary-base); font-weight: 600; }
     .lang-btn:focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
+      outline-offset: 1px;
     }
 
-    /* ── Nav chrome ────────────────────────────────────────── */
+    /* ── Nav chrome ─────────────────────────────────────────── */
     .nav-chrome {
       background: var(--bg-primary);
       border-bottom: 1px solid var(--border-default);
-      padding: 10px var(--space-2);
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
-      gap: var(--space-1);
+      min-height: 56px;
     }
     .nav-left {
       display: flex;
       align-items: center;
-      gap: var(--space-1);
+      gap: 10px;
     }
     .back-btn {
       background: none;
       border: none;
       color: var(--text-link);
-      font-size: 20px;
+      font-size: 22px;
       cursor: pointer;
-      padding: 4px 8px 4px 0;
+      padding: 2px 6px 2px 0;
+      line-height: 1;
       display: flex;
       align-items: center;
-      line-height: 1;
-      font-weight: 600;
       transition: color var(--duration-close) var(--ease-out);
     }
     .back-btn:hover { color: var(--text-link-hover); }
@@ -205,61 +187,56 @@
       border-radius: 4px;
     }
     .back-btn.hidden { visibility: hidden; pointer-events: none; }
+
+    /* NYC logo matching the Figma — blue stylized text */
     .nyc-logo {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       text-decoration: none;
-    }
-    .nyc-logo-block {
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 4px 6px;
-      border-radius: 3px;
-      letter-spacing: 0.5px;
       line-height: 1;
     }
-    .nyc-logo-label {
+    .nyc-logo-mark {
       font-family: var(--font-body);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--color-primary-base);
-      line-height: 1.3;
-      max-width: 160px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-secondary-base);
+      letter-spacing: -0.5px;
+      line-height: 1;
     }
     .hamburger-btn {
       background: none;
       border: none;
-      font-size: 22px;
-      color: var(--color-primary-base);
+      font-size: 20px;
+      color: var(--text-primary);
       cursor: pointer;
       padding: 4px;
       line-height: 1;
+      display: flex;
+      align-items: center;
     }
     .hamburger-btn:focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
+      outline-offset: var(--focus-ring-offset);
       border-radius: 4px;
     }
 
-    /* ── Progress bar ──────────────────────────────────────── */
+    /* ── Progress bar ───────────────────────────────────────── */
     .progress-wrap {
-      padding: 8px var(--space-2) 0;
+      padding: 8px 16px 6px;
       flex-shrink: 0;
+      border-bottom: 1px solid var(--color-gray-200);
     }
     .progress-label {
       font-size: 11px;
-      color: var(--color-gray-700);
-      margin-bottom: 4px;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
       display: flex;
       justify-content: space-between;
     }
     .progress-track {
-      height: 6px;
-      background: var(--color-gray-300);
+      height: 4px;
+      background: var(--color-gray-200);
       border-radius: 999px;
       overflow: hidden;
     }
@@ -270,7 +247,7 @@
       transition: width var(--duration-open) var(--ease-out);
     }
 
-    /* ── Screen container ──────────────────────────────────── */
+    /* ── Screen container ───────────────────────────────────── */
     .screens-wrapper {
       flex: 1;
       position: relative;
@@ -285,34 +262,34 @@
       display: flex;
       flex-direction: column;
     }
-    .screen.active {
-      transform: translateX(0%);
-    }
-    .screen.exit-left {
-      transform: translateX(-100%);
-    }
-    .screen.exit-right {
-      transform: translateX(100%);
-    }
-    .screen.no-transition {
-      transition: none;
-    }
+    .screen.active  { transform: translateX(0%); }
+    .screen.exit-left  { transform: translateX(-100%); }
+    .screen.exit-right { transform: translateX(100%); }
+    .screen.no-transition { transition: none; }
 
-    /* ── Screen body ───────────────────────────────────────── */
+    /* ── Screen body ────────────────────────────────────────── */
     .screen-body {
-      padding: var(--space-3) var(--space-2) var(--space-5);
+      padding: 28px 16px 120px;
       flex: 1;
       position: relative;
     }
 
-    /* ── Layer annotation badges ───────────────────────────── */
+    /* ── Pinned footer button ───────────────────────────────── */
+    .screen-footer {
+      position: sticky;
+      bottom: 0;
+      background: var(--bg-primary);
+      padding: 12px 16px 20px;
+      border-top: 1px solid var(--color-gray-200);
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+
+    /* ── Layer annotation badges ────────────────────────────── */
     .layer-badge-wrap {
-      position: absolute;
-      top: 12px;
-      right: 12px;
       display: flex;
       gap: 4px;
-      z-index: 10;
+      margin-bottom: 20px;
     }
     .layer-badge {
       font-size: 10px;
@@ -322,55 +299,44 @@
       border-radius: 999px;
       color: white;
       white-space: nowrap;
-      line-height: 1.5;
+      line-height: 1.6;
     }
     .layer-badge.layer-a { background: #7C3AED; }
     .layer-badge.layer-b { background: #050560; }
 
-    /* ── Typography helpers ────────────────────────────────── */
-    .screen-headline {
+    /* ── Typography ─────────────────────────────────────────── */
+    .screen-h1 {
       font-family: var(--font-display);
-      font-size: var(--type-h3-size);
+      font-size: var(--type-h1-size);
       font-weight: 400;
+      line-height: var(--type-h1-line-height);
       color: var(--text-primary);
-      line-height: 1.25;
-      margin-bottom: var(--space-2);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
     }
-    .screen-header {
-      font-family: var(--font-body);
+    .screen-h2 {
+      font-family: var(--font-display);
       font-size: var(--type-h2-size);
-      font-weight: 600;
+      font-weight: 400;
+      line-height: var(--type-h2-line-height);
       color: var(--text-primary);
-      line-height: 1.25;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
     }
     .screen-subtext {
+      font-family: var(--font-body);
       font-size: var(--type-ui-16-size);
       color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: var(--space-3);
-    }
-    .tip-note {
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-style: italic;
-      margin-bottom: var(--space-3);
-      line-height: 1.4;
-    }
-    .small-note {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-style: italic;
-      line-height: 1.4;
-      margin-top: var(--space-2);
+      line-height: 1.55;
+      margin-bottom: 28px;
     }
 
-    /* ── Buttons ───────────────────────────────────────────── */
+    /* ── Buttons ────────────────────────────────────────────── */
     .btn {
       display: block;
       width: 100%;
-      padding: 14px 24px;
-      border-radius: 8px;
+      padding: 15px 24px;
+      border-radius: 6px;
       border: none;
       font-family: var(--font-body);
       font-size: var(--type-button-size);
@@ -378,8 +344,10 @@
       line-height: var(--type-button-line-height);
       cursor: pointer;
       text-align: center;
-      transition: background var(--duration-close) var(--ease-out), transform var(--duration-close) var(--ease-out), color var(--duration-close) var(--ease-out), border-color var(--duration-close) var(--ease-out);
+      transition: background var(--duration-close) var(--ease-out),
+                  transform var(--duration-close) var(--ease-out);
     }
+    .btn + .btn { margin-top: 10px; }
     .btn:focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
       outline-offset: var(--focus-ring-offset);
@@ -399,71 +367,62 @@
     .btn-ghost {
       background: transparent;
       color: var(--color-primary-base);
-      border: 2px solid var(--color-primary-base);
+      border: 1.5px solid var(--color-primary-base);
     }
     .btn-ghost:hover { background: var(--bg-secondary); }
-    .btn-success {
-      background: var(--color-success-base);
-      color: var(--color-white);
-    }
-    .btn-success:hover { background: #006602; }
-    .btn-stack {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-top: var(--space-3);
-    }
 
-    /* ── Screen 0: Landing ─────────────────────────────────── */
+    /* ── Screen 0: Landing ──────────────────────────────────── */
     .landing-wrap {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 100%;
-      padding: var(--space-4) var(--space-2) var(--space-5);
+      padding-top: 40px;
     }
     .landing-icon {
-      font-size: 48px;
-      margin-bottom: var(--space-3);
-      text-align: center;
+      font-size: 52px;
+      margin-bottom: 24px;
     }
-    .landing-body {
-      font-size: var(--type-ui-16-size);
+    .landing-lead {
+      font-size: 17px;
       color: var(--text-secondary);
       line-height: 1.6;
-      margin-bottom: var(--space-5);
+      margin-bottom: 36px;
     }
     .no-account-note {
       text-align: center;
       font-size: 13px;
       color: var(--text-secondary);
-      margin-top: var(--space-2);
+      margin-top: 12px;
     }
 
-    /* ── Screen 1: Situation cards ─────────────────────────── */
+    /* ── Screen 1: Situation cards ──────────────────────────── */
+    .tip-note {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      font-style: italic;
+    }
     .situation-cards {
       display: flex;
       flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-3);
+      gap: 12px;
+      margin-bottom: 16px;
     }
     .situation-card {
       border: 1px solid var(--border-default);
       border-radius: 12px;
-      padding: var(--space-2) var(--space-2);
-      min-height: 80px;
+      padding: 16px;
       cursor: pointer;
       display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      position: relative;
+      align-items: center;
+      gap: 14px;
       background: var(--bg-primary);
-      transition: box-shadow var(--duration-open) var(--ease-out), transform var(--duration-open) var(--ease-out);
+      transition: box-shadow var(--duration-open) var(--ease-out),
+                  border-color var(--duration-close) var(--ease-out);
       text-align: left;
+      position: relative;
+      width: 100%;
     }
     .situation-card:hover {
-      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-      transform: translateY(-2px);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      border-color: var(--color-gray-400);
     }
     .situation-card:focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
@@ -473,28 +432,28 @@
       border-left: 4px solid var(--color-primary-base);
       background: #EEF2FF;
     }
-    .card-emoji {
-      font-size: 28px;
+    .card-icon {
+      font-size: 24px;
       flex-shrink: 0;
+      width: 36px;
+      text-align: center;
       line-height: 1;
-      margin-top: 2px;
     }
     .card-text { flex: 1; }
     .card-title {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
       color: var(--text-primary);
       margin-bottom: 3px;
+      display: block;
     }
     .card-desc {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-secondary);
       line-height: 1.4;
+      display: block;
     }
     .card-check {
-      position: absolute;
-      top: 10px;
-      right: 12px;
       width: 22px;
       height: 22px;
       border-radius: 50%;
@@ -503,7 +462,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 12px;
+      flex-shrink: 0;
       opacity: 0;
       transition: opacity 0.15s;
     }
@@ -515,37 +475,49 @@
       font-style: italic;
       opacity: 0;
       transition: opacity 0.4s;
-      margin-bottom: var(--space-2);
+      margin-bottom: 16px;
       min-height: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .bg-working-note.visible { opacity: 1; }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-secondary-base);
+      flex-shrink: 0;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.75); }
+    }
 
-    /* ── Screen 2: Form fields ─────────────────────────────── */
+    /* ── Screen 2: Quick basics ─────────────────────────────── */
     .reassurance-box {
       background: #E6F4E6;
-      border: 1px solid #A3D4A3;
+      border: 1px solid #B2D8B2;
       border-radius: 8px;
-      padding: var(--space-2);
+      padding: 12px 14px;
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      margin-bottom: var(--space-3);
+      margin-bottom: 24px;
       font-size: 14px;
       color: #1a5c1a;
-      line-height: 1.4;
+      line-height: 1.45;
     }
-    .reassurance-icon {
-      font-size: 18px;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
+
+    /* ── Form fields (shared) ───────────────────────────────── */
     .field-group {
       display: flex;
       flex-direction: column;
-      gap: var(--space-3);
-      margin-bottom: var(--space-3);
+      gap: 20px;
+      margin-bottom: 8px;
     }
-    .field-wrap { display: flex; flex-direction: column; gap: 5px; }
+    .field-wrap { display: flex; flex-direction: column; gap: 6px; }
     .field-label {
       font-size: var(--type-ui-14-size);
       font-weight: 600;
@@ -553,7 +525,7 @@
     }
     .field-input {
       width: 100%;
-      padding: 11px 12px;
+      padding: 12px 14px;
       border: 1.5px solid var(--border-default);
       border-radius: 8px;
       font-family: var(--font-body);
@@ -569,7 +541,7 @@
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
       outline-offset: var(--focus-ring-offset);
     }
-    .field-input::placeholder { color: var(--text-secondary); }
+    .field-input::placeholder { color: var(--color-gray-400); }
     .field-sub-note {
       font-size: 12px;
       color: var(--text-secondary);
@@ -580,32 +552,34 @@
       color: var(--color-success-base);
       font-weight: 500;
       display: none;
+      margin-top: 2px;
     }
     .field-success.visible { display: block; }
 
-    /* ── Screen 3: Chip cards ──────────────────────────────── */
+    /* ── Screen 3: Chip cards ───────────────────────────────── */
     .benefit-chips {
       display: flex;
       flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-2);
+      gap: 10px;
+      margin-bottom: 12px;
     }
     .benefit-chip {
-      border: 2px solid var(--color-primary-base);
-      border-radius: 12px;
-      padding: 14px var(--space-2);
+      border: 1.5px solid var(--color-primary-base);
+      border-radius: 10px;
+      padding: 14px 16px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: var(--space-2);
+      gap: 12px;
       background: var(--bg-primary);
       color: var(--color-primary-base);
       font-family: var(--font-body);
       font-size: 15px;
       font-weight: 600;
       text-align: left;
-      transition: background var(--duration-close) var(--ease-out), color var(--duration-close) var(--ease-out);
+      transition: background var(--duration-close) var(--ease-out),
+                  color var(--duration-close) var(--ease-out);
     }
     .benefit-chip.selected {
       background: var(--color-primary-base);
@@ -616,16 +590,15 @@
       outline-offset: var(--focus-ring-offset);
     }
     .chip-check {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       border: 2px solid currentColor;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 12px;
       flex-shrink: 0;
-      transition: background 0.15s;
     }
     .benefit-chip.selected .chip-check {
       background: var(--color-white);
@@ -635,52 +608,69 @@
     .live-counter {
       font-size: var(--type-ui-14-size);
       color: var(--text-secondary);
-      margin-bottom: var(--space-3);
+      margin-bottom: 24px;
       font-weight: 500;
     }
     .live-counter span { color: var(--color-primary-base); font-weight: 600; }
 
-    /* ── Screen 4: Deep dive ───────────────────────────────── */
+    /* ── Screen 4: Deep dive ────────────────────────────────── */
     .privacy-note {
       font-size: 13px;
       color: var(--text-secondary);
       background: var(--bg-secondary);
       border-radius: 8px;
       padding: 10px 12px;
-      margin-top: var(--space-2);
+      margin-top: 16px;
       line-height: 1.4;
     }
     .sensitive-note {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-secondary);
       font-style: italic;
-      margin-bottom: var(--space-3);
+      margin-bottom: 24px;
     }
 
-    /* ── Screen 5: Results ─────────────────────────────────── */
+    /* ── Screen 5: Results ──────────────────────────────────── */
     .result-cards {
       display: flex;
       flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-3);
+      gap: 10px;
+      margin-bottom: 24px;
     }
     .result-card {
       border: 1px solid var(--border-default);
       border-radius: 12px;
-      padding: var(--space-2);
+      padding: 16px;
       background: var(--bg-primary);
-    }
-    .result-card-header {
       display: flex;
       align-items: center;
+      gap: 14px;
+    }
+    .result-card-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+      width: 32px;
+      text-align: center;
+      line-height: 1;
+    }
+    .result-card-body { flex: 1; }
+    .result-card-top {
+      display: flex;
+      align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 6px;
-      gap: var(--space-1);
+      gap: 8px;
+      margin-bottom: 3px;
     }
     .result-card-title {
       font-size: 15px;
       font-weight: 600;
-      color: var(--text-primary);
+      color: var(--color-secondary-base);
+      line-height: 1.3;
+    }
+    .result-card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
     }
     .match-badge {
       font-size: 11px;
@@ -688,107 +678,85 @@
       padding: 2px 8px;
       border-radius: 999px;
       white-space: nowrap;
+      flex-shrink: 0;
     }
-    .match-badge.strong {
-      background: #E6F4E6;
-      color: #1a5c1a;
-    }
-    .match-badge.possible {
-      background: #FFF3CD;
-      color: #7a4f00;
-    }
-    .result-value {
-      font-size: 13px;
-      font-weight: 600;
+    .match-badge.strong { background: #E2F2D5; color: #006602; }
+    .match-badge.possible { background: var(--color-warning-light); color: var(--color-warning-dark); }
+    .result-check {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--color-success-base);
       color: var(--color-success-base);
-      margin-bottom: 4px;
-    }
-    .result-desc {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.4;
+      flex-shrink: 0;
     }
 
+    /* Claim box on results */
     .claim-box {
       background: var(--bg-secondary);
-      border-radius: 10px;
-      padding: var(--space-3) var(--space-2);
-      margin-bottom: var(--space-2);
+      border-radius: 16px;
+      padding: 24px 16px 20px;
+      margin-bottom: 4px;
     }
-    .claim-box-title {
-      font-size: 15px;
-      font-weight: 600;
+    .claim-box-h {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.25;
       color: var(--text-primary);
-      margin-bottom: var(--space-2);
+      margin-bottom: 8px;
+    }
+    .claim-box-sub {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 20px;
     }
     .claim-fields {
       display: flex;
       flex-direction: column;
-      gap: var(--space-2);
+      gap: 14px;
+      margin-bottom: 0;
     }
 
-    /* ── Screen 6: Confirmation ────────────────────────────── */
+    /* ── Screen 6: Confirmation ─────────────────────────────── */
     .confirm-wrap {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 100%;
-      padding: var(--space-5) var(--space-3);
+      padding: 48px 16px 40px;
     }
-    .confirm-check-wrap {
-      margin-bottom: var(--space-4);
-    }
-    .confirm-check-wrap svg {
-      width: 80px;
-      height: 80px;
+    .confirm-emoji {
+      font-size: 80px;
+      line-height: 1;
+      margin-bottom: 32px;
     }
     .confirm-headline {
       font-family: var(--font-display);
-      font-size: 28px;
+      font-size: 34px;
       font-weight: 400;
+      line-height: 1.18;
       color: var(--text-primary);
-      margin-bottom: var(--space-2);
-      line-height: 1.2;
+      margin-bottom: 16px;
     }
     .confirm-body {
-      font-size: 15px;
+      font-size: 17px;
       color: var(--text-secondary);
       line-height: 1.6;
-      margin-bottom: var(--space-3);
-      max-width: 320px;
-    }
-    .confirm-ref {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      background: var(--bg-secondary);
-      border-radius: 6px;
-      padding: 8px 16px;
-      margin-bottom: var(--space-4);
-      display: inline-block;
-    }
-    .confirm-done-btn {
-      width: 100%;
-      max-width: 300px;
     }
 
-    /* ── Utility ───────────────────────────────────────────── */
+    /* ── Utility ────────────────────────────────────────────── */
     .visually-hidden {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
     }
-    .mt-1 { margin-top: var(--space-1); }
-    .mt-2 { margin-top: var(--space-2); }
-    .mt-3 { margin-top: var(--space-3); }
+    .mt-2 { margin-top: 16px; }
+    .mt-3 { margin-top: 24px; }
 
-    /* ── Media: full-screen mobile ─────────────────────────── */
     @media (max-width: 430px) {
       #app { box-shadow: none; }
     }
@@ -797,34 +765,29 @@
 <body>
 <div id="app">
 
-  <!-- ── Top bar (persistent) ──────────────────────────────── -->
-  <div class="top-bar" role="banner">
-    <div class="top-bar-left">
-      <span class="free-badge">100% Free</span>
-      <span class="top-bar-tagline">· All New Yorkers</span>
-    </div>
+  <!-- ── Supernav ──────────────────────────────────────────────── -->
+  <div class="supernav" role="banner">
+    <span class="supernav-title">Health and Affordability Corps</span>
     <div class="lang-toggles" role="navigation" aria-label="Language selection">
       <button class="lang-btn active" aria-label="English" aria-pressed="true">EN</button>
       <button class="lang-btn" aria-label="Español" aria-pressed="false">ES</button>
       <button class="lang-btn" aria-label="中文" aria-pressed="false">中文</button>
       <button class="lang-btn" aria-label="বাংলা" aria-pressed="false">BN</button>
-      <button class="lang-btn" aria-label="Haitian Creole" aria-pressed="false">HT</button>
     </div>
   </div>
 
-  <!-- ── Nav chrome (persistent) ───────────────────────────── -->
+  <!-- ── Nav chrome ───────────────────────────────────────────── -->
   <div class="nav-chrome" role="navigation" aria-label="Main navigation">
     <div class="nav-left">
       <button class="back-btn hidden" id="back-btn" aria-label="Go back">←</button>
       <a href="#" class="nyc-logo" aria-label="NYC Health + Affordability Corps home">
-        <span class="nyc-logo-block">NYC</span>
-        <span class="nyc-logo-label">Health + Affordability Corps</span>
+        <span class="nyc-logo-mark">NYC</span>
       </a>
     </div>
-    <button class="hamburger-btn" aria-label="Open menu" aria-expanded="false">☰</button>
+    <button class="hamburger-btn" aria-label="Open menu" aria-expanded="false">≡</button>
   </div>
 
-  <!-- ── Progress bar (persistent, hidden on 0 and 6) ─────── -->
+  <!-- ── Progress bar ─────────────────────────────────────────── -->
   <div class="progress-wrap" id="progress-wrap" aria-hidden="true" style="display:none;">
     <div class="progress-label">
       <span id="progress-label-text">Step 1 of 5</span>
@@ -836,10 +799,10 @@
 
   <!-- ══════════════════════════════════════════════════════════
        SCREENS
-  ═══════════════════════════════════════════════════════════ -->
+  ══════════════════════════════════════════════════════════ -->
   <div class="screens-wrapper" id="screens-wrapper">
 
-    <!-- ── Screen 0: Landing ─────────────────────────────────── -->
+    <!-- ── Screen 0: Landing ───────────────────────────────────── -->
     <section class="screen active" id="screen-0" role="main" aria-label="Welcome">
       <div class="screen-body">
         <div class="layer-badge-wrap">
@@ -847,76 +810,79 @@
         </div>
         <div class="landing-wrap">
           <div class="landing-icon" aria-hidden="true">🤝</div>
-          <h1 class="screen-headline">A neighbor helped you start — let's keep going.</h1>
-          <p class="landing-body">You're close to getting help with health, food, rent, and more. Takes less than 2 minutes.</p>
+          <h1 class="screen-h1">A neighbor helped you start — let's keep going.</h1>
+          <p class="landing-lead">You're close to getting help with health, food, rent, and more. Takes less than 2 minutes.</p>
           <button class="btn btn-primary" id="s0-cta" onclick="navigate(1)">Let's find out what I qualify for</button>
-          <p class="no-account-note">No account needed. 100% free.</p>
+          <p class="no-account-note">No account needed · 100% free</p>
         </div>
       </div>
     </section>
 
-    <!-- ── Screen 1: Warm Entry ──────────────────────────────── -->
+    <!-- ── Screen 1: Situation cards ───────────────────────────── -->
     <section class="screen" id="screen-1" role="main" aria-label="What's going on">
       <div class="screen-body">
         <div class="layer-badge-wrap">
           <span class="layer-badge layer-a">Layer A — Situation surface</span>
         </div>
-        <h2 class="screen-header">What's going on?</h2>
-        <p class="screen-subtext">Pick everything that fits.</p>
-        <p class="tip-note">💡 Tip: No SSN needed here — just tell us what's happening.</p>
+        <h2 class="screen-h2">What's going on?</h2>
+        <p class="screen-subtext">Let us know what's happening to help you best.</p>
 
         <div class="situation-cards" role="group" aria-label="Select your situations">
           <button class="situation-card" id="card-0" onclick="toggleCard(0)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🏠</span>
+            <span class="card-icon" aria-hidden="true">🏠</span>
             <span class="card-text">
               <span class="card-title">I might lose my home</span>
-              <span class="card-desc">Eviction notice, late rent, or unstable housing</span>
+              <span class="card-desc">Eviction, late rent, unstable housing</span>
             </span>
             <span class="card-check" aria-hidden="true">✓</span>
           </button>
           <button class="situation-card" id="card-1" onclick="toggleCard(1)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🩺</span>
+            <span class="card-icon" aria-hidden="true">🩺</span>
             <span class="card-text">
               <span class="card-title">I need health coverage</span>
-              <span class="card-desc">No insurance, renewal due, or gap in coverage</span>
+              <span class="card-desc">Medicaid, insurance, renewal</span>
             </span>
             <span class="card-check" aria-hidden="true">✓</span>
           </button>
           <button class="situation-card" id="card-2" onclick="toggleCard(2)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🛒</span>
+            <span class="card-icon" aria-hidden="true">🛒</span>
             <span class="card-text">
               <span class="card-title">Struggling with food or bills</span>
-              <span class="card-desc">SNAP, cash help, or monthly expenses</span>
+              <span class="card-desc">SNAP, cash assistance, safety-net</span>
             </span>
             <span class="card-check" aria-hidden="true">✓</span>
           </button>
           <button class="situation-card" id="card-3" onclick="toggleCard(3)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🏥</span>
+            <span class="card-icon" aria-hidden="true">🏥</span>
             <span class="card-text">
-              <span class="card-title">Can't pay medical bills</span>
-              <span class="card-desc">Old bills, hospital debt, or new charges</span>
+              <span class="card-title">Medical bills I can't pay</span>
+              <span class="card-desc">Debt relief, NYC MIP program</span>
             </span>
             <span class="card-check" aria-hidden="true">✓</span>
           </button>
         </div>
 
-        <p class="bg-working-note" id="bg-working-note" aria-live="polite">Working out your eligibility in the background…</p>
-
-        <button class="btn btn-primary" id="s1-cta" onclick="navigate(2)" disabled aria-disabled="true">These apply to me →</button>
+        <p class="bg-working-note" id="bg-working-note" aria-live="polite">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          Working out your eligibility in the background…
+        </p>
+      </div>
+      <div class="screen-footer">
+        <button class="btn btn-primary" id="s1-cta" onclick="navigate(2)" disabled aria-disabled="true">These apply to me</button>
       </div>
     </section>
 
-    <!-- ── Screen 2: Quick Basics ────────────────────────────── -->
+    <!-- ── Screen 2: Quick basics ───────────────────────────────── -->
     <section class="screen" id="screen-2" role="main" aria-label="Quick basics">
       <div class="screen-body">
         <div class="layer-badge-wrap">
           <span class="layer-badge layer-b">Layer B — Logic running</span>
         </div>
-        <h2 class="screen-header">A few quick questions</h2>
+        <h2 class="screen-h2">A few quick questions</h2>
         <p class="screen-subtext">These help us narrow down what you qualify for.</p>
 
         <div class="reassurance-box" role="note">
-          <span class="reassurance-icon" aria-hidden="true">✅</span>
+          <span aria-hidden="true">✅</span>
           <span>No Social Security number needed at this step.</span>
         </div>
 
@@ -934,64 +900,63 @@
             <select class="field-input" id="income-select">
               <option value="" disabled selected>Select a range…</option>
               <option value="under-1500">Under $1,500</option>
-              <option value="1500-3000">$1,500–$3,000</option>
-              <option value="3000-5000">$3,000–$5,000</option>
+              <option value="1500-3000">$1,500 – $3,000</option>
+              <option value="3000-5000">$3,000 – $5,000</option>
               <option value="over-5000">Over $5,000</option>
               <option value="prefer-not">I'd rather not say</option>
             </select>
           </div>
         </div>
-
-        <p class="small-note">Behind the scenes, we're pre-scoring your eligibility across all 4 benefit areas at once.</p>
-
-        <button class="btn btn-primary mt-3" onclick="navigate(3)">Keep going →</button>
+      </div>
+      <div class="screen-footer">
+        <button class="btn btn-primary" onclick="navigate(3)">Keep going</button>
       </div>
     </section>
 
-    <!-- ── Screen 3: System Confirms ─────────────────────────── -->
+    <!-- ── Screen 3: Confirm benefit areas ─────────────────────── -->
     <section class="screen" id="screen-3" role="main" aria-label="Confirm benefit areas">
       <div class="screen-body">
         <div class="layer-badge-wrap">
           <span class="layer-badge layer-a">Layer A</span>
           <span class="layer-badge layer-b">Layer B</span>
         </div>
-        <h2 class="screen-header">Here's what we'll check for you</h2>
-        <p class="screen-subtext">Based on your situation and basics, you may qualify for all of these. You can remove any you don't need.</p>
+        <h2 class="screen-h2">Here's what we'll check for you</h2>
+        <p class="screen-subtext">You may qualify for all of these. Remove any you don't need.</p>
 
         <div class="benefit-chips" role="group" aria-label="Benefit areas to check">
           <button class="benefit-chip selected" id="chip-0" onclick="toggleChip(0)" aria-pressed="true">
-            <span>✓ Health coverage <span style="font-weight:400;font-size:13px;">(Medicaid, Child Health Plus)</span></span>
+            <span>Health coverage <span style="font-weight:400;font-size:13px;">(Medicaid, Child Health Plus)</span></span>
             <span class="chip-check" aria-hidden="true">✓</span>
           </button>
           <button class="benefit-chip selected" id="chip-1" onclick="toggleChip(1)" aria-pressed="true">
-            <span>✓ Food &amp; cash help <span style="font-weight:400;font-size:13px;">(SNAP, cash assistance)</span></span>
+            <span>Food &amp; cash help <span style="font-weight:400;font-size:13px;">(SNAP, cash assistance)</span></span>
             <span class="chip-check" aria-hidden="true">✓</span>
           </button>
           <button class="benefit-chip selected" id="chip-2" onclick="toggleChip(2)" aria-pressed="true">
-            <span>✓ Eviction prevention <span style="font-weight:400;font-size:13px;">(legal help, rental assistance)</span></span>
+            <span>Eviction prevention <span style="font-weight:400;font-size:13px;">(legal help, rental assistance)</span></span>
             <span class="chip-check" aria-hidden="true">✓</span>
           </button>
           <button class="benefit-chip selected" id="chip-3" onclick="toggleChip(3)" aria-pressed="true">
-            <span>✓ Medical debt relief <span style="font-weight:400;font-size:13px;">(NYC debt relief programs)</span></span>
+            <span>Medical debt relief <span style="font-weight:400;font-size:13px;">(NYC debt relief programs)</span></span>
             <span class="chip-check" aria-hidden="true">✓</span>
           </button>
         </div>
 
         <p class="live-counter" id="live-counter" aria-live="polite">Checking for <span id="chip-count">4</span> areas</p>
-
-        <button class="btn btn-primary" onclick="navigate(4)">Check these for me →</button>
+      </div>
+      <div class="screen-footer">
+        <button class="btn btn-primary" onclick="navigate(4)">Check these for me</button>
       </div>
     </section>
 
-    <!-- ── Screen 4: Deep-Dive ───────────────────────────────── -->
+    <!-- ── Screen 4: Deep-dive ──────────────────────────────────── -->
     <section class="screen" id="screen-4" role="main" aria-label="More details">
       <div class="screen-body">
         <div class="layer-badge-wrap">
           <span class="layer-badge layer-b">Layer B — Targeted intake</span>
         </div>
-        <h2 class="screen-header">Just a few more details</h2>
+        <h2 class="screen-h2">Just a few more details</h2>
         <p class="screen-subtext">These are specific to the programs you selected.</p>
-        <p class="sensitive-note">We only ask for sensitive info if a program really needs it.</p>
 
         <div class="field-group">
           <div class="field-wrap">
@@ -1010,92 +975,89 @@
           </div>
         </div>
 
-        <div class="privacy-note" role="note">🔒 Your info is kept private and secure. We never share it.</div>
-
-        <button class="btn btn-primary mt-3" onclick="navigate(5)">See my full results →</button>
+        <div class="privacy-note" role="note">🔒 Your info is kept private. We never share it.</div>
+      </div>
+      <div class="screen-footer">
+        <button class="btn btn-primary" onclick="navigate(5)">See my full results</button>
       </div>
     </section>
 
-    <!-- ── Screen 5: Rich Results ────────────────────────────── -->
+    <!-- ── Screen 5: Rich results ───────────────────────────────── -->
     <section class="screen" id="screen-5" role="main" aria-label="Your results">
       <div class="screen-body">
         <div class="layer-badge-wrap">
           <span class="layer-badge layer-a">Layer A — A+B output</span>
         </div>
-        <h2 class="screen-header">Here's what we found for you</h2>
+        <h2 class="screen-h2">Here's what we found for you</h2>
 
         <div class="result-cards" role="list">
           <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Health coverage</span>
-              <span class="match-badge strong">Strong match</span>
+            <span class="result-card-icon" aria-hidden="true">🏥</span>
+            <div class="result-card-body">
+              <div class="result-card-top">
+                <span class="result-card-title">Health coverage</span>
+                <span class="match-badge strong">Strong match</span>
+              </div>
+              <p class="result-card-desc">Est. value $2,400/yr</p>
             </div>
-            <p class="result-value">Est. value: $2,400/yr</p>
-            <p class="result-desc">A Health Corps worker will call you within 24 hours.</p>
+            <span class="result-check" aria-label="Matched">✓</span>
           </div>
           <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Eviction help</span>
-              <span class="match-badge possible">Possible match</span>
+            <span class="result-card-icon" aria-hidden="true">🛒</span>
+            <div class="result-card-body">
+              <div class="result-card-top">
+                <span class="result-card-title">Food &amp; cash help</span>
+                <span class="match-badge strong">Strong match</span>
+              </div>
+              <p class="result-card-desc">Est. value $3,000/yr</p>
             </div>
-            <p class="result-desc">Tenant Support Unit will reach out to you.</p>
+            <span class="result-check" aria-label="Matched">✓</span>
           </div>
           <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Food &amp; cash help</span>
-              <span class="match-badge strong">Strong match</span>
+            <span class="result-card-icon" aria-hidden="true">🏠</span>
+            <div class="result-card-body">
+              <div class="result-card-top">
+                <span class="result-card-title">Eviction help</span>
+                <span class="match-badge possible">Possible match</span>
+              </div>
+              <p class="result-card-desc">Est. value $0,000/yr</p>
             </div>
-            <p class="result-desc">Our HRA partner will follow up with next steps.</p>
-          </div>
-          <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Medical debt</span>
-              <span class="match-badge possible">Possible match</span>
-            </div>
-            <p class="result-desc">A partner screener will contact you soon.</p>
+            <span class="result-check" aria-label="Matched">✓</span>
           </div>
         </div>
 
         <div class="claim-box">
-          <p class="claim-box-title">Ready to connect with a benefits worker?</p>
+          <h3 class="claim-box-h">Ready to claim these benefits?</h3>
+          <p class="claim-box-sub">A Health + Affordability Corps worker will follow up to start your applications.</p>
           <div class="claim-fields">
             <div class="field-wrap">
-              <label class="field-label" for="s5-name">Full name</label>
-              <input class="field-input" type="text" id="s5-name" autocomplete="name" placeholder="Your full name" />
+              <label class="field-label" for="s5-fname">First name</label>
+              <input class="field-input" type="text" id="s5-fname" autocomplete="given-name" placeholder="Jaylene" />
             </div>
             <div class="field-wrap">
-              <label class="field-label" for="s5-phone">Phone number</label>
-              <input class="field-input" type="tel" id="s5-phone" autocomplete="tel" placeholder="e.g. (212) 555-0100" />
+              <label class="field-label" for="s5-lname">Last name</label>
+              <input class="field-input" type="text" id="s5-lname" autocomplete="family-name" placeholder="Rubio" />
             </div>
             <div class="field-wrap">
-              <label class="field-label" for="s5-email">Email address (optional)</label>
+              <label class="field-label" for="s5-email">Email</label>
               <input class="field-input" type="email" id="s5-email" autocomplete="email" placeholder="you@example.com" />
             </div>
           </div>
         </div>
-
-        <div class="btn-stack">
-          <button class="btn btn-primary" onclick="navigate(6)">Connect me with a benefits worker</button>
-          <button class="btn btn-ghost" onclick="navigate(6)">Text me instead</button>
-        </div>
+      </div>
+      <div class="screen-footer">
+        <button class="btn btn-primary" onclick="navigate(6)">Submit</button>
+        <button class="btn btn-ghost" onclick="navigate(6)">Text me instead</button>
       </div>
     </section>
 
-    <!-- ── Screen 6: Confirmation ────────────────────────────── -->
+    <!-- ── Screen 6: Confirmation ───────────────────────────────── -->
     <section class="screen" id="screen-6" role="main" aria-label="You're confirmed">
       <div class="screen-body">
-        <!-- No layer badge on confirmation screen -->
         <div class="confirm-wrap">
-          <div class="confirm-check-wrap" aria-hidden="true">
-            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Success checkmark">
-              <circle cx="40" cy="40" r="38" fill="#008703" />
-              <path d="M22 41L34 53L58 27" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h2 class="confirm-headline">You're in the system!</h2>
-          <p class="confirm-body">A Health + Affordability Corps worker will follow up in 24 hours. Watch for a text from our team.</p>
-          <span class="confirm-ref" aria-label="Reference number NYC-2026-00847">Reference #: NYC-2026-00847</span>
-          <button class="btn btn-success confirm-done-btn" onclick="resetApp()">Done</button>
+          <div class="confirm-emoji" aria-hidden="true">🎉</div>
+          <h2 class="confirm-headline">A Health + Affordability Corps worker will follow up to start your applications.</h2>
+          <p class="confirm-body">Watch for a text or call from our team within 24 hours.</p>
         </div>
       </div>
     </section>
@@ -1104,12 +1066,11 @@
 </div><!-- /app -->
 
 <script>
-  /* ── State ─────────────────────────────────────────────────── */
+  /* ── State ────────────────────────────────────────────────── */
   var currentScreen = 0;
   var selectedCards = [false, false, false, false];
   var selectedChips = [true, true, true, true];
 
-  /* ── Progress config ───────────────────────────────────────── */
   var progressMap = {
     1: { step: 1, pct: 20 },
     2: { step: 2, pct: 40 },
@@ -1118,7 +1079,7 @@
     5: { step: 5, pct: 100 },
   };
 
-  /* ── Navigation ────────────────────────────────────────────── */
+  /* ── Navigation ───────────────────────────────────────────── */
   function navigate(toScreen) {
     if (toScreen === currentScreen) return;
     var direction = toScreen > currentScreen ? 'forward' : 'back';
@@ -1126,28 +1087,16 @@
     var fromEl = document.getElementById('screen-' + currentScreen);
     var toEl   = document.getElementById('screen-' + toScreen);
 
-    // Setup incoming screen off-screen
     toEl.classList.remove('exit-left', 'exit-right', 'active', 'no-transition');
     toEl.classList.add('no-transition');
-    if (direction === 'forward') {
-      toEl.style.transform = 'translateX(100%)';
-    } else {
-      toEl.style.transform = 'translateX(-100%)';
-    }
+    toEl.style.transform = direction === 'forward' ? 'translateX(100%)' : 'translateX(-100%)';
     toEl.offsetHeight; // force reflow
-
     toEl.classList.remove('no-transition');
 
-    // Animate
     requestAnimationFrame(function() {
       fromEl.classList.remove('active');
-      if (direction === 'forward') {
-        fromEl.classList.add('exit-left');
-        fromEl.style.transform = '';
-      } else {
-        fromEl.classList.add('exit-right');
-        fromEl.style.transform = '';
-      }
+      fromEl.classList.add(direction === 'forward' ? 'exit-left' : 'exit-right');
+      fromEl.style.transform = '';
       toEl.style.transform = '';
       toEl.classList.add('active');
     });
@@ -1155,26 +1104,21 @@
     currentScreen = toScreen;
     updateChrome();
 
-    // Pre-fill Screen 5 from Screen 4
-    if (toScreen === 5) {
-      prefillResults();
-    }
+    if (toScreen === 5) prefillResults();
   }
 
   function updateChrome() {
-    var backBtn      = document.getElementById('back-btn');
-    var progressWrap = document.getElementById('progress-wrap');
-    var progressFill = document.getElementById('progress-fill');
+    var backBtn       = document.getElementById('back-btn');
+    var progressWrap  = document.getElementById('progress-wrap');
+    var progressFill  = document.getElementById('progress-fill');
     var progressLabel = document.getElementById('progress-label-text');
 
-    // Back button
     if (currentScreen === 0 || currentScreen === 6) {
       backBtn.classList.add('hidden');
     } else {
       backBtn.classList.remove('hidden');
     }
 
-    // Progress bar
     if (currentScreen === 0 || currentScreen === 6) {
       progressWrap.style.display = 'none';
     } else {
@@ -1187,47 +1131,33 @@
     }
   }
 
-  /* ── Back button ───────────────────────────────────────────── */
   document.getElementById('back-btn').addEventListener('click', function() {
-    if (currentScreen > 0) {
-      navigate(currentScreen - 1);
-    }
+    if (currentScreen > 0) navigate(currentScreen - 1);
   });
 
-  /* ── Screen 1: Situation card toggles ─────────────────────── */
+  /* ── Screen 1: Situation card toggles ────────────────────── */
   function toggleCard(idx) {
     selectedCards[idx] = !selectedCards[idx];
     var card = document.getElementById('card-' + idx);
-    if (selectedCards[idx]) {
-      card.classList.add('selected');
-      card.setAttribute('aria-pressed', 'true');
-    } else {
-      card.classList.remove('selected');
-      card.setAttribute('aria-pressed', 'false');
-    }
+    card.classList.toggle('selected', selectedCards[idx]);
+    card.setAttribute('aria-pressed', selectedCards[idx] ? 'true' : 'false');
 
     var anySelected = selectedCards.some(function(v) { return v; });
     var cta = document.getElementById('s1-cta');
     cta.disabled = !anySelected;
     cta.setAttribute('aria-disabled', anySelected ? 'false' : 'true');
 
-    // Show background working note on first tap
     if (anySelected) {
       document.getElementById('bg-working-note').classList.add('visible');
     }
   }
 
-  /* ── Screen 3: Chip toggles ────────────────────────────────── */
+  /* ── Screen 3: Chip toggles ──────────────────────────────── */
   function toggleChip(idx) {
     selectedChips[idx] = !selectedChips[idx];
     var chip = document.getElementById('chip-' + idx);
-    if (selectedChips[idx]) {
-      chip.classList.add('selected');
-      chip.setAttribute('aria-pressed', 'true');
-    } else {
-      chip.classList.remove('selected');
-      chip.setAttribute('aria-pressed', 'false');
-    }
+    chip.classList.toggle('selected', selectedChips[idx]);
+    chip.setAttribute('aria-pressed', selectedChips[idx] ? 'true' : 'false');
     updateChipCounter();
   }
 
@@ -1236,84 +1166,23 @@
     document.getElementById('chip-count').textContent = count;
   }
 
-  /* ── Screen 4: Phone inline success ───────────────────────── */
+  /* ── Screen 4: Phone inline success ──────────────────────── */
   function checkPhone() {
-    var phone = document.getElementById('phone-input');
-    var digits = phone.value.replace(/\D/g, '');
-    var successEl = document.getElementById('phone-success');
-    if (digits.length >= 10) {
-      successEl.classList.add('visible');
-    } else {
-      successEl.classList.remove('visible');
-    }
+    var digits = document.getElementById('phone-input').value.replace(/\D/g, '');
+    document.getElementById('phone-success').classList.toggle('visible', digits.length >= 10);
   }
 
-  /* ── Screen 5: Pre-fill from Screen 4 ─────────────────────── */
+  /* ── Screen 5: Pre-fill from Screen 4 ────────────────────── */
   function prefillResults() {
-    var name  = document.getElementById('name-input').value;
-    var phone = document.getElementById('phone-input').value;
-    if (name)  document.getElementById('s5-name').value  = name;
-    if (phone) document.getElementById('s5-phone').value = phone;
+    var name = document.getElementById('name-input').value;
+    if (name) {
+      var parts = name.split(' ');
+      document.getElementById('s5-fname').value = parts[0] || '';
+      document.getElementById('s5-lname').value = parts.slice(1).join(' ') || '';
+    }
   }
 
-  /* ── Screen 6: Reset ───────────────────────────────────────── */
-  function resetApp() {
-    // Reset state
-    selectedCards = [false, false, false, false];
-    selectedChips = [true, true, true, true];
-
-    // Reset cards
-    for (var i = 0; i < 4; i++) {
-      var c = document.getElementById('card-' + i);
-      c.classList.remove('selected');
-      c.setAttribute('aria-pressed', 'false');
-    }
-    document.getElementById('bg-working-note').classList.remove('visible');
-    document.getElementById('s1-cta').disabled = true;
-    document.getElementById('s1-cta').setAttribute('aria-disabled', 'true');
-
-    // Reset chips
-    for (var j = 0; j < 4; j++) {
-      var ch = document.getElementById('chip-' + j);
-      ch.classList.add('selected');
-      ch.setAttribute('aria-pressed', 'true');
-    }
-    document.getElementById('chip-count').textContent = '4';
-
-    // Reset fields
-    document.getElementById('zip-input').value      = '';
-    document.getElementById('household-input').value = '';
-    document.getElementById('income-select').value   = '';
-    document.getElementById('name-input').value      = '';
-    document.getElementById('dob-input').value       = '';
-    document.getElementById('phone-input').value     = '';
-    document.getElementById('phone-success').classList.remove('visible');
-    document.getElementById('s5-name').value         = '';
-    document.getElementById('s5-phone').value        = '';
-    document.getElementById('s5-email').value        = '';
-
-    // Navigate back to screen 0 (backward direction)
-    var fromEl = document.getElementById('screen-6');
-    var toEl   = document.getElementById('screen-0');
-
-    toEl.classList.remove('exit-left', 'exit-right', 'active', 'no-transition');
-    toEl.classList.add('no-transition');
-    toEl.style.transform = 'translateX(-100%)';
-    toEl.offsetHeight;
-    toEl.classList.remove('no-transition');
-
-    requestAnimationFrame(function() {
-      fromEl.classList.remove('active');
-      fromEl.classList.add('exit-right');
-      toEl.style.transform = '';
-      toEl.classList.add('active');
-    });
-
-    currentScreen = 0;
-    updateChrome();
-  }
-
-  /* ── Language buttons (UI only) ────────────────────────────── */
+  /* ── Language buttons (UI only) ──────────────────────────── */
   document.querySelectorAll('.lang-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.lang-btn').forEach(function(b) {
@@ -1325,7 +1194,7 @@
     });
   });
 
-  /* ── Init ──────────────────────────────────────────────────── */
+  /* ── Init ─────────────────────────────────────────────────── */
   updateChrome();
 </script>
 </body>
