@@ -219,21 +219,6 @@
       flex-shrink: 0;
     }
 
-    /* ── Layer badges ───────────────────────────────────────── */
-    .layer-badge-wrap { display: flex; gap: 4px; margin-bottom: 20px; }
-    .layer-badge {
-      font-size: 10px;
-      font-weight: 600;
-      font-family: var(--font-body);
-      padding: 2px 8px;
-      border-radius: 999px;
-      color: white;
-      white-space: nowrap;
-      line-height: 1.6;
-    }
-    .layer-badge.layer-a { background: #7C3AED; }
-    .layer-badge.layer-b { background: #050560; }
-
     /* ── Typography ─────────────────────────────────────────── */
     .screen-h1 {
       font-family: var(--font-display);
@@ -569,9 +554,6 @@
     <!-- ── Screen 0: Landing ───────────────────────────────────── -->
     <section class="screen active" id="screen-0" role="main" aria-label="Welcome">
       <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A — Warm entry</span>
-        </div>
         <div class="landing-wrap">
           <div class="landing-icon" aria-hidden="true">🤝</div>
           <h1 class="screen-h1">A neighbor helped you start — let's keep going.</h1>
@@ -585,9 +567,6 @@
     <!-- ── Screen 1: Situation cards ───────────────────────────── -->
     <section class="screen" id="screen-1" role="main" aria-label="What's going on">
       <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A — Situation surface</span>
-        </div>
         <h2 class="screen-h2">What's going on?</h2>
         <p class="screen-subtext">Let us know what's happening to help you best.</p>
 
@@ -632,82 +611,30 @@
         </p>
       </div>
       <div class="screen-footer">
-        <button class="btn btn-primary" id="s1-cta" onclick="navigate('s2')" disabled aria-disabled="true">These apply to me</button>
+        <button class="btn btn-primary" id="s1-cta" onclick="navigate('save')" disabled aria-disabled="true">These apply to me</button>
       </div>
     </section>
 
-    <!-- ── Screen 2: Quick basics ───────────────────────────────── -->
-    <section class="screen" id="screen-2" role="main" aria-label="Quick basics">
+    <!-- ── Screen Save: Save progress ──────────────────────────── -->
+    <section class="screen" id="screen-save" role="main" aria-label="Save your progress">
       <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-b">Layer B — Logic running</span>
-        </div>
-        <h2 class="screen-h2">A few quick questions</h2>
-        <p class="screen-subtext">These help us narrow down what you qualify for.</p>
+        <h2 class="screen-h2">Before we continue, let's save your progress.</h2>
+        <p class="screen-subtext">We'll only use this to follow up on your benefits.</p>
 
-        <div class="reassurance-box" role="note">
-          <span aria-hidden="true">✅</span>
-          <span>No Social Security number needed at this step.</span>
-        </div>
-
-        <div class="field-group">
-          <div class="field-wrap">
-            <label class="field-label" for="zip-input">ZIP code</label>
-            <input class="field-input" type="text" id="zip-input" inputmode="numeric" placeholder="e.g. 10036" maxlength="5" autocomplete="postal-code" />
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="household-input">How many people live with you?</label>
-            <input class="field-input" type="number" id="household-input" min="1" max="20" placeholder="e.g. 3" />
-          </div>
+        <div class="field-wrap">
+          <label class="field-label" for="save-phone">Phone number</label>
+          <input class="field-input" type="tel" id="save-phone" placeholder="Enter phone number" inputmode="tel" autocomplete="tel" oninput="checkSavePhone()" />
+          <span class="field-success" id="save-phone-success">✓ Saved. You can come back any time even if you don't finish today.</span>
         </div>
       </div>
       <div class="screen-footer">
-        <button class="btn btn-primary" onclick="navigate('s3')">Keep going</button>
-      </div>
-    </section>
-
-    <!-- ── Screen 3: Confirm benefit areas ─────────────────────── -->
-    <section class="screen" id="screen-3" role="main" aria-label="Confirm benefit areas">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A</span>
-          <span class="layer-badge layer-b">Layer B</span>
-        </div>
-        <h2 class="screen-h2">Here's what we'll check for you</h2>
-        <p class="screen-subtext">You may qualify for all of these. Remove any you don't need.</p>
-
-        <div class="benefit-chips" role="group" aria-label="Benefit areas to check">
-          <button class="benefit-chip selected" id="chip-0" onclick="toggleChip(0)" aria-pressed="true">
-            <span>Health coverage <span style="font-weight:400;font-size:13px;">(Medicaid, Child Health Plus)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="benefit-chip selected" id="chip-1" onclick="toggleChip(1)" aria-pressed="true">
-            <span>Food &amp; cash help <span style="font-weight:400;font-size:13px;">(SNAP, cash assistance)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="benefit-chip selected" id="chip-2" onclick="toggleChip(2)" aria-pressed="true">
-            <span>Eviction prevention <span style="font-weight:400;font-size:13px;">(legal help, rental assistance)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="benefit-chip selected" id="chip-3" onclick="toggleChip(3)" aria-pressed="true">
-            <span>Medical debt relief <span style="font-weight:400;font-size:13px;">(NYC debt relief programs)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-        </div>
-
-        <p class="live-counter" id="live-counter" aria-live="polite">Checking for <span id="chip-count">4</span> areas</p>
-      </div>
-      <div class="screen-footer">
-        <button class="btn btn-primary" onclick="startProgramScreens()">Check these for me</button>
+        <button class="btn btn-primary" id="save-cta" onclick="startProgramScreens()">Save and continue</button>
       </div>
     </section>
 
     <!-- ── Screen P1: Health questions ─────────────────────────── -->
     <section class="screen" id="screen-p1" role="main" aria-label="Health coverage questions">
       <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-b">Layer B — Targeted intake</span>
-        </div>
         <h2 class="screen-h2">Program specific questions</h2>
         <p class="prog-section-label">Health coverage</p>
 
@@ -735,9 +662,6 @@
     <!-- ── Screen P2: Eviction questions ───────────────────────── -->
     <section class="screen" id="screen-p2" role="main" aria-label="Eviction prevention questions">
       <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-b">Layer B — Targeted intake</span>
-        </div>
         <h2 class="screen-h2">Program specific questions</h2>
         <p class="prog-section-label">Eviction prevention</p>
 
@@ -762,9 +686,6 @@
     <!-- ── Screen P3: Cash / income questions ──────────────────── -->
     <section class="screen" id="screen-p3" role="main" aria-label="Cash and income questions">
       <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-b">Layer B — Targeted intake</span>
-        </div>
         <h2 class="screen-h2">More questions</h2>
 
         <div class="field-wrap" style="margin-bottom:24px;">
@@ -790,9 +711,6 @@
     <!-- ── Screen 4: Deep-dive contact ─────────────────────────── -->
     <section class="screen" id="screen-4" role="main" aria-label="More details">
       <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-b">Layer B — Targeted intake</span>
-        </div>
         <h2 class="screen-h2">Just a few more details</h2>
         <p class="screen-subtext">These are specific to the programs you selected.</p>
 
@@ -823,9 +741,6 @@
     <!-- ── Screen 5: Rich results ───────────────────────────────── -->
     <section class="screen" id="screen-5" role="main" aria-label="Your results">
       <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A — A+B output</span>
-        </div>
         <h2 class="screen-h2">Here's what we found for you</h2>
 
         <div class="result-cards" role="list">
@@ -907,26 +822,25 @@
   /* ── State ────────────────────────────────────────────────── */
   var currentScreenId = 's0';
   var selectedCards   = [false, false, false, false];
-  var selectedChips   = [true, true, true, true];
 
   // Navigation history stack for back button
   var navHistory = [];
 
-  // Queue of program-specific screens to visit after Screen 3
+  // Queue of program-specific screens to visit after save screen
   var programQueue = [];
   var programQueueIdx = 0;
 
-  // Map chip index → program screen id
-  // chip-0 = Health (p1), chip-1 = Food/cash (p3), chip-2 = Eviction (p2), chip-3 = Medical debt (no extra screen)
-  var chipToScreen = { 0: 'p1', 2: 'p2', 1: 'p3' };
+  // Map card index → program screen id
+  // card-0 = Eviction (p2), card-1 = Health (p1), card-2 = Food/cash (p3), card-3 = Medical debt (no extra screen)
+  var cardToScreen = { 0: 'p2', 1: 'p1', 2: 'p3' };
 
-  // Screen order for progress bar (named screens only)
-  var progressSteps = ['s1','s2','s3','p1','p2','p3','s4','s5'];
+  // Screen order for progress bar
+  var progressSteps = ['s1','save','p1','p2','p3','s4','s5'];
 
   /* Maps logical screen id → DOM element id suffix */
   function elId(id) {
-    // 's0'→'0', 's1'→'1' … 's6'→'6'; 'p1'→'p1', 'p2'→'p2', 'p3'→'p3'
-    if (id[0] === 's') return id.slice(1);
+    // 's0'→'0', 's1'→'1' … 's6'→'6'; 'save'→'save'; 'p1'→'p1' etc.
+    if (id[0] === 's' && id !== 'save') return id.slice(1);
     return id;
   }
 
@@ -984,10 +898,9 @@
       progressWrap.style.display = 'none';
     } else {
       progressWrap.style.display = 'block';
-      var stepIdx   = progressSteps.indexOf(currentScreenId);
-      var stepNum   = stepIdx >= 0 ? stepIdx + 1 : 1;
-      var totalSteps = buildProgramQueue().length + 4; // dynamic total
-      var pct = Math.round((stepNum / (progressSteps.length)) * 100);
+      var stepIdx = progressSteps.indexOf(currentScreenId);
+      var stepNum = stepIdx >= 0 ? stepIdx + 1 : 1;
+      var pct = Math.round((stepNum / progressSteps.length) * 100);
       progressFill.style.width = Math.min(pct, 100) + '%';
       progressLabel.textContent = 'Step ' + stepNum + ' of ' + progressSteps.length;
     }
@@ -1008,29 +921,19 @@
     if (anySelected) document.getElementById('bg-working-note').classList.add('visible');
   }
 
-  /* ── Screen 3: Chip toggles ──────────────────────────────── */
-  function toggleChip(idx) {
-    selectedChips[idx] = !selectedChips[idx];
-    var chip = document.getElementById('chip-' + idx);
-    chip.classList.toggle('selected', selectedChips[idx]);
-    chip.setAttribute('aria-pressed', selectedChips[idx] ? 'true' : 'false');
-    document.getElementById('chip-count').textContent =
-      selectedChips.filter(function(v) { return v; }).length;
-  }
-
-  /* ── Build program queue from chip selections ─────────────── */
+  /* ── Build program queue from card selections ─────────────── */
   function buildProgramQueue() {
     var queue = [];
-    // Order: health (chip 0) → eviction (chip 2) → cash (chip 1)
-    [0, 2, 1].forEach(function(chipIdx) {
-      if (selectedChips[chipIdx] && chipToScreen[chipIdx]) {
-        queue.push(chipToScreen[chipIdx]);
+    // Order: health (card 1) → eviction (card 0) → cash (card 2)
+    [1, 0, 2].forEach(function(cardIdx) {
+      if (selectedCards[cardIdx] && cardToScreen[cardIdx]) {
+        queue.push(cardToScreen[cardIdx]);
       }
     });
     return queue;
   }
 
-  /* ── Called when leaving Screen 3 ────────────────────────── */
+  /* ── Called from save screen ──────────────────────────────── */
   function startProgramScreens() {
     programQueue    = buildProgramQueue();
     programQueueIdx = 0;
@@ -1040,6 +943,14 @@
     } else {
       navigate('s4');
     }
+  }
+
+  /* ── Save screen phone field ──────────────────────────────── */
+  function checkSavePhone() {
+    var digits = document.getElementById('save-phone').value.replace(/\D/g, '');
+    var saved  = digits.length >= 10;
+    document.getElementById('save-phone-success').classList.toggle('visible', saved);
+    document.getElementById('save-cta').textContent = saved ? 'Next' : 'Save and continue';
   }
 
   /* ── Called by each program screen's Next button ─────────── */
