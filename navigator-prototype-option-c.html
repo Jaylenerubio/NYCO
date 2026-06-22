@@ -708,33 +708,39 @@
       </div>
     </section>
 
-    <!-- ── Screen 4: Deep-dive contact ─────────────────────────── -->
-    <section class="screen" id="screen-4" role="main" aria-label="More details">
+    <!-- ── Screen 4: Contact details ───────────────────────────── -->
+    <section class="screen" id="screen-4" role="main" aria-label="Your details">
       <div class="screen-body">
-        <h2 class="screen-h2">Just a few more details</h2>
-        <p class="screen-subtext">These are specific to the programs you selected.</p>
+        <h2 class="screen-h2">Almost there</h2>
+        <p class="screen-subtext">So we can connect you with someone who can help.</p>
 
         <div class="field-group">
           <div class="field-wrap">
-            <label class="field-label" for="name-input">Full name</label>
-            <input class="field-input" type="text" id="name-input" placeholder="Your full name" autocomplete="name" />
+            <label class="field-label" for="fname-input">First name</label>
+            <input class="field-input" type="text" id="fname-input" placeholder="First name" autocomplete="given-name" />
           </div>
           <div class="field-wrap">
-            <label class="field-label" for="dob-input">Date of birth</label>
-            <input class="field-input" type="date" id="dob-input" autocomplete="bday" />
-            <span class="field-sub-note">Required for Medicaid eligibility only</span>
+            <label class="field-label" for="lname-input">Last name</label>
+            <input class="field-input" type="text" id="lname-input" placeholder="Last name" autocomplete="family-name" />
           </div>
           <div class="field-wrap">
-            <label class="field-label" for="phone-input">Phone number (optional)</label>
-            <input class="field-input" type="tel" id="phone-input" placeholder="e.g. (212) 555-0100" autocomplete="tel" oninput="checkPhone()" />
-            <span class="field-success" id="phone-success">✓ We'll text you a link if you need to come back.</span>
+            <label class="field-label" for="email-input">Email <span style="font-weight:400;color:var(--text-secondary)">(optional)</span></label>
+            <input class="field-input" type="email" id="email-input" placeholder="you@example.com" autocomplete="email" />
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="phone-input">Phone number</label>
+            <input class="field-input" type="tel" id="phone-input" placeholder="e.g. (212) 555-0100" autocomplete="tel" />
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="zip-input">ZIP code</label>
+            <input class="field-input" type="text" id="zip-input" inputmode="numeric" placeholder="e.g. 10036" maxlength="5" autocomplete="postal-code" />
           </div>
         </div>
 
         <div class="privacy-note" role="note">🔒 Your info is kept private. We never share it.</div>
       </div>
       <div class="screen-footer">
-        <button class="btn btn-primary" onclick="navigate('s5')">See my full results</button>
+        <button class="btn btn-primary" onclick="navigate('s5')">See my results</button>
       </div>
     </section>
 
@@ -780,27 +786,13 @@
         </div>
 
         <div class="claim-box">
-          <h3 class="claim-box-h">Ready to claim these benefits?</h3>
-          <p class="claim-box-sub">A Health + Affordability Corps worker will follow up to start your applications.</p>
-          <div class="claim-fields">
-            <div class="field-wrap">
-              <label class="field-label" for="s5-fname">First name</label>
-              <input class="field-input" type="text" id="s5-fname" autocomplete="given-name" placeholder="Jaylene" />
-            </div>
-            <div class="field-wrap">
-              <label class="field-label" for="s5-lname">Last name</label>
-              <input class="field-input" type="text" id="s5-lname" autocomplete="family-name" placeholder="Rubio" />
-            </div>
-            <div class="field-wrap">
-              <label class="field-label" for="s5-email">Email</label>
-              <input class="field-input" type="email" id="s5-email" autocomplete="email" placeholder="you@example.com" />
-            </div>
-          </div>
+          <h3 class="claim-box-h">Ready to start claiming these?</h3>
+          <p class="claim-box-sub">A Health + Affordability Corps worker will reach out to walk you through each application — no paperwork on your own.</p>
         </div>
       </div>
       <div class="screen-footer">
-        <button class="btn btn-primary" onclick="navigate('s6')">Submit</button>
-        <button class="btn btn-ghost" onclick="navigate('s6')">Text me instead</button>
+        <button class="btn btn-primary" onclick="navigate('s6')">Connect me with someone</button>
+        <button class="btn btn-ghost" onclick="navigate('s6')">Text me the results instead</button>
       </div>
     </section>
 
@@ -872,7 +864,7 @@
     if (!isBack) navHistory.push(fromId);
     currentScreenId = toId;
 
-    if (toId === 's5') prefillResults();
+    if (toId === 's4') prefillContactScreen();
     updateChrome();
   }
 
@@ -983,20 +975,11 @@
     });
   }
 
-  /* ── Screen 4: Phone inline success ──────────────────────── */
-  function checkPhone() {
-    var digits = document.getElementById('phone-input').value.replace(/\D/g, '');
-    document.getElementById('phone-success').classList.toggle('visible', digits.length >= 10);
-  }
-
-  /* ── Screen 5: Pre-fill from Screen 4 ────────────────────── */
-  function prefillResults() {
-    var name = document.getElementById('name-input').value;
-    if (name) {
-      var parts = name.split(' ');
-      document.getElementById('s5-fname').value = parts[0] || '';
-      document.getElementById('s5-lname').value = parts.slice(1).join(' ') || '';
-    }
+  /* ── Screen 4: Prefill phone from save screen ────────────── */
+  function prefillContactScreen() {
+    var saved = document.getElementById('save-phone').value;
+    var phoneEl = document.getElementById('phone-input');
+    if (saved && !phoneEl.value) phoneEl.value = saved;
   }
 
   /* ── Language buttons (UI only) ──────────────────────────── */
