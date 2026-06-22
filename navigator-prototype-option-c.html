@@ -248,10 +248,9 @@
     .prog-section-label {
       font-size: 15px;
       font-weight: 400;
-      color: var(--text-primary);
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border-default);
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      line-height: 1.5;
     }
 
     /* ── Buttons ────────────────────────────────────────────── */
@@ -635,11 +634,11 @@
     <!-- ── Screen P1: Health questions ─────────────────────────── -->
     <section class="screen" id="screen-p1" role="main" aria-label="Health coverage questions">
       <div class="screen-body">
-        <h2 class="screen-h2">Program specific questions</h2>
-        <p class="prog-section-label">Health coverage</p>
+        <h2 class="screen-h2">Let's check your health coverage options.</h2>
+        <p class="prog-section-label">A few quick questions about your household.</p>
 
         <div class="yn-question">
-          <p class="yn-label">Does anyone in your household currently have health insurance?</p>
+          <p class="yn-label">Does anyone in your home currently have health insurance?</p>
           <div class="yn-chips" role="group" aria-label="Health insurance">
             <button class="yn-chip" id="h1-yes" onclick="selectYN('h1','yes')" aria-pressed="false">Yes</button>
             <button class="yn-chip" id="h1-no"  onclick="selectYN('h1','no')"  aria-pressed="false">No</button>
@@ -647,7 +646,7 @@
         </div>
 
         <div class="yn-question">
-          <p class="yn-label">Is anyone in the household pregnant?</p>
+          <p class="yn-label">Is anyone in your home pregnant?</p>
           <div class="yn-chips" role="group" aria-label="Pregnancy">
             <button class="yn-chip" id="h2-yes" onclick="selectYN('h2','yes')" aria-pressed="false">Yes</button>
             <button class="yn-chip" id="h2-no"  onclick="selectYN('h2','no')"  aria-pressed="false">No</button>
@@ -655,18 +654,18 @@
         </div>
       </div>
       <div class="screen-footer">
-        <button class="btn btn-primary" onclick="nextProgram()">Next</button>
+        <button class="btn btn-primary" onclick="nextProgram()">Keep going</button>
       </div>
     </section>
 
     <!-- ── Screen P2: Eviction questions ───────────────────────── -->
     <section class="screen" id="screen-p2" role="main" aria-label="Eviction prevention questions">
       <div class="screen-body">
-        <h2 class="screen-h2">Program specific questions</h2>
-        <p class="prog-section-label">Eviction prevention</p>
+        <h2 class="screen-h2">Let's see what housing help is available.</h2>
+        <p class="prog-section-label">Your answers help us find the right support.</p>
 
         <div class="yn-question">
-          <p class="yn-label">Have you received a formal eviction notice?</p>
+          <p class="yn-label">Have you gotten a formal eviction notice?</p>
           <div class="yn-chips" role="group" aria-label="Eviction notice">
             <button class="yn-chip" id="e1-yes" onclick="selectYN('e1','yes')" aria-pressed="false">Yes</button>
             <button class="yn-chip" id="e1-no"  onclick="selectYN('e1','no')"  aria-pressed="false">No</button>
@@ -674,27 +673,28 @@
         </div>
 
         <div class="field-wrap mt-2">
-          <label class="yn-label" for="months-behind">How many months are you behind on rent?</label>
-          <input class="field-input" type="text" id="months-behind" inputmode="numeric" placeholder="2 months" />
+          <label class="yn-label" for="months-behind">About how many months behind are you on rent?</label>
+          <input class="field-input" type="text" id="months-behind" inputmode="numeric" placeholder="e.g. 2" />
         </div>
       </div>
       <div class="screen-footer">
-        <button class="btn btn-primary" onclick="nextProgram()">Next</button>
+        <button class="btn btn-primary" onclick="nextProgram()">Keep going</button>
       </div>
     </section>
 
     <!-- ── Screen P3: Cash / income questions ──────────────────── -->
     <section class="screen" id="screen-p3" role="main" aria-label="Cash and income questions">
       <div class="screen-body">
-        <h2 class="screen-h2">More questions</h2>
+        <h2 class="screen-h2">Just a couple more things.</h2>
+        <p class="screen-subtext">This helps us check food and cash programs you may qualify for.</p>
 
         <div class="field-wrap" style="margin-bottom:24px;">
-          <label class="yn-label" for="hh-size">How many people live in your household?</label>
-          <input class="field-input" type="text" id="hh-size" inputmode="numeric" placeholder="##" />
+          <label class="yn-label" for="hh-size">How many people live in your home?</label>
+          <input class="field-input" type="text" id="hh-size" inputmode="numeric" placeholder="e.g. 3" />
         </div>
 
         <div>
-          <p class="yn-label">Approximate monthly household income (before taxes)</p>
+          <p class="yn-label">About how much does your household make each month? <span style="font-weight:400;color:var(--text-secondary)">(before taxes)</span></p>
           <div class="income-chips" role="group" aria-label="Income range">
             <button class="income-chip" id="inc-0" onclick="selectIncome(0)" aria-pressed="false">$0–$10,000</button>
             <button class="income-chip" id="inc-1" onclick="selectIncome(1)" aria-pressed="false">$11,000–$20,000</button>
@@ -704,7 +704,7 @@
         </div>
       </div>
       <div class="screen-footer">
-        <button class="btn btn-primary" onclick="nextProgram()">Next</button>
+        <button class="btn btn-primary" onclick="nextProgram()">Keep going</button>
       </div>
     </section>
 
