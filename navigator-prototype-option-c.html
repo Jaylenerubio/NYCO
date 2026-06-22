@@ -923,13 +923,20 @@
   // Screen order for progress bar (named screens only)
   var progressSteps = ['s1','s2','s3','p1','p2','p3','s4','s5'];
 
+  /* Maps logical screen id → DOM element id suffix */
+  function elId(id) {
+    // 's0'→'0', 's1'→'1' … 's6'→'6'; 'p1'→'p1', 'p2'→'p2', 'p3'→'p3'
+    if (id[0] === 's') return id.slice(1);
+    return id;
+  }
+
   /* ── Core navigate ────────────────────────────────────────── */
   function navigate(toId, isBack) {
     var fromId = currentScreenId;
     if (toId === fromId) return;
 
-    var fromEl = document.getElementById('screen-' + fromId);
-    var toEl   = document.getElementById('screen-' + toId);
+    var fromEl = document.getElementById('screen-' + elId(fromId));
+    var toEl   = document.getElementById('screen-' + elId(toId));
     if (!fromEl || !toEl) return;
 
     var direction = isBack ? 'back' : 'forward';
