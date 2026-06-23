@@ -102,80 +102,37 @@
       overflow: hidden;
     }
 
-    /* ── Supernav ───────────────────────────────────────────── */
-    .supernav {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border-default);
-      padding: 7px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-    .supernav-title {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-    .lang-toggles { display: flex; gap: 3px; }
-    .lang-btn {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-family: var(--font-body);
-      font-size: 11px;
-      font-weight: 500;
-      padding: 1px 5px;
-      border-radius: 3px;
-      cursor: pointer;
-      line-height: 1.4;
-      transition: color .15s, background .15s;
-    }
-    .lang-btn:hover { color: var(--text-primary); background: var(--color-gray-200); }
-    .lang-btn.active { color: var(--color-secondary-base); font-weight: 600; }
-    .lang-btn:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: 1px; }
-
     /* ── Nav chrome ─────────────────────────────────────────── */
     .nav-chrome {
       background: var(--bg-primary);
       border-bottom: 1px solid var(--border-default);
       padding: 10px 16px;
-      display: flex;
+      display: grid;
+      grid-template-columns: 40px 1fr 40px;
       align-items: center;
-      justify-content: space-between;
       flex-shrink: 0;
       min-height: 52px;
     }
-    .nav-left { display: flex; align-items: center; gap: 10px; }
     .back-btn {
       background: none;
       border: none;
       color: var(--text-link);
-      font-size: 22px;
-      cursor: pointer;
-      padding: 2px 6px 2px 0;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      transition: color var(--duration-close) var(--ease-out);
-    }
-    .back-btn:hover { color: var(--text-link-hover); }
-    .back-btn:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); border-radius: 4px; }
-    .back-btn.hidden { display: none; }
-
-    /* NYC SVG logo */
-    .nyc-logo { text-decoration: none; display: flex; align-items: center; }
-    .nyc-logo svg { display: block; }
-
-    .hamburger-btn {
-      background: none;
-      border: none;
-      color: var(--text-primary);
       font-size: 20px;
       cursor: pointer;
       padding: 4px;
       line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color var(--duration-close) var(--ease-out);
+      border-radius: 6px;
     }
-    .hamburger-btn:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); border-radius: 4px; }
+    .back-btn:hover { color: var(--text-link-hover); background: var(--bg-secondary); }
+    .back-btn:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); border-radius: 4px; }
+    .back-btn.hidden { visibility: hidden; pointer-events: none; }
+
+    /* NYC logo — centered in the grid */
+    .nyc-logo { text-decoration: none; display: flex; align-items: center; justify-content: center; }
 
     /* ── Progress bar ───────────────────────────────────────── */
     .progress-wrap {
@@ -520,27 +477,13 @@
 <body>
 <div id="app">
 
-  <!-- ── Supernav ──────────────────────────────────────────────── -->
-  <div class="supernav" role="banner">
-    <span class="supernav-title">Health and Affordability Corps</span>
-    <div class="lang-toggles" role="navigation" aria-label="Language selection">
-      <button class="lang-btn active" aria-label="English" aria-pressed="true">EN</button>
-      <button class="lang-btn" aria-label="Español" aria-pressed="false">ES</button>
-      <button class="lang-btn" aria-label="中文" aria-pressed="false">中文</button>
-      <button class="lang-btn" aria-label="বাংলা" aria-pressed="false">BN</button>
-    </div>
-  </div>
-
   <!-- ── Nav chrome ───────────────────────────────────────────── -->
   <div class="nav-chrome" role="navigation" aria-label="Main navigation">
-    <div class="nav-left">
-      <button class="back-btn hidden" id="back-btn" aria-label="Go back">←</button>
-      <!-- NYC logo -->
-      <a href="#" class="nyc-logo" aria-label="NYC Health + Affordability Corps home" onclick="resetToStart();return false;">
-        <img src="./NYC LOGO (2).svg" alt="NYC" height="22" />
-      </a>
-    </div>
-    <button class="hamburger-btn" aria-label="Open menu" aria-expanded="false">≡</button>
+    <button class="back-btn hidden" id="back-btn" aria-label="Go back">←</button>
+    <a href="#" class="nyc-logo" aria-label="NYC Health + Affordability Corps home" onclick="resetToStart();return false;">
+      <img src="./NYC LOGO (2).svg" alt="NYC" height="22" />
+    </a>
+    <span></span>
   </div>
 
   <!-- ── Progress bar ─────────────────────────────────────────── -->
@@ -1029,17 +972,6 @@
     if (saved && !phoneEl.value) phoneEl.value = saved;
   }
 
-  /* ── Language buttons (UI only) ──────────────────────────── */
-  document.querySelectorAll('.lang-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.lang-btn').forEach(function(b) {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
-    });
-  });
 
   /* ── Init ─────────────────────────────────────────────────── */
   updateChrome();
