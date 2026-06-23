@@ -793,7 +793,18 @@
       </div>
       <div class="screen-footer">
         <button class="btn btn-primary" onclick="navigate('s6')">Connect me with someone</button>
-        <button class="btn btn-ghost" onclick="navigate('s6')">Text me the results instead</button>
+        <button class="btn btn-ghost" onclick="navigateTextMe()">Text me the results instead</button>
+      </div>
+    </section>
+
+    <!-- ── Screen Text: Text sent confirmation ─────────────────── -->
+    <section class="screen" id="screen-text" role="main" aria-label="Results sent">
+      <div class="screen-body">
+        <div class="confirm-wrap">
+          <div class="confirm-emoji" aria-hidden="true">📱</div>
+          <h2 class="confirm-headline">Results sent!</h2>
+          <p class="confirm-body">We texted your results to <strong id="text-phone-display"></strong>. A Health + Affordability Corps worker will also follow up within 24 hours.</p>
+        </div>
       </div>
     </section>
 
@@ -884,7 +895,7 @@
     var progressFill  = document.getElementById('progress-fill');
     var progressLabel = document.getElementById('progress-label-text');
 
-    var hideChrome = (currentScreenId === 's0' || currentScreenId === 's6');
+    var hideChrome = (currentScreenId === 's0' || currentScreenId === 's6' || currentScreenId === 'text');
     backBtn.classList.toggle('hidden', hideChrome || navHistory.length === 0);
 
     if (hideChrome) {
@@ -974,6 +985,15 @@
       el.classList.toggle('selected', sel);
       el.setAttribute('aria-pressed', sel ? 'true' : 'false');
     });
+  }
+
+  /* ── "Text me" flow ──────────────────────────────────────── */
+  function navigateTextMe() {
+    var phone = document.getElementById('phone-input').value
+             || document.getElementById('save-phone').value
+             || 'your number';
+    document.getElementById('text-phone-display').textContent = phone;
+    navigate('text');
   }
 
   /* ── Screen 4: Prefill phone from save screen ────────────── */
