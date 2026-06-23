@@ -501,7 +501,7 @@
   </div>
 
   <!-- ── Nav chrome ───────────────────────────────────────────── -->
-  <div class="nav-chrome" role="navigation" aria-label="Main navigation">
+  <div class="nav-chrome" id="nav-chrome" role="navigation" aria-label="Main navigation">
     <button class="back-btn hidden" id="back-btn" aria-label="Go back">← Back</button>
   </div>
 
@@ -868,7 +868,8 @@
     var progressLabel = document.getElementById('progress-label-text');
 
     var hideChrome = (currentScreenId === 's0' || currentScreenId === 's6');
-    backBtn.classList.toggle('hidden', hideChrome || navHistory.length === 0);
+    document.getElementById('nav-chrome').style.display = hideChrome ? 'none' : 'flex';
+    backBtn.classList.toggle('hidden', navHistory.length === 0);
 
     if (hideChrome) {
       progressWrap.style.display = 'none';
