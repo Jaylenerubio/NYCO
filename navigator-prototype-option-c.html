@@ -102,37 +102,52 @@
       overflow: hidden;
     }
 
+    /* ── Supernav ───────────────────────────────────────────── */
+    .supernav {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-default);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .supernav-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .nyc-logo { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; }
+
     /* ── Nav chrome ─────────────────────────────────────────── */
     .nav-chrome {
       background: var(--bg-primary);
       border-bottom: 1px solid var(--border-default);
-      padding: 10px 16px;
-      display: grid;
-      grid-template-columns: 40px 1fr 40px;
+      padding: 6px 16px;
+      display: flex;
       align-items: center;
       flex-shrink: 0;
-      min-height: 52px;
+      min-height: 44px;
     }
     .back-btn {
       background: none;
       border: none;
       color: var(--text-link);
-      font-size: 20px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 500;
       cursor: pointer;
-      padding: 4px;
+      padding: 4px 8px 4px 0;
       line-height: 1;
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 4px;
       transition: color var(--duration-close) var(--ease-out);
       border-radius: 6px;
     }
-    .back-btn:hover { color: var(--text-link-hover); background: var(--bg-secondary); }
+    .back-btn:hover { color: var(--text-link-hover); }
     .back-btn:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); border-radius: 4px; }
     .back-btn.hidden { visibility: hidden; pointer-events: none; }
-
-    /* NYC logo — centered in the grid */
-    .nyc-logo { text-decoration: none; display: flex; align-items: center; justify-content: center; }
 
     /* ── Progress bar ───────────────────────────────────────── */
     .progress-wrap {
@@ -477,13 +492,17 @@
 <body>
 <div id="app">
 
+  <!-- ── Supernav ──────────────────────────────────────────────── -->
+  <div class="supernav" role="banner">
+    <a href="#" class="nyc-logo" aria-label="NYC Health + Affordability Corps home" onclick="resetToStart();return false;">
+      <img src="./NYC LOGO (2).svg" alt="NYC" height="20" />
+    </a>
+    <span class="supernav-title">Health and Affordability Corps</span>
+  </div>
+
   <!-- ── Nav chrome ───────────────────────────────────────────── -->
   <div class="nav-chrome" role="navigation" aria-label="Main navigation">
-    <button class="back-btn hidden" id="back-btn" aria-label="Go back">←</button>
-    <a href="#" class="nyc-logo" aria-label="NYC Health + Affordability Corps home" onclick="resetToStart();return false;">
-      <img src="./NYC LOGO (2).svg" alt="NYC" height="22" />
-    </a>
-    <span></span>
+    <button class="back-btn hidden" id="back-btn" aria-label="Go back">← Back</button>
   </div>
 
   <!-- ── Progress bar ─────────────────────────────────────────── -->
