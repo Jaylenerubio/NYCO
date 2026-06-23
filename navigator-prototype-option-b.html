@@ -369,11 +369,11 @@
         <div class="scroll-sentinel" id="sentinel-save"></div>
       </div>
       <div class="screen-footer" id="footer-save">
-        <button class="btn-primary" onclick="navigate('s3')">Continue</button>
+        <button class="btn-primary" onclick="navigate('s6')">Continue</button>
       </div>
     </div>
 
-    <!-- Screen 3: Myself / Household (STEP 2/5) -->
+    <!-- Screen 3: Myself / Household (STEP 3/5) -->
     <div class="screen" id="screen-3">
       <div class="screen-inner">
         <div class="heading-block">
@@ -492,7 +492,7 @@
         <div class="scroll-sentinel" id="sentinel-6"></div>
       </div>
       <div class="screen-footer" id="footer-6">
-        <button class="btn-primary" onclick="navigate('s7')">Next</button>
+        <button class="btn-primary" onclick="navigate('s3')">Next</button>
       </div>
     </div>
 
@@ -605,8 +605,8 @@
   var memberIdx     = 0;           // pointer for per-member loop
 
   // Progress: filled segments per screen (0 = hide bar)
-  var stepForScreen = { s1:1, save:0, s3:2, s4:3, s5:3, s6:4, s7:4, results:0, confirm:0 };
-  var labelForScreen = { s1:'Step 1/5', s3:'Step 2/5', s4:'Step 3/5', s5:'Step 3/5', s6:'Step 4/5', s7:'Step 4/5' };
+  var stepForScreen = { s1:1, save:0, s6:2, s3:3, s4:4, s5:4, s7:5, results:0, confirm:0 };
+  var labelForScreen = { s1:'Step 1/5', s6:'Step 2/5', s3:'Step 3/5', s4:'Step 4/5', s5:'Step 4/5', s7:'Step 5/5' };
 
   // ── ID helpers ──────────────────────────────
   function elSuffix(key) {
@@ -707,7 +707,7 @@
   }
   function continueFromScope() {
     if (scopeMode === 'household') { prepareScreen4(); navigate('s4'); }
-    else navigate('s6');
+    else navigate('s7');
   }
 
   // ── Screen 4: household members ─────────────
@@ -753,7 +753,7 @@
   function startMemberLoop() {
     // members needing detail = non-self with a relation chosen
     var extras = members.filter(function(m){ return !m.self; });
-    if (extras.length === 0) { navigate('s6'); return; }
+    if (extras.length === 0) { navigate('s7'); return; }
     memberIdx = members.findIndex(function(m){ return !m.self; });
     navigate('s5');
   }
@@ -784,7 +784,7 @@
       var t = document.getElementById('screen-5'); t.scrollTop = 0;
       setTimeout(function(){ getFooterEl('s5').classList.remove('footer-visible'); setupFooterGate(t,'s5'); }, 50);
     } else {
-      navigate('s6');
+      navigate('s7');
     }
   }
 
