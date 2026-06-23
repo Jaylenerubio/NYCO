@@ -177,15 +177,10 @@
       position: absolute;
       inset: 0;
       overflow-y: auto;
-      display: flex;
+      display: none;
       flex-direction: column;
-      transform: translateX(100%);
-      transition: transform var(--duration-open) var(--ease-out);
     }
-    .screen.active    { transform: translateX(0%); }
-    .screen.exit-left  { transform: translateX(-100%); }
-    .screen.exit-right { transform: translateX(100%); }
-    .screen.no-transition { transition: none; }
+    .screen.active { display: flex; }
 
     /* Screen inner */
     .screen-inner {
@@ -877,21 +872,8 @@
     var target  = getScreenEl(toKey);
     if (!target || current === target) return;
 
-    if (!isBack && current) {
-      navHistory.push(current.id);
-    }
-
-    if (current) {
-      current.classList.remove('active');
-      current.classList.add(isBack ? 'exit-right' : 'exit-left');
-      setTimeout(function() { current.classList.remove('exit-left','exit-right'); }, 220);
-    }
-
-    target.classList.add('no-transition');
-    target.classList.remove('exit-left','exit-right');
-    target.classList.add(isBack ? 'exit-left' : 'exit-right');
-    target.offsetWidth; // force reflow
-    target.classList.remove('no-transition');
+    if (!isBack && current) navHistory.push(current.id);
+    if (current) current.classList.remove('active');
     target.classList.add('active');
 
     updateChrome(toKey);
@@ -904,18 +886,17 @@
   function goBack() {
     if (!navHistory.length) return;
     var prevDomId = navHistory.pop();
-    var current   = document.querySelector('.screen.active');
-    var target    = document.getElementById(prevDomId);
+    var suffix  = prevDomId.replace('screen-','');
+    var prevKey = suffix === 'save' ? 'save' : suffix === '4h' ? 's4h' : 's' + suffix;
+    var current = document.querySelector('.screen.active');
+    var target  = document.getElementById(prevDomId);
     if (!target || current === target) return;
-
-    var suffix = prevDomId.replace('screen-','');
-    var prevKey = suffix === 'save' ? 'save'
-                : suffix === '4h'   ? 's4h'
-                : 's' + suffix;
-
-    navigate(prevKey, true);
-    // correct history — navigate pushed current again, pop it back
-    navHistory.pop();
+    if (current) current.classList.remove('active');
+    target.classList.add('active');
+    updateChrome(prevKey);
+    updateProgress(prevKey);
+    target.scrollTop = 0;
+    setTimeout(function() { setupFooterGate(target, prevKey); }, 50);
   }
 
   // ── Screen enter hooks ──────────────────────
