@@ -97,7 +97,8 @@
     #app {
       width: 100%;
       max-width: 390px;
-      min-height: 100vh;
+      height: 100vh;
+      height: 100dvh;
       background: var(--bg-primary);
       box-shadow: 0 0 60px rgba(0,0,0,0.18);
       display: flex;
@@ -1144,6 +1145,7 @@
   // ── Init ─────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function() {
     if (window.lucide) lucide.createIcons();
+    updateChrome('s0');
     setTimeout(function() { setupFooterGate(document.getElementById('screen-0'),'s0'); }, 100);
   });
 </script>
