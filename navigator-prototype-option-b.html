@@ -82,8 +82,12 @@
       padding: 0;
     }
 
-    html, body {
+    html {
       height: 100%;
+    }
+    body {
+      height: 100%;
+      margin: 0;
       background: var(--bg-secondary);
       font-family: var(--font-body);
       color: var(--text-primary);
@@ -97,13 +101,11 @@
     #app {
       width: 100%;
       max-width: 390px;
-      height: 100vh;
-      height: 100dvh;
+      height: 100%;
       background: var(--bg-primary);
       box-shadow: 0 0 60px rgba(0,0,0,0.18);
       display: flex;
       flex-direction: column;
-      position: relative;
       overflow: hidden;
     }
 
@@ -170,7 +172,7 @@
     }
 
     /* Screens wrapper & screens */
-    .screens-wrapper { flex: 1; position: relative; overflow: hidden; }
+    .screens-wrapper { flex: 1; min-height: 0; position: relative; overflow: hidden; }
     .screen {
       position: absolute;
       inset: 0;
