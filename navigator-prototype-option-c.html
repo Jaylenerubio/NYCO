@@ -189,6 +189,13 @@
       padding: 12px 16px 20px;
       border-top: 1px solid var(--color-gray-200);
       flex-shrink: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms var(--ease-out);
+    }
+    .screen-footer.footer-visible {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     /* ── Typography ─────────────────────────────────────────── */
@@ -841,6 +848,8 @@
       fromEl.style.transform = '';
       toEl.style.transform = '';
       toEl.classList.add('active');
+      toEl.scrollTop = 0;
+      setTimeout(function() { setupFooterGate(toEl); }, 50);
     });
 
     if (!isBack) navHistory.push(fromId);
@@ -975,6 +984,7 @@
     currentScreenId = 's0';
     navHistory = [];
     updateChrome();
+    setTimeout(function() { setupFooterGate(document.getElementById('screen-0')); }, 50);
   }
 
   /* ── Screen 5: Show phone results were sent to ───────────── */
@@ -993,8 +1003,41 @@
   }
 
 
+  /* ── Scroll-gate: show footer only when bottom is reached ─── */
+  var footerObservers = {};
+
+  function setupFooterGate(screenEl) {
+    var id = screenEl.id;
+    if (footerObservers[id]) footerObservers[id].disconnect();
+
+    var footer   = screenEl.querySelector('.screen-footer');
+    var body     = screenEl.querySelector('.screen-body');
+    if (!footer || !body) return;
+
+    // Reuse or create sentinel
+    var sentinel = body.querySelector('.scroll-sentinel');
+    if (!sentinel) {
+      sentinel = document.createElement('div');
+      sentinel.className = 'scroll-sentinel';
+      sentinel.style.height = '1px';
+      body.appendChild(sentinel);
+    }
+
+    var obs = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting) {
+        footer.classList.add('footer-visible');
+      } else {
+        footer.classList.remove('footer-visible');
+      }
+    }, { root: screenEl, threshold: 0 });
+
+    obs.observe(sentinel);
+    footerObservers[id] = obs;
+  }
+
   /* ── Init ─────────────────────────────────────────────────── */
   updateChrome();
+  setupFooterGate(document.getElementById('screen-0'));
 </script>
 </body>
 </html>
