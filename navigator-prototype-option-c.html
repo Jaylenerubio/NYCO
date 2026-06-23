@@ -497,9 +497,17 @@
 
     /* ── Screen 6: Confirmation ─────────────────────────────── */
     .confirm-wrap { display: flex; flex-direction: column; padding: 48px 16px 40px; }
-    .confirm-emoji { font-size: 80px; line-height: 1; margin-bottom: 32px; }
-    .confirm-headline { font-family: var(--font-display); font-size: 34px; font-weight: 400; line-height: 1.18; color: var(--text-primary); margin-bottom: 16px; }
-    .confirm-body { font-size: 17px; color: var(--text-secondary); line-height: 1.6; }
+    .confirm-check-circle {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: #3a7d2c; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; font-weight: 700;
+      margin: 0 auto 32px;
+      flex-shrink: 0;
+    }
+    .confirm-headline { font-family: var(--font-display); font-size: 34px; font-weight: 700; line-height: 1.18; color: var(--color-primary-base); margin-bottom: 16px; }
+    .confirm-body { font-size: 17px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px; }
+    .confirm-ref { font-size: 14px; color: var(--color-gray-500); }
 
     /* ── Utility ────────────────────────────────────────────── */
     .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -528,7 +536,7 @@
     <div class="nav-left">
       <button class="back-btn hidden" id="back-btn" aria-label="Go back">←</button>
       <!-- NYC logo -->
-      <a href="#" class="nyc-logo" aria-label="NYC Health + Affordability Corps home">
+      <a href="#" class="nyc-logo" aria-label="NYC Health + Affordability Corps home" onclick="resetToStart();return false;">
         <img src="./NYC LOGO (2).svg" alt="NYC" height="22" />
       </a>
     </div>
@@ -793,18 +801,22 @@
         </div>
       </div>
       <div class="screen-footer">
-        <button class="btn btn-primary" onclick="navigate('s6')">Connect with someone</button>
+        <button class="btn btn-primary" onclick="navigate('s6')">Connect me with a benefits worker</button>
       </div>
     </section>
 
     <!-- ── Screen 6: Confirmation ───────────────────────────────── -->
     <section class="screen" id="screen-6" role="main" aria-label="You're confirmed">
       <div class="screen-body">
-        <div class="confirm-wrap">
-          <div class="confirm-emoji" aria-hidden="true">🎉</div>
-          <h2 class="confirm-headline">A Health + Affordability Corps worker will follow up to start your applications.</h2>
-          <p class="confirm-body">Watch for a text or call from our team within 24 hours.</p>
+        <div class="confirm-wrap" style="align-items:center;text-align:center;padding-top:64px;">
+          <div class="confirm-check-circle" aria-hidden="true">✓</div>
+          <h2 class="confirm-headline">You're in the system!</h2>
+          <p class="confirm-body">A Health + Affordability Corps worker will follow up in 24 hours. Watch for a text from our team.</p>
+          <p class="confirm-ref">Reference #: NYC-2026-<span id="confirm-ref-num"></span></p>
         </div>
+      </div>
+      <div class="screen-footer">
+        <button class="btn btn-primary" onclick="resetToStart()">Done</button>
       </div>
     </section>
 
@@ -867,6 +879,7 @@
 
     if (toId === 's4') prefillContactScreen();
     if (toId === 's5') prefillResultsPhone();
+    if (toId === 's6') generateRefNumber();
     updateChrome();
   }
 
@@ -975,6 +988,23 @@
       el.classList.toggle('selected', sel);
       el.setAttribute('aria-pressed', sel ? 'true' : 'false');
     });
+  }
+
+  /* ── Screen 6: Generate reference number + reset ─────────── */
+  function generateRefNumber() {
+    var n = String(Math.floor(Math.random() * 90000) + 10000);
+    document.getElementById('confirm-ref-num').textContent = n;
+  }
+
+  function resetToStart() {
+    var current = document.getElementById('screen-' + elId(currentScreenId));
+    var home    = document.getElementById('screen-0');
+    if (current) { current.classList.remove('active'); current.classList.add('exit-right'); }
+    home.classList.remove('exit-left','exit-right','no-transition');
+    home.classList.add('active');
+    currentScreenId = 's0';
+    navHistory = [];
+    updateChrome();
   }
 
   /* ── Screen 5: Show phone results were sent to ───────────── */
