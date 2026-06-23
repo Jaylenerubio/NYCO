@@ -350,9 +350,9 @@
     .card-desc  { font-size: 14px; color: var(--text-secondary); line-height: 1.4; display: block; }
     .card-check {
       width: 22px; height: 22px;
-      color: var(--color-secondary-base);
+      color: var(--color-primary-base);
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; font-weight: 700; flex-shrink: 0;
+      flex-shrink: 0;
       opacity: 0; transition: opacity .15s;
     }
     .situation-card.selected .card-check { opacity: 1; }
@@ -546,7 +546,7 @@
               <span class="card-title">I might lose my home</span>
               <span class="card-desc">Eviction, late rent, unstable housing</span>
             </span>
-            <span class="card-check" aria-hidden="true">✓</span>
+            <span class="card-check" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
           </button>
           <button class="situation-card" id="card-1" onclick="toggleCard(1)" aria-pressed="false">
             <span class="card-icon" aria-hidden="true">🩺</span>
@@ -554,7 +554,7 @@
               <span class="card-title">I need health coverage</span>
               <span class="card-desc">Medicaid, insurance, renewal</span>
             </span>
-            <span class="card-check" aria-hidden="true">✓</span>
+            <span class="card-check" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
           </button>
           <button class="situation-card" id="card-2" onclick="toggleCard(2)" aria-pressed="false">
             <span class="card-icon" aria-hidden="true">🛒</span>
@@ -562,7 +562,7 @@
               <span class="card-title">Struggling with food or bills</span>
               <span class="card-desc">SNAP, cash assistance, safety-net</span>
             </span>
-            <span class="card-check" aria-hidden="true">✓</span>
+            <span class="card-check" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
           </button>
           <button class="situation-card" id="card-3" onclick="toggleCard(3)" aria-pressed="false">
             <span class="card-icon" aria-hidden="true">🏥</span>
@@ -570,7 +570,7 @@
               <span class="card-title">Medical bills I can't pay</span>
               <span class="card-desc">Debt relief, NYC MIP program</span>
             </span>
-            <span class="card-check" aria-hidden="true">✓</span>
+            <span class="card-check" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
           </button>
         </div>
 
