@@ -232,6 +232,9 @@
     .info-chip-text { font-size: 14px; line-height: 1.5; color: var(--color-black); }
     .info-chip-text.italic { font-style: italic; font-size: 16px; line-height: 1.4; }
 
+    /* Field helptext */
+    .field-help { font-size: 13px; line-height: 1.4; color: var(--color-gray-700); margin-top: 6px; }
+
     /* Saved note */
     .saved-note { display: none; font-size: 14px; line-height: 1.5; color: var(--color-success-text); align-items: flex-start; gap: 6px; }
     .saved-note.visible { display: flex; }
@@ -378,10 +381,6 @@
           <h2>Don't miss out on getting your bills covered.</h2>
           <p class="screen-subtext">Please provide a phone number so that we can provide personalized support.</p>
         </div>
-        <div class="info-chip">
-          <span class="info-chip-icon"><i data-lucide="info"></i></span>
-          <span class="info-chip-text">We'll never spam you or share your information without your consent.</span>
-        </div>
         <div class="field-group">
           <label class="field-label" for="lang-input-save">What is your preferred language?</label>
           <select class="field-select" id="lang-input-save">
@@ -401,6 +400,7 @@
         <div class="field-group">
           <label class="field-label" for="phone-input">Phone number</label>
           <input class="field-input" type="tel" id="phone-input" placeholder="Enter phone number" oninput="checkSave()" maxlength="14" />
+          <p class="field-help">We'll never spam you or share your information without your consent.</p>
         </div>
         <div class="saved-note" id="saved-note">
           <i data-lucide="check"></i>
