@@ -247,14 +247,21 @@
 
     /* Results */
     .results-list { display: flex; flex-direction: column; }
-    .result-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 8px 16px; }
+    .result-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 16px 8px; }
     .result-divider { height: 1px; background: var(--color-neutral-300); width: 100%; }
-    .result-info { display: flex; flex-direction: column; gap: 8px; padding: 8px; }
-    .result-name { font-size: 16px; color: var(--color-black); }
-    .result-value { font-size: 16px; color: var(--text-secondary); }
-    .match-badge { flex-shrink: 0; padding: 4px 8px; border-radius: 30px; font-size: 14px; font-weight: 700; line-height: 1.5; white-space: nowrap; }
-    .match-badge.strong { background: var(--color-success-bg); color: var(--color-success-text); }
-    .match-badge.possible { background: var(--color-warning-bg); color: var(--color-warning-text); }
+    .result-info { display: flex; flex-direction: column; gap: 6px; }
+    .result-name { font-size: 20px; color: var(--color-black); line-height: 1.3; }
+    .result-value { font-size: 15px; color: var(--text-secondary); }
+    .match-badge { flex-shrink: 0; padding: 6px 14px; border-radius: 30px; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap; }
+    .match-badge.strong { background: #DCEFD2; color: #2F7D32; }
+    .match-badge.possible { background: #F4E8CE; color: #8A6A22; }
+    .result-note {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+      background: var(--color-neutral-100); border-radius: 8px; padding: 16px;
+      font-size: 15px; line-height: 1.5; color: var(--color-black);
+    }
+    .result-note-close { background: none; border: none; cursor: pointer; flex-shrink: 0; color: var(--color-black); padding: 0; display: flex; }
+    .result-note-close svg { width: 20px; height: 20px; }
 
     /* Confirmation */
     .confirm-icon {
@@ -566,15 +573,11 @@
     <div class="screen" id="screen-results">
       <div class="screen-inner">
         <h2>Here's what you could save.</h2>
-        <div class="info-chip">
-          <span class="info-chip-icon"><i data-lucide="smartphone"></i></span>
-          <span class="info-chip-text italic">We've saved and texted your results</span>
-        </div>
         <div class="results-list">
           <div class="result-row">
             <div class="result-info">
-              <span class="result-name">Health coverage</span>
-              <span class="result-value">Est. value $2,400/yr</span>
+              <span class="result-name">Health Coverage</span>
+              <span class="result-value">est. value $2,400/yr</span>
             </div>
             <span class="match-badge strong">Strong match</span>
           </div>
@@ -582,7 +585,7 @@
           <div class="result-row">
             <div class="result-info">
               <span class="result-name">Food &amp; cash help</span>
-              <span class="result-value">Est. value $3,000/yr</span>
+              <span class="result-value">est. value $3,000/yr</span>
             </div>
             <span class="match-badge strong">Strong match</span>
           </div>
@@ -590,10 +593,22 @@
           <div class="result-row">
             <div class="result-info">
               <span class="result-name">Eviction help</span>
-              <span class="result-value">Est. value $5,000/yr</span>
+              <span class="result-value">-----</span>
             </div>
             <span class="match-badge possible">Possible match</span>
           </div>
+          <div class="result-divider"></div>
+          <div class="result-row">
+            <div class="result-info">
+              <span class="result-name">Medical debt relief</span>
+              <span class="result-value">est. value $5,000/yr</span>
+            </div>
+            <span class="match-badge possible">Possible match</span>
+          </div>
+        </div>
+        <div class="result-note" id="result-note">
+          <span>These results have been sent to your phone number for you to refer to.</span>
+          <button class="result-note-close" aria-label="Dismiss" onclick="document.getElementById('result-note').style.display='none'"><i data-lucide="x"></i></button>
         </div>
         <div class="scroll-sentinel" id="sentinel-results"></div>
       </div>
