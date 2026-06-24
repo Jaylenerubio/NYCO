@@ -622,8 +622,18 @@
   var memberIdx     = 0;           // pointer for per-member loop
 
   // Progress: filled segments per screen (0 = hide bar)
-  var stepForScreen = { s1:1, save:2, s3:3, s6:4, s4:5, s5:6, s7:7, results:0, confirm:0 };
-  var labelForScreen = { s1:'Step 1/7', save:'Step 2/7', s3:'Step 3/7', s6:'Step 4/7', s4:'Step 5/7', s5:'Step 6/7', s7:'Step 7/7' };
+  // Household visits add-household (s4) + member loop (s5) before about-you (s6).
+  // Myself skips s4/s5 and goes straight to about-you.
+  function stepForScreen(key) {
+    if (scopeMode === 'household') {
+      return ({ s1:1, save:2, s3:3, s4:4, s5:5, s6:6, s7:7 })[key] || 0;
+    }
+    return ({ s1:1, save:2, s3:3, s6:4, s7:5 })[key] || 0;
+  }
+  function labelForScreen(key) {
+    var n = stepForScreen(key);
+    return n > 0 ? ('Step ' + n + '/7') : '';
+  }
 
   // ── ID helpers ──────────────────────────────
   function elSuffix(key) {
@@ -692,15 +702,16 @@
     // First screen (s1) and confirmation hide the back row.
     var hideBack = (key === 's1' || key === 'confirm');
     chrome.classList.toggle('hidden', hideBack);
-    var steps = stepForScreen[key] || 0;
+    var steps = stepForScreen(key);
     progWrap.style.display = steps > 0 ? '' : 'none';
   }
   function updateProgress(key) {
-    var n = stepForScreen[key] || 0;
+    var n = stepForScreen(key);
     for (var i = 1; i <= 7; i++) {
       document.getElementById('seg-' + i).classList.toggle('filled', i <= n);
     }
-    if (labelForScreen[key]) document.getElementById('progress-label-text').textContent = labelForScreen[key];
+    var label = labelForScreen(key);
+    if (label) document.getElementById('progress-label-text').textContent = label;
   }
 
   // ── Screen 1: situation cards ───────────────
@@ -726,11 +737,11 @@
     document.getElementById('btn-s3-continue').disabled = false;
   }
   function continueFromScope() {
-    navigate('s6');
+    if (scopeMode === 'household') { prepareScreen4(); navigate('s4'); }
+    else navigate('s6');
   }
   function continueFromAboutYou() {
-    if (scopeMode === 'household') { prepareScreen4(); navigate('s4'); }
-    else navigate('s7');
+    navigate('s7');
   }
 
   // ── Screen 4: household members ─────────────
@@ -776,7 +787,7 @@
   function startMemberLoop() {
     // members needing detail = non-self with a relation chosen
     var extras = members.filter(function(m){ return !m.self; });
-    if (extras.length === 0) { navigate('s7'); return; }
+    if (extras.length === 0) { navigate('s6'); return; }
     memberIdx = members.findIndex(function(m){ return !m.self; });
     navigate('s5');
   }
@@ -807,7 +818,7 @@
       var t = document.getElementById('screen-5'); t.scrollTop = 0;
       setTimeout(function(){ getFooterEl('s5').classList.remove('footer-visible'); setupFooterGate(t,'s5'); }, 50);
     } else {
-      navigate('s7');
+      navigate('s6');
     }
   }
 
@@ -815,7 +826,7 @@
   function prepareScreen6() {
     var name = document.getElementById('first-name').value.trim();
     if (scopeMode === 'household') {
-      document.getElementById('s6-title').textContent = name ? ("Let’s get to know " + name + " first.") : "Let’s get to know you first.";
+      document.getElementById('s6-title').textContent = name ? ("Let’s get to know " + name + ".") : "Let’s get to know you.";
     } else {
       document.getElementById('s6-title').textContent = "Tell us about yourself.";
     }
