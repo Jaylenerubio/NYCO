@@ -356,6 +356,18 @@
           <span class="info-chip-text">We'll never spam you or share your information without your consent.</span>
         </div>
         <div class="field-group">
+          <label class="field-label" for="lang-input-save">What is your preferred language?</label>
+          <select class="field-select" id="lang-input-save">
+            <option value="">Select a language</option>
+            <option>English</option>
+            <option>Spanish</option>
+            <option>Korean</option>
+            <option>French</option>
+            <option>Japanese</option>
+            <option>Chinese</option>
+          </select>
+        </div>
+        <div class="field-group">
           <label class="field-label" for="first-name">What's your first name?</label>
           <input class="field-input" type="text" id="first-name" placeholder="Enter preferred name" oninput="checkSave()" />
         </div>
@@ -445,18 +457,6 @@
       <div class="screen-inner">
         <div class="heading-block">
           <h2 id="s6-title">Let's get to know you first.</h2>
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="language-input">What is your preferred language?</label>
-          <select class="field-select" id="language-input">
-            <option value="">Select a language</option>
-            <option>English</option>
-            <option>Spanish</option>
-            <option>Korean</option>
-            <option>French</option>
-            <option>Japanese</option>
-            <option>Chinese</option>
-          </select>
         </div>
         <div class="field-group">
           <label class="field-label" for="age-input">How old are you?</label>
@@ -797,8 +797,11 @@
   // ── Screen 6: about you ─────────────────────
   function prepareScreen6() {
     var name = document.getElementById('first-name').value.trim();
-    document.getElementById('s6-title').textContent = name ? ("Let's get to know " + name + " first.") : "Let's get to know you first.";
-    // hide household-size question on the household path (already collected members)
+    if (scopeMode === 'household') {
+      document.getElementById('s6-title').textContent = name ? ("Let’s get to know " + name + " first.") : "Let’s get to know you first.";
+    } else {
+      document.getElementById('s6-title').textContent = "Tell us about yourself.";
+    }
     document.getElementById('household-size-group').style.display = (scopeMode === 'household') ? 'none' : '';
   }
   function selectIncome(idx) {
@@ -840,7 +843,7 @@
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
     document.getElementById('btn-s3-continue').disabled = true;
-    document.getElementById('language-input').value = '';
+    document.getElementById('lang-input-save').value = '';
     document.getElementById('age-input').value = '';
     document.getElementById('household-size-input').value = '';
     document.getElementById('s5-age').value = '';
