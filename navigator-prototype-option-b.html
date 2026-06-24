@@ -370,7 +370,7 @@
         <div class="scroll-sentinel" id="sentinel-save"></div>
       </div>
       <div class="screen-footer" id="footer-save">
-        <button class="btn-primary" onclick="navigate('s6')">Continue</button>
+        <button class="btn-primary" onclick="navigate('s3')">Continue</button>
       </div>
     </div>
 
@@ -395,7 +395,7 @@
     <div class="screen" id="screen-4">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2>Who is part of your household?</h2>
+          <h2>Now, let's add your household.</h2>
           <p class="screen-subtext">Include people living with you who are family members, dependents, or make income for the family.</p>
         </div>
         <div class="member-list" id="member-list"></div>
@@ -444,7 +444,7 @@
     <div class="screen" id="screen-6">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2 id="s6-title">Let's get to know you.</h2>
+          <h2 id="s6-title">Let's get to know you first.</h2>
         </div>
         <div class="field-group">
           <label class="field-label" for="language-input">What is your preferred language?</label>
@@ -492,7 +492,7 @@
         <div class="scroll-sentinel" id="sentinel-6"></div>
       </div>
       <div class="screen-footer" id="footer-6">
-        <button class="btn-primary" onclick="navigate('s3')">Next</button>
+        <button class="btn-primary" onclick="continueFromAboutYou()">Next</button>
       </div>
     </div>
 
@@ -605,8 +605,8 @@
   var memberIdx     = 0;           // pointer for per-member loop
 
   // Progress: filled segments per screen (0 = hide bar)
-  var stepForScreen = { s1:1, save:0, s6:2, s3:3, s4:4, s5:4, s7:5, results:0, confirm:0 };
-  var labelForScreen = { s1:'Step 1/5', s6:'Step 2/5', s3:'Step 3/5', s4:'Step 4/5', s5:'Step 4/5', s7:'Step 5/5' };
+  var stepForScreen = { s1:1, save:0, s3:2, s6:3, s4:4, s5:4, s7:5, results:0, confirm:0 };
+  var labelForScreen = { s1:'Step 1/5', s3:'Step 2/5', s6:'Step 3/5', s4:'Step 4/5', s5:'Step 4/5', s7:'Step 5/5' };
 
   // ── ID helpers ──────────────────────────────
   function elSuffix(key) {
@@ -706,6 +706,9 @@
     document.getElementById('btn-s3-continue').disabled = false;
   }
   function continueFromScope() {
+    navigate('s6');
+  }
+  function continueFromAboutYou() {
     if (scopeMode === 'household') { prepareScreen4(); navigate('s4'); }
     else navigate('s7');
   }
@@ -791,7 +794,7 @@
   // ── Screen 6: about you ─────────────────────
   function prepareScreen6() {
     var name = document.getElementById('first-name').value.trim();
-    document.getElementById('s6-title').textContent = name ? ("Let's get to know " + name + ".") : "Let's get to know you.";
+    document.getElementById('s6-title').textContent = name ? ("Let's get to know " + name + " first.") : "Let's get to know you first.";
     // hide household-size question on the household path (already collected members)
     document.getElementById('household-size-group').style.display = (scopeMode === 'household') ? 'none' : '';
   }
