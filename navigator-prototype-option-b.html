@@ -580,11 +580,11 @@
           <div class="confirm-icon">
             <svg viewBox="0 0 40 40"><polyline points="8 21 16 29 32 11"/></svg>
           </div>
-          <h2>You're in the system!</h2>
+          <h2 id="confirm-title">We got you.</h2>
           <p style="margin-top:var(--space-2);color:var(--text-secondary);font-size:16px;line-height:1.6;">
-            A benefits worker will follow up to help you get started with your applications. Watch for a text or call within 24 hours.
+            We'll take it from here.<br><br>
+            Look out for a text from one of our NYC Health &amp; Affordability Corps workers in 24 hours to start your applications.
           </p>
-          <div class="ref-number" id="ref-number">NYC-2026-XXXXX</div>
         </div>
         <div class="scroll-sentinel" id="sentinel-confirm"></div>
       </div>
@@ -662,7 +662,10 @@
     if (key === 's5') renderMemberQuestion();
     if (key === 's6') prepareScreen6();
     if (key === 's7') prepareScreen7();
-    if (key === 'confirm') document.getElementById('ref-number').textContent = 'NYC-2026-' + genRef();
+    if (key === 'confirm') {
+      var cname = document.getElementById('first-name').value.trim();
+      document.getElementById('confirm-title').textContent = cname ? ('We got you, ' + cname + '.') : 'We got you.';
+    }
   }
 
   // ── Chrome & progress ───────────────────────
