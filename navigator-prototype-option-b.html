@@ -208,6 +208,7 @@
       cursor: pointer; text-align: center;
       transition: border-color 150ms ease, background 150ms ease;
     }
+    .chip-row.hug-content .chip { flex: 0 0 auto; }
     .chip:hover { border-color: var(--color-secondary-base); }
     .chip.selected { border-color: var(--color-secondary-base); background: var(--color-secondary-light); color: var(--color-secondary-dark); }
 
@@ -512,7 +513,7 @@
         </div>
         <div class="field-group">
           <span class="field-label" id="medicaid-label">Do you have Medicaid or Medicare?</span>
-          <div class="chip-grid-2">
+          <div class="chip-row hug-content">
             <button class="chip" id="medicaid-0" onclick="selectMedicaid(0)">Medicaid only</button>
             <button class="chip" id="medicaid-1" onclick="selectMedicaid(1)">Medicare only</button>
             <button class="chip" id="medicaid-2" onclick="selectMedicaid(2)">Both Medicaid and Medicare</button>
