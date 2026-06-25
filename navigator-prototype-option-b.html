@@ -104,7 +104,21 @@
     .btn-readmore { align-self: center; background: var(--color-neutral-100); border: none; border-radius: 999px; padding: 12px 28px; font-family: var(--font-body); font-size: 16px; font-weight: 600; color: var(--color-black); cursor: pointer; }
     .btn-readmore:hover { background: var(--color-neutral-200); }
     .consent-check { display: flex; gap: 12px; align-items: flex-start; }
-    .consent-check input { width: 22px; height: 22px; flex-shrink: 0; margin-top: 2px; accent-color: var(--color-secondary-base); cursor: pointer; }
+    .consent-check input {
+      -webkit-appearance: none; appearance: none;
+      width: 24px; height: 24px; flex-shrink: 0; margin-top: 1px;
+      border: 2px solid var(--color-neutral-300); border-radius: 8px;
+      background: var(--color-white); cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background 150ms ease, border-color 150ms ease;
+    }
+    .consent-check input:checked { background: var(--color-secondary-base); border-color: var(--color-secondary-base); }
+    .consent-check input:checked::after {
+      content: ''; width: 6px; height: 11px;
+      border: solid var(--color-white); border-width: 0 2.5px 2.5px 0;
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
+    .consent-check input:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: 2px; }
     .consent-check label { font-size: 16px; line-height: 1.5; color: var(--color-black); cursor: pointer; }
 
     /* Buttons */
