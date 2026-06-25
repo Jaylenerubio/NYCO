@@ -295,6 +295,7 @@
       <div class="progress-seg" id="seg-3"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-4"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-5"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-6"><span class="seg-fill"></span></div>
     </div>
   </div>
 
@@ -459,17 +460,17 @@
       </div>
     </div>
 
-    <!-- S6: About you (Step 4/5, myself path) -->
+    <!-- S6: About you (myself: Step 4/5 · household: Step 5/6) -->
     <div class="screen step-screen" id="screen-6">
       <div class="screen-inner">
         <div class="heading-block">
-          <h1>Tell us about yourself.</h1>
+          <h1 id="s6-title">Tell us about yourself.</h1>
         </div>
         <div class="field-group">
           <label class="field-label" for="age-input">How old are you?</label>
           <input class="field-input" type="number" id="age-input" placeholder="e.g. 30" min="0" max="120" />
         </div>
-        <div class="field-group">
+        <div class="field-group" id="household-size-group">
           <label class="field-label" for="household-size-input">How many people are in your household?</label>
           <input class="field-input" type="number" id="household-size-input" placeholder="e.g. 2" min="1" max="20" />
         </div>
@@ -604,16 +605,17 @@
   var scopeMode     = null;   // 'myself' | 'household'
   var members       = [];     // [{relation, self, age}]
 
-  // ── Progress — 5 steps, both paths ─────────
+  // ── Progress — household 6 steps (adds S4), myself 5 steps ──
   function stepForScreen(key) {
     if (scopeMode === 'household') {
-      return ({ s1:1, save:2, s3:3, s4:4, s5:4, s7:5 })[key] || 0;
+      return ({ s1:1, save:2, s3:3, s4:4, s6:5, s7:6 })[key] || 0;
     }
     return ({ s1:1, save:2, s3:3, s6:4, s7:5 })[key] || 0;
   }
+  function totalSteps() { return scopeMode === 'household' ? 6 : 5; }
   function labelForScreen(key) {
     var n = stepForScreen(key);
-    return n > 0 ? ('Step ' + n + '/5') : '';
+    return n > 0 ? ('Step ' + n + '/' + totalSteps()) : '';
   }
 
   // ── ID helpers ──────────────────────────────
@@ -667,6 +669,7 @@
   // ── Screen enter hooks ──────────────────────
   function onScreenEnter(key) {
     if (key === 's4') renderMembers();
+    if (key === 's6') prepareScreen6();
     if (key === 's7') prepareScreen7();
     if (key === 'confirm') {
       var cname = document.getElementById('first-name').value.trim();
@@ -691,9 +694,12 @@
   }
   function updateProgress(key) {
     var n = stepForScreen(key);
-    for (var i = 1; i <= 5; i++) {
-      var fill = document.getElementById('seg-' + i).querySelector('.seg-fill');
-      fill.style.width = (i <= n ? 100 : 0) + '%';
+    var total = totalSteps();
+    for (var i = 1; i <= 6; i++) {
+      var seg = document.getElementById('seg-' + i);
+      if (i > total) { seg.style.display = 'none'; continue; }
+      seg.style.display = '';
+      seg.querySelector('.seg-fill').style.width = (i <= n ? 100 : 0) + '%';
     }
     var label = labelForScreen(key);
     if (label) document.getElementById('progress-label-text').textContent = label;
@@ -808,6 +814,19 @@
 
   // After S4: go straight to S6 (about you)
   function afterHousehold() { navigate('s6'); }
+
+  // S6 adapts to path: household hides redundant household-size question + uses a warmer title.
+  function prepareScreen6() {
+    var name  = document.getElementById('first-name').value.trim();
+    var title = document.getElementById('s6-title');
+    if (scopeMode === 'household') {
+      title.textContent = name ? ("Let's get to know " + name + ".") : "Let's get to know you.";
+      document.getElementById('household-size-group').style.display = 'none';
+    } else {
+      title.textContent = "Tell us about yourself.";
+      document.getElementById('household-size-group').style.display = '';
+    }
+  }
 
   // ── S6: about you (myself only) ─────────────
   function selectIncome(idx) {
