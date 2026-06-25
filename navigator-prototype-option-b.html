@@ -423,7 +423,7 @@
         <div class="scroll-sentinel" id="sentinel-save"></div>
       </div>
       <div class="screen-footer" id="footer-save">
-        <button class="btn-primary" onclick="navigate('s3')">Continue</button>
+        <button class="btn-primary" id="btn-save-continue" onclick="navigate('s3')" disabled>Continue</button>
       </div>
     </div>
 
@@ -779,10 +779,13 @@
 
   // ── Save ────────────────────────────────────
   function checkSave() {
-    var contact = document.getElementById('contact-input').value.trim();
-    var isPhone = contact.replace(/\D/g,'').length >= 10;
-    var isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+    var firstName = document.getElementById('first-name').value.trim();
+    var contact   = document.getElementById('contact-input').value.trim();
+    var isPhone   = contact.replace(/\D/g,'').length >= 10;
+    var isEmail   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+    var valid     = firstName !== '' && (isPhone || isEmail);
     document.getElementById('saved-note').classList.toggle('visible', isPhone || isEmail);
+    document.getElementById('btn-save-continue').disabled = !valid;
   }
 
   // ── S3: scope ───────────────────────────────
@@ -951,6 +954,7 @@
     document.getElementById('saved-note').classList.remove('visible');
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
+    document.getElementById('btn-save-continue').disabled = true;
     document.getElementById('btn-s3-continue').disabled = true;
     document.getElementById('lang-input').value = '';
     document.getElementById('consent-checkbox').checked = false;
