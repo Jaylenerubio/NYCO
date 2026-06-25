@@ -314,8 +314,8 @@
         <div class="field-group">
           <label class="field-label" for="lang-input">Select language</label>
           <select class="field-select" id="lang-input">
-            <option value="">Select language</option>
-            <option>English</option>
+            <option value="" disabled>Select language</option>
+            <option selected>English</option>
             <option>Spanish</option>
             <option>Korean</option>
             <option>French</option>
@@ -957,7 +957,7 @@
     document.getElementById('scope-household').classList.remove('selected');
     document.getElementById('btn-save-continue').disabled = true;
     document.getElementById('btn-s3-continue').disabled = true;
-    document.getElementById('lang-input').value = '';
+    document.getElementById('lang-input').value = 'English';
     document.getElementById('consent-checkbox').checked = false;
     document.getElementById('btn-consent-continue').disabled = true;
     document.getElementById('consent-more').classList.remove('open');
