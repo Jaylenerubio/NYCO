@@ -531,46 +531,6 @@
         <div class="scroll-sentinel" id="sentinel-7"></div>
       </div>
       <div class="screen-footer" id="footer-7">
-        <button class="btn-primary" onclick="navigate('results')">Continue</button>
-      </div>
-    </div>
-
-    <!-- Results -->
-    <div class="screen" id="screen-results">
-      <div class="screen-inner">
-        <h2>Here's what you could save.</h2>
-        <div class="results-list">
-          <div class="result-row">
-            <div class="result-info">
-              <span class="result-name">Health Coverage</span>
-              <span class="result-value">est. value $2,400/yr</span>
-            </div>
-            <span class="match-badge strong">Strong match</span>
-          </div>
-          <div class="result-divider"></div>
-          <div class="result-row">
-            <div class="result-info">
-              <span class="result-name">Food &amp; cash help</span>
-              <span class="result-value">est. value $3,000/yr</span>
-            </div>
-            <span class="match-badge strong">Strong match</span>
-          </div>
-          <div class="result-divider"></div>
-          <div class="result-row">
-            <div class="result-info">
-              <span class="result-name">Eviction help</span>
-              <span class="result-value">-----</span>
-            </div>
-            <span class="match-badge possible">Possible match</span>
-          </div>
-        </div>
-        <div class="result-note" id="result-note">
-          <span>We've saved and sent you your results.</span>
-          <button class="result-note-close" aria-label="Dismiss" onclick="document.getElementById('result-note').style.display='none'"><i data-lucide="x"></i></button>
-        </div>
-        <div class="scroll-sentinel" id="sentinel-results"></div>
-      </div>
-      <div class="screen-footer" id="footer-results">
         <button class="btn-primary" onclick="navigate('confirm')">Connect me with a benefits worker</button>
       </div>
     </div>
@@ -882,8 +842,7 @@
     document.getElementById('consent-fade-wrap').classList.remove('expanded');
     document.getElementById('readmore-btn').textContent = 'Read more';
     document.getElementById('member-list').innerHTML = '';
-    document.getElementById('result-note').style.display = '';
-    document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
     document.querySelectorAll('.screen-footer').forEach(function(f) { f.classList.remove('footer-visible'); });
 
     var cur     = document.querySelector('.screen.active');
