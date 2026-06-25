@@ -10,9 +10,7 @@
     :root {
       --color-primary-base:    #050560;
       --color-primary-dark:    #030339;
-      --color-secondary-light: #D3DEFA;
       --color-secondary-base:  #284CCA;
-      --color-secondary-dark:  #182D79;
       --color-white:           #FFFFFF;
       --color-neutral-100:     #F5F5F5;
       --color-neutral-200:     #EEEEEE;
@@ -20,91 +18,48 @@
       --color-gray-400:        #C2C2C2;
       --color-gray-500:        #AAAAAA;
       --color-black:           #191919;
-      --color-navy-text:       #121C3D;
       --text-secondary:        #6B6B7A;
-      --color-success-bg:      #ECFFF5;
       --color-success-text:    #006333;
-      --color-warning-bg:      #F9FFA6;
-      --color-warning-text:    #8A8800;
       --color-error-base:      #EC131E;
-      --color-error-light:     #F8D9DE;
-
-      --bg-primary:   var(--color-white);
-      --bg-secondary: var(--color-neutral-100);
-      --border-default: var(--color-neutral-300);
-
-      --duration-open:  220ms;
-      --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
-
-      --focus-ring-color:  var(--color-secondary-base);
-      --focus-ring-width:  3px;
-      --focus-ring-offset: 2px;
-
-      --font-display: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
-      --font-body:    'Public Sans', system-ui, -apple-system, sans-serif;
-
-      --space-1: 8px;
-      --space-2: 16px;
-      --space-3: 24px;
-      --space-4: 32px;
+      --bg-primary:            var(--color-white);
+      --bg-secondary:          var(--color-neutral-100);
+      --border-default:        var(--color-neutral-300);
+      --ease-out:              cubic-bezier(0.16, 1, 0.3, 1);
+      --font-display:          'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+      --font-body:             'Public Sans', system-ui, -apple-system, sans-serif;
+      --space-1: 8px; --space-2: 16px; --space-3: 24px; --space-4: 32px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { height: 100%; }
     body {
-      height: 100%;
-      background: var(--bg-secondary);
-      font-family: var(--font-body);
-      color: var(--color-black);
-      font-size: 16px;
-      line-height: 1.5;
-      display: flex;
-      justify-content: center;
+      height: 100%; background: var(--bg-secondary); font-family: var(--font-body);
+      color: var(--color-black); font-size: 16px; line-height: 1.5;
+      display: flex; justify-content: center;
     }
-
     #app {
-      width: 100%;
-      max-width: 390px;
-      height: 100%;
-      background: var(--bg-primary);
-      box-shadow: 0 0 60px rgba(0,0,0,0.18);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      width: 100%; max-width: 390px; height: 100%; background: var(--bg-primary);
+      box-shadow: 0 0 60px rgba(0,0,0,0.18); display: flex; flex-direction: column; overflow: hidden;
     }
     @media (max-width: 430px) { #app { box-shadow: none; } }
 
     /* Supernav */
     .supernav {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border-default);
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
+      background: var(--bg-secondary); border-bottom: 1px solid var(--border-default);
+      padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
     }
     .nyc-logo { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; }
-    .supernav-title { font-size: 13px; font-weight: 500; color: var(--text-secondary); line-height: 1.2; }
 
     /* Back row */
     .nav-chrome {
-      background: var(--bg-primary);
-      border-bottom: 1px solid var(--border-default);
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
+      background: var(--bg-primary); border-bottom: 1px solid var(--border-default);
+      padding: 16px; display: flex; align-items: center; flex-shrink: 0;
     }
     .nav-chrome.hidden { display: none; }
     .back-btn {
-      background: none; border: none; cursor: pointer;
-      color: var(--color-black);
-      font-family: var(--font-body);
-      font-size: 16px; font-weight: 400;
-      display: flex; align-items: center; gap: 8px;
-      padding: 0;
+      background: none; border: none; cursor: pointer; color: var(--color-black);
+      font-family: var(--font-body); font-size: 16px; font-weight: 400;
+      display: flex; align-items: center; gap: 8px; padding: 0;
     }
     .back-btn svg { width: 24px; height: 24px; }
 
@@ -114,9 +69,24 @@
     @keyframes progEnter { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: translateY(0); } }
     .progress-label { font-size: 12px; line-height: 1.6; text-transform: uppercase; color: var(--color-black); margin-bottom: 13px; }
     .progress-track { display: flex; gap: 2px; }
-    .progress-seg { flex: 1; height: 8px; border-radius: 20px; background: var(--color-neutral-100); overflow: hidden; }
+    .progress-seg { flex: 1; height: 8px; border-radius: 20px; background: var(--color-neutral-200); overflow: hidden; }
     .progress-seg .seg-fill { display: block; height: 100%; width: 0; background: var(--color-secondary-base); border-radius: 20px; transition: width .45s cubic-bezier(.4,0,.2,1); }
     .progress-seg.filled .seg-fill { width: 100%; }
+
+    /* Screens */
+    .screens-wrapper { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+    .screen { position: absolute; inset: 0; overflow-y: auto; display: none; flex-direction: column; }
+    .screen.active { display: flex; }
+    .screen-inner { width: 100%; padding: 24px 16px; flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+    #screen-landing .screen-inner { padding-top: 56px; }
+    .screen-inner.centered { justify-content: center; align-items: center; text-align: center; }
+
+    /* Typography — matches uploaded screener */
+    h1 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 1.14; letter-spacing: -.5px; color: var(--color-black); }
+    .step-screen h1 { font-size: 28px; line-height: 1.3; letter-spacing: normal; }
+    h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.3; color: var(--color-black); }
+    .heading-block { display: flex; flex-direction: column; gap: var(--space-1); }
+    .screen-subtext { font-size: 18px; color: var(--text-secondary); line-height: 1.5; text-wrap: pretty; }
 
     /* Landing */
     .pill-time { display: inline-block; align-self: flex-start; background: #DCEFD2; color: #2F7D32; border-radius: 999px; padding: 6px 16px; font-size: 14px; font-weight: 500; }
@@ -136,55 +106,36 @@
     .consent-check input { width: 22px; height: 22px; flex-shrink: 0; margin-top: 2px; accent-color: var(--color-secondary-base); cursor: pointer; }
     .consent-check label { font-size: 16px; line-height: 1.5; color: var(--color-black); cursor: pointer; }
 
-    /* Screens */
-    .screens-wrapper { flex: 1; min-height: 0; position: relative; overflow: hidden; }
-    .screen { position: absolute; inset: 0; overflow-y: auto; display: none; flex-direction: column; }
-    .screen.active { display: flex; }
-
-    .screen-inner { width: 100%; padding: 24px 16px; flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
-    #screen-landing .screen-inner { padding-top: 56px; }
-    .screen-inner.centered { justify-content: center; align-items: center; text-align: center; }
-
-    /* Typography */
-    h1 { font-family: var(--font-display); font-weight: 400; font-size: 32px; line-height: 1.3; color: var(--color-black); }
-    h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.3; color: var(--color-black); }
-    .heading-block { display: flex; flex-direction: column; gap: var(--space-1); }
-    .screen-subtext { font-size: 16px; color: var(--text-secondary); line-height: 1.5; }
-
     /* Buttons */
     .btn-primary {
-      display: block; width: 100%;
-      padding: 16px 24px;
-      background: var(--color-primary-base);
-      color: var(--color-white);
+      display: block; width: 100%; padding: 16px 24px;
+      background: var(--color-primary-base); color: var(--color-white);
       border: 2px solid transparent; border-radius: 4px;
       font-family: var(--font-body); font-size: 18px; font-weight: 600; line-height: 22px;
-      text-align: center; cursor: pointer;
-      transition: background 150ms ease;
+      text-align: center; cursor: pointer; transition: background 150ms ease;
     }
     .btn-primary:hover:not(:disabled) { background: var(--color-primary-dark); }
     .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-primary:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
-
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 20px;
-      background: transparent;
-      color: var(--color-primary-base);
-      border: 1.5px solid var(--color-neutral-300); border-radius: 4px;
-      font-family: var(--font-body); font-size: 16px; font-weight: 600;
-      cursor: pointer; transition: background 150ms ease, border-color 150ms ease;
-    }
-    .btn-secondary:hover { background: var(--color-neutral-100); border-color: var(--color-gray-400); }
-    .btn-secondary svg { width: 18px; height: 18px; }
 
     .btn-text-danger {
-      background: none; border: none; cursor: pointer;
-      color: var(--color-error-base);
+      background: none; border: none; cursor: pointer; color: var(--color-error-base);
       font-family: var(--font-body); font-size: 14px; font-weight: 500;
       display: inline-flex; align-items: center; gap: 4px; padding: 4px 0;
     }
     .btn-text-danger svg { width: 14px; height: 14px; }
+
+    /* Scope buttons — full-width stacked */
+    .scope-stack { display: flex; flex-direction: column; gap: 14px; }
+    .scope-btn {
+      display: block; width: 100%; padding: 18px;
+      border: 1px solid var(--color-neutral-300); border-radius: 6px;
+      background: var(--color-white); color: var(--color-black);
+      font-family: var(--font-body); font-size: 16px; font-weight: 400;
+      cursor: pointer; text-align: center;
+      transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+    }
+    .scope-btn:hover { border-color: var(--color-secondary-base); }
+    .scope-btn.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
 
     /* Fields */
     .field-group { display: flex; flex-direction: column; gap: 8px; }
@@ -195,16 +146,26 @@
       font-family: var(--font-body); font-size: 16px; color: var(--color-black);
       background: var(--color-white); transition: border-color 150ms ease;
     }
-    .field-select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23191919' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px; cursor: pointer; }
+    .field-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23191919' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px; cursor: pointer;
+    }
     .field-input:focus, .field-select:focus { outline: none; border-color: var(--color-secondary-base); box-shadow: 0 0 0 3px rgba(40,76,202,0.15); }
     .field-input::placeholder { color: var(--color-gray-500); }
+    .field-input:disabled { background: var(--color-neutral-100); color: var(--color-gray-500); cursor: default; }
+    .field-help { font-size: 13px; line-height: 1.4; color: var(--text-secondary); margin-top: 6px; }
+
+    /* Saved note */
+    .saved-note { display: none; font-size: 14px; line-height: 1.5; color: var(--color-success-text); align-items: flex-start; gap: 6px; }
+    .saved-note.visible { display: flex; }
+    .saved-note svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
 
     /* Situation cards */
     .cards-grid { display: flex; flex-direction: column; gap: var(--space-1); }
     .situation-card {
       display: flex; align-items: flex-start; gap: var(--space-1);
-      padding: 8px 16px;
-      background: var(--color-white);
+      padding: 8px 16px; background: var(--color-white);
       border: 2px solid var(--color-neutral-200); border-radius: 8px;
       cursor: pointer; text-align: left; width: 100%;
       transition: border-color 150ms ease, background 150ms ease;
@@ -220,45 +181,29 @@
 
     /* Chips */
     .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip-row.hug-content { flex-wrap: wrap; }
     .chip-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .chip {
-      flex: 1; min-width: 0;
-      padding: 18px 8px;
-      background: var(--color-white);
-      border: 1px solid var(--color-neutral-300); border-radius: 8px;
+      flex: 1; min-width: 0; padding: 18px 8px;
+      background: var(--color-white); border: 1px solid var(--color-neutral-300); border-radius: 8px;
       font-family: var(--font-body); font-size: 16px; font-weight: 400; color: var(--color-black);
       cursor: pointer; text-align: center;
       transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease, transform .12s ease;
     }
     .chip-row.hug-content .chip { flex: 0 1 auto; padding: 18px 22px; white-space: nowrap; }
-    .chip-grid-2 .chip, .chip-row .chip { padding: 18px 8px; }
     .chip:hover { border-color: var(--color-secondary-base); }
     .chip:active { transform: scale(.97); }
-    .chip.selected { border-color: var(--color-secondary-base); background: #F1F4FD; color: var(--color-black); box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+    .chip.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
 
     /* Info chip */
-    .info-chip {
-      background: var(--color-neutral-100); border-radius: 8px;
-      padding: 16px;
-      display: flex; gap: 8px; align-items: flex-start;
-    }
+    .info-chip { background: var(--color-neutral-100); border-radius: 8px; padding: 16px; display: flex; gap: 8px; align-items: flex-start; }
     .info-chip-icon { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-black); margin-top: 2px; }
     .info-chip-icon svg { width: 20px; height: 20px; }
     .info-chip-text { font-size: 14px; line-height: 1.5; color: var(--color-black); }
-    .info-chip-text.italic { font-style: italic; font-size: 16px; line-height: 1.4; }
 
-    /* Field helptext */
-    .field-help { font-size: 13px; line-height: 1.4; color: var(--text-secondary); margin-top: 6px; }
-
-    /* Saved note */
-    .saved-note { display: none; font-size: 14px; line-height: 1.5; color: var(--color-success-text); align-items: flex-start; gap: 6px; }
-    .saved-note.visible { display: flex; }
-    .saved-note svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
-
-    /* Add member (outlined pill, springy press) */
+    /* Add member (outlined pill) */
     .add-member {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
       border: 1px solid var(--color-secondary-base); border-radius: 999px;
       background: var(--color-white); color: var(--color-secondary-base);
       font-family: var(--font-body); font-size: 18px; font-weight: 600;
@@ -271,9 +216,9 @@
     .add-member svg { width: 18px; height: 18px; }
 
     /* Household member rows */
-    .member-list { display: flex; flex-direction: column; gap: var(--space-2); }
-    .member-row { display: flex; flex-direction: column; gap: 8px; }
-    .member-row-head { display: flex; align-items: center; justify-content: space-between; }
+    .member-list { display: flex; flex-direction: column; gap: var(--space-3); }
+    .member-entry { display: flex; flex-direction: column; gap: 8px; }
+    .member-inline-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
     /* Results */
     .results-list { display: flex; flex-direction: column; }
@@ -300,22 +245,13 @@
       margin: 0 auto var(--space-3);
     }
     .confirm-icon svg { width: 40px; height: 40px; stroke: white; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-    .ref-number {
-      font-size: 16px; font-weight: 600; color: var(--text-secondary);
-      background: var(--color-neutral-100); border: 1.5px solid var(--border-default);
-      border-radius: 4px; padding: 10px 16px; text-align: center; letter-spacing: 0.05em;
-      margin-top: var(--space-3);
-    }
 
     /* Scroll-gate footer */
     .screen-footer {
-      position: sticky; bottom: 0;
-      background: var(--bg-primary);
-      padding: 16px 16px 24px;
-      flex-shrink: 0;
+      position: sticky; bottom: 0; background: var(--bg-primary);
+      padding: 16px 16px 24px; flex-shrink: 0;
       display: flex; flex-direction: column; gap: var(--space-1);
-      opacity: 0; pointer-events: none;
-      transition: opacity 200ms var(--ease-out);
+      opacity: 0; pointer-events: none; transition: opacity 200ms var(--ease-out);
     }
     .screen-footer.footer-visible { opacity: 1; pointer-events: auto; }
     .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
@@ -330,28 +266,26 @@
     </a>
   </div>
 
-  <div class="nav-chrome hidden" id="nav-chrome" role="navigation" aria-label="Back">
+  <div class="nav-chrome hidden" id="nav-chrome" role="navigation">
     <button class="back-btn" id="back-btn" aria-label="Go back" onclick="goBack()">
       <i data-lucide="arrow-left"></i> Back
     </button>
   </div>
 
   <div class="progress-wrap" id="progress-wrap" style="display:none">
-    <div class="progress-label" id="progress-label-text">Step 1/7</div>
+    <div class="progress-label" id="progress-label-text">Step 1/5</div>
     <div class="progress-track">
       <div class="progress-seg" id="seg-1"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-2"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-3"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-4"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-5"><span class="seg-fill"></span></div>
-      <div class="progress-seg" id="seg-6"><span class="seg-fill"></span></div>
-      <div class="progress-seg" id="seg-7"><span class="seg-fill"></span></div>
     </div>
   </div>
 
   <div class="screens-wrapper">
 
-    <!-- Landing (no progress, no nav) -->
+    <!-- Landing -->
     <div class="screen active" id="screen-landing">
       <div class="screen-inner">
         <div class="heading-block">
@@ -380,7 +314,7 @@
       </div>
     </div>
 
-    <!-- Consent (no progress, no nav) -->
+    <!-- Consent -->
     <div class="screen" id="screen-consent">
       <div class="screen-inner">
         <div class="heading-block">
@@ -402,11 +336,11 @@
       </div>
     </div>
 
-    <!-- Screen 1: How can we help? (STEP 1/5) -->
-    <div class="screen" id="screen-1">
+    <!-- S1: How can we help (Step 1/5) -->
+    <div class="screen step-screen" id="screen-1">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2>How can we help?</h2>
+          <h1>How can we help?</h1>
           <p class="screen-subtext">Take 2 minutes to share what's going on. We'll automatically match you with the right programs and services for you.</p>
         </div>
         <div class="cards-grid">
@@ -446,11 +380,11 @@
       </div>
     </div>
 
-    <!-- Screen save: phone (no progress) -->
-    <div class="screen" id="screen-save">
+    <!-- Save: contact info (Step 2/5) -->
+    <div class="screen step-screen" id="screen-save">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2>Don't miss out on getting your bills covered.</h2>
+          <h1>Don't miss out on getting your bills covered.</h1>
           <p class="screen-subtext">Please provide a phone number so that we can provide personalized support.</p>
         </div>
         <div class="field-group">
@@ -477,15 +411,15 @@
       </div>
     </div>
 
-    <!-- Screen 3: Myself / Household (STEP 3/5) -->
-    <div class="screen" id="screen-3">
+    <!-- S3: Myself / Household (Step 3/5) -->
+    <div class="screen step-screen" id="screen-3">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2>Are you applying for yourself or your household?</h2>
+          <h1>Would you like to check for just yourself or your household?</h1>
         </div>
-        <div class="chip-row">
-          <button class="chip" id="scope-myself" onclick="selectScope('myself')">Myself</button>
-          <button class="chip" id="scope-household" onclick="selectScope('household')">Household</button>
+        <div class="scope-stack">
+          <button class="scope-btn" id="scope-myself" onclick="selectScope('myself')">Myself</button>
+          <button class="scope-btn" id="scope-household" onclick="selectScope('household')">Household</button>
         </div>
         <div class="scroll-sentinel" id="sentinel-3"></div>
       </div>
@@ -494,64 +428,53 @@
       </div>
     </div>
 
-    <!-- Screen 4: Household members (STEP 3/5) -->
-    <div class="screen" id="screen-4">
+    <!-- S4: Household members — Relation + Age inline (Step 4/5, household path) -->
+    <div class="screen step-screen" id="screen-4">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2>Now, let's add your household.</h2>
+          <h1>Who is part of your household?</h1>
           <p class="screen-subtext">Include people living with you who are family members, dependents, or make income for the family.</p>
         </div>
         <div class="member-list" id="member-list"></div>
-        <button class="add-member" onclick="addMember()">Add member <i data-lucide="plus"></i></button>
+        <button class="add-member" onclick="addMember()"><i data-lucide="plus"></i> Add member</button>
         <div class="scroll-sentinel" id="sentinel-4"></div>
       </div>
       <div class="screen-footer" id="footer-4">
-        <button class="btn-primary" onclick="startMemberLoop()">Continue</button>
+        <button class="btn-primary" onclick="afterHousehold()">Continue</button>
       </div>
     </div>
 
-    <!-- Screen 5: Per-member details (STEP 3/5, loops) -->
-    <div class="screen" id="screen-5">
+    <!-- S5: Per-member disability (Step 4/5, loops through household members) -->
+    <div class="screen step-screen" id="screen-5">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2 id="s5-title">Tell us about your relative</h2>
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="s5-age">Age</label>
-          <input class="field-input" type="number" id="s5-age" placeholder="e.g. 30" min="0" max="120" />
+          <h1 id="s5-title">Tell us about your spouse</h1>
         </div>
         <div class="field-group">
           <span class="field-label">Do they have a disability?</span>
-          <div class="chip-row">
-            <button class="chip" id="s5-disability-yes" onclick="selectMemberQ('disability','yes')">Yes</button>
-            <button class="chip" id="s5-disability-no" onclick="selectMemberQ('disability','no')">No</button>
-          </div>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Are they a U.S. citizen?</span>
-          <div class="chip-row">
-            <button class="chip" id="s5-citizen-yes" onclick="selectMemberQ('citizen','yes')">Yes</button>
-            <button class="chip" id="s5-citizen-no" onclick="selectMemberQ('citizen','no')">No</button>
+          <div class="scope-stack" style="margin-top:8px;">
+            <button class="scope-btn" id="s5-disability-yes" onclick="selectMemberDisability('yes')">Yes</button>
+            <button class="scope-btn" id="s5-disability-no" onclick="selectMemberDisability('no')">No</button>
           </div>
         </div>
         <div class="scroll-sentinel" id="sentinel-5"></div>
       </div>
       <div class="screen-footer" id="footer-5">
-        <button class="btn-primary" onclick="nextMember()">Continue</button>
+        <button class="btn-primary" id="btn-s5-continue" onclick="nextMemberDisability()" disabled>Continue</button>
       </div>
     </div>
 
-    <!-- Screen 6: About you (STEP 4/5) -->
-    <div class="screen" id="screen-6">
+    <!-- S6: About you (Step 4/5, myself path) -->
+    <div class="screen step-screen" id="screen-6">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2 id="s6-title">Let's get to know you first.</h2>
+          <h1>Tell us about yourself.</h1>
         </div>
         <div class="field-group">
           <label class="field-label" for="age-input">How old are you?</label>
           <input class="field-input" type="number" id="age-input" placeholder="e.g. 30" min="0" max="120" />
         </div>
-        <div class="field-group" id="household-size-group">
+        <div class="field-group">
           <label class="field-label" for="household-size-input">How many people are in your household?</label>
           <input class="field-input" type="number" id="household-size-input" placeholder="e.g. 2" min="1" max="20" />
         </div>
@@ -564,32 +487,18 @@
             <button class="chip" id="income-3" onclick="selectIncome(3)">$5,000+</button>
           </div>
         </div>
-        <div class="field-group">
-          <span class="field-label">Do you have a disability?</span>
-          <div class="chip-row">
-            <button class="chip" id="disability-yes" onclick="selectYN('disability','yes')">Yes</button>
-            <button class="chip" id="disability-no" onclick="selectYN('disability','no')">No</button>
-          </div>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Are you a U.S. citizen?</span>
-          <div class="chip-row">
-            <button class="chip" id="citizen-yes" onclick="selectYN('citizen','yes')">Yes</button>
-            <button class="chip" id="citizen-no" onclick="selectYN('citizen','no')">No</button>
-          </div>
-        </div>
         <div class="scroll-sentinel" id="sentinel-6"></div>
       </div>
       <div class="screen-footer" id="footer-6">
-        <button class="btn-primary" onclick="continueFromAboutYou()">Next</button>
+        <button class="btn-primary" onclick="navigate('s7')">Continue</button>
       </div>
     </div>
 
-    <!-- Screen 7: A few more questions (STEP 4/5) -->
-    <div class="screen" id="screen-7">
+    <!-- S7: Quick questions (Step 5/5) -->
+    <div class="screen step-screen" id="screen-7">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2>Answer a few more quick questions.</h2>
+          <h1>Answer a few more quick questions.</h1>
           <p class="screen-subtext">Give your best guess if you're not sure.</p>
         </div>
         <div class="field-group">
@@ -597,6 +506,7 @@
           <div class="chip-row">
             <button class="chip" id="snap-yes" onclick="selectYN('snap','yes')">Yes</button>
             <button class="chip" id="snap-no" onclick="selectYN('snap','no')">No</button>
+            <button class="chip" id="snap-notsure" onclick="selectYN('snap','notsure')">Not sure</button>
           </div>
         </div>
         <div class="field-group">
@@ -615,6 +525,13 @@
             <button class="chip" id="pregnant-no" onclick="selectYN('pregnant','no')">No</button>
           </div>
         </div>
+        <div class="field-group" id="s7-disability-group">
+          <span class="field-label" id="s7-disability-label">Do you have a disability?</span>
+          <div class="chip-row">
+            <button class="chip" id="s7disability-yes" onclick="selectYN('s7disability','yes')">Yes</button>
+            <button class="chip" id="s7disability-no" onclick="selectYN('s7disability','no')">No</button>
+          </div>
+        </div>
         <div class="scroll-sentinel" id="sentinel-7"></div>
       </div>
       <div class="screen-footer" id="footer-7">
@@ -622,7 +539,7 @@
       </div>
     </div>
 
-    <!-- Results: Here's what you could save (no progress) -->
+    <!-- Results -->
     <div class="screen" id="screen-results">
       <div class="screen-inner">
         <h2>Here's what you could save.</h2>
@@ -670,7 +587,7 @@
       </div>
     </div>
 
-    <!-- Confirmation (no progress, no nav) -->
+    <!-- Confirmation -->
     <div class="screen" id="screen-confirm">
       <div class="screen-inner centered">
         <div>
@@ -697,30 +614,27 @@
   // ── State ──────────────────────────────────
   var navHistory    = [];
   var selectedCards = new Set();
-  var scopeMode     = null;        // 'myself' | 'household'
-  var members       = [];          // [{relation, age, disability, citizen}]
-  var memberIdx     = 0;           // pointer for per-member loop
+  var scopeMode     = null;   // 'myself' | 'household'
+  var members       = [];     // [{relation, self, age}]
 
-  // Progress: filled segments per screen (0 = hide bar)
-  // Household visits add-household (s4) + member loop (s5) before about-you (s6).
-  // Myself skips s4/s5 and goes straight to about-you.
+  // ── Progress — 5 steps, both paths ─────────
   function stepForScreen(key) {
     if (scopeMode === 'household') {
-      return ({ s1:1, save:2, s3:3, s4:4, s5:5, s6:6, s7:7 })[key] || 0;
+      return ({ s1:1, save:2, s3:3, s4:4, s5:4, s7:5 })[key] || 0;
     }
     return ({ s1:1, save:2, s3:3, s6:4, s7:5 })[key] || 0;
   }
   function labelForScreen(key) {
     var n = stepForScreen(key);
-    return n > 0 ? ('Step ' + n + '/7') : '';
+    return n > 0 ? ('Step ' + n + '/5') : '';
   }
 
   // ── ID helpers ──────────────────────────────
   function elSuffix(key) {
-    if (key === 'save') return 'save';
+    if (key === 'save')    return 'save';
     if (key === 'results') return 'results';
     if (key === 'confirm') return 'confirm';
-    if (/^s/.test(key)) return key.slice(1);
+    if (/^s/.test(key))    return key.slice(1);
     return key;
   }
   function getScreenEl(key)   { return document.getElementById('screen-'   + elSuffix(key)); }
@@ -728,16 +642,13 @@
   function getSentinelEl(key) { return document.getElementById('sentinel-' + elSuffix(key)); }
 
   // ── Navigate ────────────────────────────────
-  function navigate(toKey, isBack) {
-    isBack = !!isBack;
+  function navigate(toKey) {
     var current = document.querySelector('.screen.active');
     var target  = getScreenEl(toKey);
     if (!target || current === target) return;
-
-    if (!isBack && current) navHistory.push(current.id);
+    if (current) navHistory.push(current.id);
     if (current) current.classList.remove('active');
     target.classList.add('active');
-
     updateChrome(toKey);
     updateProgress(toKey);
     onScreenEnter(toKey);
@@ -751,8 +662,8 @@
     var current   = document.querySelector('.screen.active');
     var target    = document.getElementById(prevDomId);
     if (!target || current === target) return;
-    var suffix  = prevDomId.replace('screen-','');
-    var prevKey = suffix === 'save' ? 'save'
+    var suffix = prevDomId.replace('screen-', '');
+    var prevKey = suffix === 'save'    ? 'save'
                 : suffix === 'results' ? 'results'
                 : suffix === 'confirm' ? 'confirm'
                 : suffix === 'landing' ? 'landing'
@@ -768,8 +679,7 @@
 
   // ── Screen enter hooks ──────────────────────
   function onScreenEnter(key) {
-    if (key === 's5') renderMemberQuestion();
-    if (key === 's6') prepareScreen6();
+    if (key === 's4') renderMembers();
     if (key === 's7') prepareScreen7();
     if (key === 'confirm') {
       var cname = document.getElementById('first-name').value.trim();
@@ -781,13 +691,11 @@
   function updateChrome(key) {
     var chrome   = document.getElementById('nav-chrome');
     var progWrap = document.getElementById('progress-wrap');
-    // Landing (first screen) and confirmation hide the back row.
     var hideBack = (key === 'landing' || key === 'confirm');
     chrome.classList.toggle('hidden', hideBack);
-    var steps = stepForScreen(key);
+    var steps     = stepForScreen(key);
     var wasHidden = (progWrap.style.display === 'none');
     progWrap.style.display = steps > 0 ? '' : 'none';
-    // Replay the entry animation each time the bar transitions from hidden to shown.
     if (steps > 0 && wasHidden) {
       progWrap.classList.remove('enter');
       void progWrap.offsetWidth;
@@ -796,14 +704,14 @@
   }
   function updateProgress(key) {
     var n = stepForScreen(key);
-    for (var i = 1; i <= 7; i++) {
+    for (var i = 1; i <= 5; i++) {
       document.getElementById('seg-' + i).classList.toggle('filled', i <= n);
     }
     var label = labelForScreen(key);
     if (label) document.getElementById('progress-label-text').textContent = label;
   }
 
-  // ── Screen 1: situation cards ───────────────
+  // ── S1: situation cards ─────────────────────
   function toggleCard(key) {
     var el = document.getElementById('card-' + key);
     if (selectedCards.has(key)) { selectedCards.delete(key); el.classList.remove('selected'); el.setAttribute('aria-pressed','false'); }
@@ -811,7 +719,7 @@
     document.getElementById('btn-s1-continue').disabled = (selectedCards.size === 0);
   }
 
-  // ── Landing / consent ───────────────────────
+  // ── Consent ─────────────────────────────────
   function toggleReadMore() {
     var more = document.getElementById('consent-more');
     var btn  = document.getElementById('readmore-btn');
@@ -824,7 +732,7 @@
     document.getElementById('btn-consent-continue').disabled = !document.getElementById('consent-checkbox').checked;
   }
 
-  // ── Screen save: contact ────────────────────
+  // ── Save ────────────────────────────────────
   function checkSave() {
     var contact = document.getElementById('contact-input').value.trim();
     var isPhone = contact.replace(/\D/g,'').length >= 10;
@@ -832,7 +740,7 @@
     document.getElementById('saved-note').classList.toggle('visible', isPhone || isEmail);
   }
 
-  // ── Screen 3: scope ─────────────────────────
+  // ── S3: scope ───────────────────────────────
   function selectScope(mode) {
     scopeMode = mode;
     document.getElementById('scope-myself').classList.toggle('selected', mode === 'myself');
@@ -843,111 +751,132 @@
     if (scopeMode === 'household') { prepareScreen4(); navigate('s4'); }
     else navigate('s6');
   }
-  function continueFromAboutYou() {
-    navigate('s7');
-  }
 
-  // ── Screen 4: household members ─────────────
+  // ── S4: household members (inline Relation + Age) ──
+  var RELATIONS = ['Your spouse','Your child','Your parent','Your sibling','Other relative','Other'];
+
   function prepareScreen4() {
-    if (members.length === 0) members = [{ relation:'You', self:true, age:'', disability:null, citizen:null }];
+    if (members.length === 0) {
+      var firstName = document.getElementById('first-name').value.trim();
+      members = [{ relation: firstName || '', self: true, age: '' }];
+    }
     renderMembers();
   }
-  var RELATIONS = ['Your spouse','Your child','Your parent','Your sibling','Other relative','Other'];
+
   function renderMembers() {
-    var list = document.getElementById('member-list');
+    var list      = document.getElementById('member-list');
+    var firstName = document.getElementById('first-name').value.trim();
     list.innerHTML = '';
     members.forEach(function(m, i) {
-      var row = document.createElement('div');
-      row.className = 'member-row';
+      var entry = document.createElement('div');
+      entry.className = 'member-entry';
       if (m.self) {
-        row.innerHTML =
-          '<label class="field-label">Relation</label>' +
-          '<input class="field-input" type="text" value="You" disabled />';
+        entry.innerHTML =
+          '<div class="member-inline-row">' +
+            '<div class="field-group">' +
+              '<label class="field-label">Relation</label>' +
+              '<input class="field-input" type="text" value="' + escHtml(firstName || '(Name auto-filled)') + '" disabled />' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label">Age</label>' +
+              '<input class="field-input" type="number" placeholder="e.g 32" min="0" max="120" value="' + escHtml(m.age) + '" oninput="members[' + i + '].age=this.value" />' +
+            '</div>' +
+          '</div>';
       } else {
-        var opts = RELATIONS.map(function(r){
-          return '<option' + (m.relation === r ? ' selected' : '') + '>' + r + '</option>';
-        }).join('');
-        row.innerHTML =
-          '<div class="member-row-head">' +
-            '<label class="field-label">Relation</label>' +
+        var opts = '<option value="">Select relation</option>' +
+          RELATIONS.map(function(r) {
+            return '<option' + (m.relation === r ? ' selected' : '') + '>' + escHtml(r) + '</option>';
+          }).join('');
+        entry.innerHTML =
+          '<div style="display:flex;justify-content:flex-end;">' +
             '<button class="btn-text-danger" onclick="removeMember(' + i + ')"><i data-lucide="x"></i> Remove</button>' +
           '</div>' +
-          '<select class="field-select" onchange="members[' + i + '].relation=this.value">' +
-            '<option value="">Select relation</option>' + opts +
-          '</select>';
+          '<div class="member-inline-row">' +
+            '<div class="field-group">' +
+              '<label class="field-label">Relation</label>' +
+              '<select class="field-select" onchange="members[' + i + '].relation=this.value">' + opts + '</select>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label">Age</label>' +
+              '<input class="field-input" type="number" placeholder="e.g 32" min="0" max="120" value="' + escHtml(m.age) + '" oninput="members[' + i + '].age=this.value" />' +
+            '</div>' +
+          '</div>';
       }
-      list.appendChild(row);
+      list.appendChild(entry);
     });
     if (window.lucide) lucide.createIcons();
   }
-  function addMember() {
-    members.push({ relation:'', self:false, age:'', disability:null, citizen:null });
-    renderMembers();
-  }
-  function removeMember(i) { members.splice(i,1); renderMembers(); }
 
-  // ── Per-member loop (screen 5) ──────────────
-  function startMemberLoop() {
-    // members needing detail = non-self with a relation chosen
-    var extras = members.filter(function(m){ return !m.self; });
-    if (extras.length === 0) { navigate('s6'); return; }
-    memberIdx = members.findIndex(function(m){ return !m.self; });
+  function addMember() {
+    members.push({ relation: '', self: false, age: '' });
+    renderMembers();
+    var s4 = document.getElementById('screen-4');
+    if (s4) requestAnimationFrame(function() { s4.scrollTop = s4.scrollHeight; });
+  }
+  function removeMember(i) { members.splice(i, 1); renderMembers(); }
+
+  // After S4: loop through non-self members for disability question
+  var memberIdx = 0;
+  function afterHousehold() {
+    var nonSelf = members.filter(function(m) { return !m.self; });
+    if (nonSelf.length === 0) { navigate('s7'); return; }
+    memberIdx = members.findIndex(function(m) { return !m.self; });
+    renderMemberDisability();
     navigate('s5');
   }
-  function renderMemberQuestion() {
+  function renderMemberDisability() {
     var m = members[memberIdx];
-    var rel = (m && m.relation) ? m.relation.toLowerCase() : 'relative';
-    document.getElementById('s5-title').textContent = 'Tell us about ' + (rel.indexOf('your') === 0 ? rel : 'your ' + rel) + '.';
-    document.getElementById('s5-age').value = m && m.age ? m.age : '';
-    ['disability','citizen'].forEach(function(q){
-      document.getElementById('s5-' + q + '-yes').classList.toggle('selected', m && m[q] === 'yes');
-      document.getElementById('s5-' + q + '-no').classList.toggle('selected', m && m[q] === 'no');
-    });
+    var rel = (m && m.relation) ? m.relation : 'family member';
+    var noun = rel.toLowerCase().replace(/^your /, '');
+    document.getElementById('s5-title').textContent = 'Tell us about your ' + noun + '.';
+    document.getElementById('s5-disability-yes').classList.remove('selected');
+    document.getElementById('s5-disability-no').classList.remove('selected');
+    if (m && m.disability === 'yes') document.getElementById('s5-disability-yes').classList.add('selected');
+    if (m && m.disability === 'no')  document.getElementById('s5-disability-no').classList.add('selected');
+    document.getElementById('btn-s5-continue').disabled = !(m && m.disability);
   }
-  function selectMemberQ(q, val) {
-    members[memberIdx][q] = val;
-    document.getElementById('s5-' + q + '-yes').classList.toggle('selected', val === 'yes');
-    document.getElementById('s5-' + q + '-no').classList.toggle('selected', val === 'no');
+  function selectMemberDisability(val) {
+    members[memberIdx].disability = val;
+    document.getElementById('s5-disability-yes').classList.toggle('selected', val === 'yes');
+    document.getElementById('s5-disability-no').classList.toggle('selected', val === 'no');
+    document.getElementById('btn-s5-continue').disabled = false;
   }
-  function nextMember() {
-    members[memberIdx].age = document.getElementById('s5-age').value;
-    // find next non-self member after current index
+  function nextMemberDisability() {
+    // Find next non-self member
     var next = -1;
-    for (var i = memberIdx + 1; i < members.length; i++) { if (!members[i].self) { next = i; break; } }
+    for (var i = memberIdx + 1; i < members.length; i++) {
+      if (!members[i].self) { next = i; break; }
+    }
     if (next >= 0) {
       memberIdx = next;
       navHistory.push('screen-5');
-      renderMemberQuestion();
-      var t = document.getElementById('screen-5'); t.scrollTop = 0;
-      setTimeout(function(){ getFooterEl('s5').classList.remove('footer-visible'); setupFooterGate(t,'s5'); }, 50);
+      renderMemberDisability();
+      var s5 = document.getElementById('screen-5');
+      s5.scrollTop = 0;
+      getFooterEl('s5').classList.remove('footer-visible');
+      setTimeout(function() { setupFooterGate(s5, 's5'); }, 50);
     } else {
-      navigate('s6');
+      navigate('s7');
     }
   }
 
-  // ── Screen 6: about you ─────────────────────
-  function prepareScreen6() {
-    var name = document.getElementById('first-name').value.trim();
-    if (scopeMode === 'household') {
-      document.getElementById('s6-title').textContent = name ? ("Let’s get to know " + name + ".") : "Let’s get to know you.";
-    } else {
-      document.getElementById('s6-title').textContent = "Tell us about yourself.";
-    }
-    document.getElementById('household-size-group').style.display = (scopeMode === 'household') ? 'none' : '';
-  }
+  // ── S6: about you (myself only) ─────────────
   function selectIncome(idx) {
-    for (var i=0;i<4;i++) document.getElementById('income-'+i).classList.toggle('selected', i===idx);
+    for (var i = 0; i < 4; i++) document.getElementById('income-' + i).classList.toggle('selected', i === idx);
   }
   function selectYN(group, val) {
-    var y = document.getElementById(group+'-yes'), n = document.getElementById(group+'-no');
-    if (y) y.classList.toggle('selected', val==='yes');
-    if (n) n.classList.toggle('selected', val==='no');
+    var y  = document.getElementById(group + '-yes');
+    var n  = document.getElementById(group + '-no');
+    var ns = document.getElementById(group + '-notsure');
+    if (y)  y.classList.toggle('selected', val === 'yes');
+    if (n)  n.classList.toggle('selected', val === 'no');
+    if (ns) ns.classList.toggle('selected', val === 'notsure');
   }
   function selectMedicaid(idx) {
-    for (var i=0;i<4;i++) document.getElementById('medicaid-'+i).classList.toggle('selected', i===idx);
+    for (var i = 0; i < 4; i++) document.getElementById('medicaid-' + i).classList.toggle('selected', i === idx);
   }
 
-  // ── Screen 7: household-aware copy ──────────
+  // ── S7: quick questions ──────────────────────
   function prepareScreen7() {
     var hh = (scopeMode === 'household');
     document.getElementById('snap-label').textContent = hh
@@ -959,18 +888,20 @@
     document.getElementById('pregnant-label').textContent = hh
       ? 'Are you or anyone in your household pregnant?'
       : 'Are you pregnant?';
+    document.getElementById('s7-disability-label').textContent = hh
+      ? 'Do you or anyone in your household have a disability?'
+      : 'Do you have a disability?';
   }
 
   // ── Helpers ─────────────────────────────────
-  function genRef() { return String(Math.floor(10000 + Math.random()*90000)); }
+  function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
   function resetToStart() {
-    selectedCards.clear(); scopeMode = null; members = []; memberIdx = 0; navHistory = [];
-    document.querySelectorAll('.situation-card').forEach(function(c){ c.classList.remove('selected'); c.setAttribute('aria-pressed','false'); });
+    selectedCards.clear(); scopeMode = null; members = []; navHistory = [];
+
+    document.querySelectorAll('.situation-card').forEach(function(c) { c.classList.remove('selected'); c.setAttribute('aria-pressed','false'); });
     document.getElementById('btn-s1-continue').disabled = true;
-    document.getElementById('first-name').value = '';
-    document.getElementById('last-name').value = '';
-    document.getElementById('contact-input').value = '';
+    ['first-name','last-name','contact-input','age-input','household-size-input'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
     document.getElementById('saved-note').classList.remove('visible');
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
@@ -979,12 +910,13 @@
     document.getElementById('consent-checkbox').checked = false;
     document.getElementById('btn-consent-continue').disabled = true;
     document.getElementById('consent-more').classList.remove('open');
+    document.getElementById('consent-fade-wrap').classList.remove('expanded');
     document.getElementById('readmore-btn').textContent = 'Read more';
-    document.getElementById('age-input').value = '';
-    document.getElementById('household-size-input').value = '';
-    document.getElementById('s5-age').value = '';
-    document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('selected'); });
-    document.querySelectorAll('.screen-footer').forEach(function(f){ f.classList.remove('footer-visible'); });
+    document.getElementById('member-list').innerHTML = '';
+    document.getElementById('result-note').style.display = '';
+    memberIdx = 0;
+    document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+    document.querySelectorAll('.screen-footer').forEach(function(f) { f.classList.remove('footer-visible'); });
 
     var cur     = document.querySelector('.screen.active');
     var landing = document.getElementById('screen-landing');
@@ -992,7 +924,7 @@
     landing.classList.add('active');
     updateChrome('landing'); updateProgress('landing');
     landing.scrollTop = 0;
-    setTimeout(function(){ setupFooterGate(landing,'landing'); }, 50);
+    setTimeout(function() { setupFooterGate(landing, 'landing'); }, 50);
   }
 
   // ── Scroll-gate footer ──────────────────────
@@ -1013,7 +945,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     if (window.lucide) lucide.createIcons();
     updateChrome('landing'); updateProgress('landing');
-    setTimeout(function() { setupFooterGate(document.getElementById('screen-landing'),'landing'); }, 100);
+    setTimeout(function() { setupFooterGate(document.getElementById('screen-landing'), 'landing'); }, 100);
   });
 </script>
 </body>
