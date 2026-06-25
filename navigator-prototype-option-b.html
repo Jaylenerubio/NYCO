@@ -255,11 +255,12 @@
 
     /* Confirmation */
     .confirm-icon {
-      width: 80px; height: 80px; background: var(--color-success-text);
+      width: 80px; height: 80px; background: #DCEFD2;
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       margin: 0 auto var(--space-3);
     }
-    .confirm-icon svg { width: 40px; height: 40px; stroke: white; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .confirm-icon svg { width: 36px; height: 36px; stroke: #2F7D32; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .confirm-lead { font-weight: 700; color: var(--color-black); font-size: 16px; line-height: 1.5; }
 
     /* Scroll-gate footer */
     .screen-footer {
@@ -603,8 +604,8 @@
             <svg viewBox="0 0 40 40"><polyline points="8 21 16 29 32 11"/></svg>
           </div>
           <h2 id="confirm-title">We got you.</h2>
+          <p class="confirm-lead" style="margin-top:var(--space-3);">We'll take it from here.</p>
           <p style="margin-top:var(--space-2);color:var(--text-secondary);font-size:16px;line-height:1.6;">
-            We'll take it from here.<br><br>
             Look out for a text from one of our NYC Health &amp; Affordability Corps workers in 24 hours to start your applications.
           </p>
         </div>
