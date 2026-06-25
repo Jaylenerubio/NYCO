@@ -68,8 +68,7 @@
     .progress-wrap.enter { animation: progEnter .45s ease both; }
     @keyframes progEnter { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: translateY(0); } }
     .progress-label { font-size: 12px; line-height: 1.6; text-transform: uppercase; color: var(--color-black); margin-bottom: 13px; }
-    .progress-sub { font-size: 12px; line-height: 1.4; color: var(--text-secondary); margin-top: 10px; }
-    .progress-track { display: flex; gap: 2px; }
+.progress-track { display: flex; gap: 2px; }
     .progress-seg { flex: 1; height: 8px; border-radius: 20px; background: var(--color-neutral-200); overflow: hidden; }
     .progress-seg .seg-fill { display: block; height: 100%; width: 0; background: var(--color-secondary-base); border-radius: 20px; transition: width .45s cubic-bezier(.4,0,.2,1); }
     .progress-seg.filled .seg-fill { width: 100%; }
@@ -297,7 +296,6 @@
       <div class="progress-seg" id="seg-4"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-5"><span class="seg-fill"></span></div>
     </div>
-    <div class="progress-sub" id="progress-sub" style="display:none"></div>
   </div>
 
   <div class="screens-wrapper">
@@ -458,26 +456,6 @@
       </div>
       <div class="screen-footer" id="footer-4">
         <button class="btn-primary" onclick="afterHousehold()">Continue</button>
-      </div>
-    </div>
-
-    <!-- S5: Per-member disability (Step 4/5, loops through household members) -->
-    <div class="screen step-screen" id="screen-5">
-      <div class="screen-inner">
-        <div class="heading-block">
-          <h1 id="s5-title">Tell us about your spouse</h1>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Do they have a disability?</span>
-          <div class="scope-stack" style="margin-top:8px;">
-            <button class="scope-btn" id="s5-disability-yes" onclick="selectMemberDisability('yes')">Yes</button>
-            <button class="scope-btn" id="s5-disability-no" onclick="selectMemberDisability('no')">No</button>
-          </div>
-        </div>
-        <div class="scroll-sentinel" id="sentinel-5"></div>
-      </div>
-      <div class="screen-footer" id="footer-5">
-        <button class="btn-primary" id="btn-s5-continue" onclick="nextMemberDisability()" disabled>Continue</button>
       </div>
     </div>
 
@@ -711,50 +689,14 @@
       progWrap.classList.add('enter');
     }
   }
-  // Non-self members needing per-person detail
-  function nonSelfMembers() { return members.filter(function(m) { return !m.self; }); }
-  function memberPosition() {
-    var ns = nonSelfMembers();
-    var cur = members[memberIdx];
-    var pos = ns.indexOf(cur);
-    return { pos: pos, total: ns.length };
-  }
-  // Fractional fill (0..1) for the CURRENT (nth) segment.
-  // Step 4 spans S4 (add members) + the S5 per-member loop, so segment 4
-  // fills proportionally as you move through household members.
-  function currentStepFraction(key) {
-    if (key === 's4') return nonSelfMembers().length ? 0.15 : 1;
-    if (key === 's5') {
-      var mp = memberPosition();
-      if (mp.total <= 0) return 1;
-      return (mp.pos + 1) / mp.total;
-    }
-    return 1;
-  }
   function updateProgress(key) {
-    var n    = stepForScreen(key);
-    var frac = currentStepFraction(key);
+    var n = stepForScreen(key);
     for (var i = 1; i <= 5; i++) {
       var fill = document.getElementById('seg-' + i).querySelector('.seg-fill');
-      var w = (i < n) ? 100 : (i === n ? Math.round(frac * 100) : 0);
-      fill.style.width = w + '%';
+      fill.style.width = (i <= n ? 100 : 0) + '%';
     }
     var label = labelForScreen(key);
     if (label) document.getElementById('progress-label-text').textContent = label;
-    updateMemberSublabel(key);
-  }
-  function updateMemberSublabel(key) {
-    var sub = document.getElementById('progress-sub');
-    if (key === 's5') {
-      var mp = memberPosition();
-      var m  = members[memberIdx];
-      var rel = (m && m.relation) ? m.relation.replace(/^Your /i, '') : 'Member';
-      rel = rel.charAt(0).toUpperCase() + rel.slice(1);
-      sub.textContent = rel + ' · ' + (mp.pos + 1) + ' of ' + mp.total;
-      sub.style.display = '';
-    } else {
-      sub.style.display = 'none';
-    }
   }
 
   // ── S1: situation cards ─────────────────────
@@ -864,51 +806,8 @@
   }
   function removeMember(i) { members.splice(i, 1); renderMembers(); }
 
-  // After S4: loop through non-self members for disability question
-  var memberIdx = 0;
-  function afterHousehold() {
-    var nonSelf = members.filter(function(m) { return !m.self; });
-    if (nonSelf.length === 0) { navigate('s7'); return; }
-    memberIdx = members.findIndex(function(m) { return !m.self; });
-    renderMemberDisability();
-    navigate('s5');
-  }
-  function renderMemberDisability() {
-    var m = members[memberIdx];
-    var rel = (m && m.relation) ? m.relation : 'family member';
-    var noun = rel.toLowerCase().replace(/^your /, '');
-    document.getElementById('s5-title').textContent = 'Tell us about your ' + noun + '.';
-    document.getElementById('s5-disability-yes').classList.remove('selected');
-    document.getElementById('s5-disability-no').classList.remove('selected');
-    if (m && m.disability === 'yes') document.getElementById('s5-disability-yes').classList.add('selected');
-    if (m && m.disability === 'no')  document.getElementById('s5-disability-no').classList.add('selected');
-    document.getElementById('btn-s5-continue').disabled = !(m && m.disability);
-  }
-  function selectMemberDisability(val) {
-    members[memberIdx].disability = val;
-    document.getElementById('s5-disability-yes').classList.toggle('selected', val === 'yes');
-    document.getElementById('s5-disability-no').classList.toggle('selected', val === 'no');
-    document.getElementById('btn-s5-continue').disabled = false;
-  }
-  function nextMemberDisability() {
-    // Find next non-self member
-    var next = -1;
-    for (var i = memberIdx + 1; i < members.length; i++) {
-      if (!members[i].self) { next = i; break; }
-    }
-    if (next >= 0) {
-      memberIdx = next;
-      navHistory.push('screen-5');
-      renderMemberDisability();
-      updateProgress('s5');
-      var s5 = document.getElementById('screen-5');
-      s5.scrollTop = 0;
-      getFooterEl('s5').classList.remove('footer-visible');
-      setTimeout(function() { setupFooterGate(s5, 's5'); }, 50);
-    } else {
-      navigate('s7');
-    }
-  }
+  // After S4: go straight to S6 (about you)
+  function afterHousehold() { navigate('s6'); }
 
   // ── S6: about you (myself only) ─────────────
   function selectIncome(idx) {
@@ -965,7 +864,6 @@
     document.getElementById('readmore-btn').textContent = 'Read more';
     document.getElementById('member-list').innerHTML = '';
     document.getElementById('result-note').style.display = '';
-    memberIdx = 0;
     document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
     document.querySelectorAll('.screen-footer').forEach(function(f) { f.classList.remove('footer-visible'); });
 
