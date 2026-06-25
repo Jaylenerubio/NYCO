@@ -269,6 +269,9 @@
       opacity: 0; pointer-events: none; transition: opacity 200ms var(--ease-out);
     }
     .screen-footer.footer-visible { opacity: 1; pointer-events: auto; }
+    /* Last two screens: button hugs the content instead of pinning to the bottom */
+    #screen-results .screen-inner, #screen-confirm .screen-inner { flex: 0 0 auto; }
+    #screen-confirm .screen-inner.centered { justify-content: flex-start; padding-top: 72px; }
     .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
   </style>
 </head>
@@ -573,8 +576,7 @@
             <svg viewBox="0 0 40 40"><polyline points="8 21 16 29 32 11"/></svg>
           </div>
           <h2 id="confirm-title">We got you.</h2>
-          <p class="confirm-lead" style="margin-top:var(--space-3);">We'll take it from here.</p>
-          <p style="margin-top:var(--space-2);color:var(--text-secondary);font-size:16px;line-height:1.6;">
+          <p class="confirm-lead" style="margin-top:var(--space-3);color:var(--text-secondary);font-size:16px;line-height:1.6;">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
         </div>
