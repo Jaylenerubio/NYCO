@@ -68,6 +68,7 @@
     .progress-wrap.enter { animation: progEnter .45s ease both; }
     @keyframes progEnter { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: translateY(0); } }
     .progress-label { font-size: 12px; line-height: 1.6; text-transform: uppercase; color: var(--color-black); margin-bottom: 13px; }
+    .progress-sub { font-size: 12px; line-height: 1.4; color: var(--text-secondary); margin-top: 10px; }
     .progress-track { display: flex; gap: 2px; }
     .progress-seg { flex: 1; height: 8px; border-radius: 20px; background: var(--color-neutral-200); overflow: hidden; }
     .progress-seg .seg-fill { display: block; height: 100%; width: 0; background: var(--color-secondary-base); border-radius: 20px; transition: width .45s cubic-bezier(.4,0,.2,1); }
@@ -281,6 +282,7 @@
       <div class="progress-seg" id="seg-4"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-5"><span class="seg-fill"></span></div>
     </div>
+    <div class="progress-sub" id="progress-sub" style="display:none"></div>
   </div>
 
   <div class="screens-wrapper">
@@ -702,13 +704,50 @@
       progWrap.classList.add('enter');
     }
   }
+  // Non-self members needing per-person detail
+  function nonSelfMembers() { return members.filter(function(m) { return !m.self; }); }
+  function memberPosition() {
+    var ns = nonSelfMembers();
+    var cur = members[memberIdx];
+    var pos = ns.indexOf(cur);
+    return { pos: pos, total: ns.length };
+  }
+  // Fractional fill (0..1) for the CURRENT (nth) segment.
+  // Step 4 spans S4 (add members) + the S5 per-member loop, so segment 4
+  // fills proportionally as you move through household members.
+  function currentStepFraction(key) {
+    if (key === 's4') return nonSelfMembers().length ? 0.15 : 1;
+    if (key === 's5') {
+      var mp = memberPosition();
+      if (mp.total <= 0) return 1;
+      return (mp.pos + 1) / mp.total;
+    }
+    return 1;
+  }
   function updateProgress(key) {
-    var n = stepForScreen(key);
+    var n    = stepForScreen(key);
+    var frac = currentStepFraction(key);
     for (var i = 1; i <= 5; i++) {
-      document.getElementById('seg-' + i).classList.toggle('filled', i <= n);
+      var fill = document.getElementById('seg-' + i).querySelector('.seg-fill');
+      var w = (i < n) ? 100 : (i === n ? Math.round(frac * 100) : 0);
+      fill.style.width = w + '%';
     }
     var label = labelForScreen(key);
     if (label) document.getElementById('progress-label-text').textContent = label;
+    updateMemberSublabel(key);
+  }
+  function updateMemberSublabel(key) {
+    var sub = document.getElementById('progress-sub');
+    if (key === 's5') {
+      var mp = memberPosition();
+      var m  = members[memberIdx];
+      var rel = (m && m.relation) ? m.relation.replace(/^Your /i, '') : 'Member';
+      rel = rel.charAt(0).toUpperCase() + rel.slice(1);
+      sub.textContent = rel + ' · ' + (mp.pos + 1) + ' of ' + mp.total;
+      sub.style.display = '';
+    } else {
+      sub.style.display = 'none';
+    }
   }
 
   // ── S1: situation cards ─────────────────────
@@ -851,6 +890,7 @@
       memberIdx = next;
       navHistory.push('screen-5');
       renderMemberDisability();
+      updateProgress('s5');
       var s5 = document.getElementById('screen-5');
       s5.scrollTop = 0;
       getFooterEl('s5').classList.remove('footer-visible');
