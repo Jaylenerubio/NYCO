@@ -538,7 +538,7 @@
     <!-- Results -->
     <div class="screen" id="screen-results">
       <div class="screen-inner">
-        <h2>Here's what you could save.</h2>
+        <h2>Here's what you may be eligible for</h2>
         <div class="results-list">
           <div class="result-row">
             <div class="result-info">
@@ -558,14 +558,10 @@
             </div>
           </div>
         </div>
-        <div class="result-note" id="result-note">
-          <span>We've saved and sent you your results.</span>
-          <button class="result-note-close" aria-label="Dismiss" onclick="document.getElementById('result-note').style.display='none'"><i data-lucide="x"></i></button>
-        </div>
         <div class="scroll-sentinel" id="sentinel-results"></div>
       </div>
       <div class="screen-footer" id="footer-results">
-        <button class="btn-primary" onclick="navigate('confirm')">Connect me with a benefits worker</button>
+        <button class="btn-primary" onclick="navigate('confirm')">Connect with a benefits worker</button>
       </div>
     </div>
 
@@ -876,7 +872,6 @@
     document.getElementById('consent-fade-wrap').classList.remove('expanded');
     document.getElementById('readmore-btn').textContent = 'Read more';
     document.getElementById('member-list').innerHTML = '';
-    document.getElementById('result-note').style.display = '';
 document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
     document.querySelectorAll('.screen-footer').forEach(function(f) { f.classList.remove('footer-visible'); });
 
