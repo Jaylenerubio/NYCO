@@ -486,7 +486,7 @@
         <div class="scroll-sentinel" id="sentinel-6"></div>
       </div>
       <div class="screen-footer" id="footer-6">
-        <button class="btn-primary" onclick="navigate('s7')">Continue</button>
+        <button class="btn-primary" onclick="afterScreen6()">Continue</button>
       </div>
     </div>
 
@@ -615,7 +615,7 @@
   // ── Progress — household 6 steps (adds S4), myself 5 steps ──
   function stepForScreen(key) {
     if (scopeMode === 'household') {
-      return ({ s1:1, save:2, s3:3, s4:4, s6:5, s7:6 })[key] || 0;
+      return ({ s1:1, save:2, s3:3, s6:4, s4:5, s7:6 })[key] || 0;
     }
     return ({ s1:1, save:2, s3:3, s6:4, s7:5 })[key] || 0;
   }
@@ -752,18 +752,15 @@
     document.getElementById('btn-s3-continue').disabled = false;
   }
   function continueFromScope() {
-    if (scopeMode === 'household') { prepareScreen4(); navigate('s4'); }
-    else navigate('s6');
+    navigate('s6');
   }
 
   // ── S4: household members (inline Relation + Age) ──
   var RELATIONS = ['Your spouse','Your child','Your parent','Your sibling','Other relative','Other'];
 
   function prepareScreen4() {
-    if (members.length === 0) {
-      var firstName = document.getElementById('first-name').value.trim();
-      members = [{ relation: firstName || '', self: true, age: '' }];
-    }
+    // Age is collected on the prior "about you" screen, so S4 starts empty —
+    // just the "Add member" button until the user adds family members.
     renderMembers();
   }
 
@@ -819,15 +816,21 @@
   }
   function removeMember(i) { members.splice(i, 1); renderMembers(); }
 
-  // After S4: go straight to S6 (about you)
-  function afterHousehold() { navigate('s6'); }
+  // After S6 (about you): household → add family members (S4); myself → quick questions (S7)
+  function afterScreen6() {
+    if (scopeMode === 'household') { prepareScreen4(); navigate('s4'); }
+    else navigate('s7');
+  }
+
+  // After S4 (add family members): go to quick questions (S7)
+  function afterHousehold() { navigate('s7'); }
 
   // S6 adapts to path: household hides redundant household-size question + uses a warmer title.
   function prepareScreen6() {
     var name  = document.getElementById('first-name').value.trim();
     var title = document.getElementById('s6-title');
     if (scopeMode === 'household') {
-      title.textContent = name ? ("Let's get to know " + name + ".") : "Let's get to know you.";
+      title.textContent = name ? ("Let's start with " + name + ".") : "Let's start with you.";
       document.getElementById('household-size-group').style.display = 'none';
     } else {
       title.textContent = "Tell us about yourself.";
