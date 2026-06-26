@@ -597,15 +597,39 @@
         </div>
         <div class="field-group">
           <label class="field-label" for="md-state">What state was the hospital in?</label>
-          <input class="field-input" type="text" id="md-state" placeholder="e.g. New York" />
+          <select class="field-select" id="md-state">
+            <option value="">Select a state</option>
+            <option>New York</option>
+            <option>New Jersey</option>
+            <option>Connecticut</option>
+          </select>
         </div>
         <div class="field-group">
           <label class="field-label" for="md-city">What city?</label>
-          <input class="field-input" type="text" id="md-city" placeholder="e.g. New York" />
+          <select class="field-select" id="md-city">
+            <option value="">Select a city</option>
+            <option>Manhattan</option>
+            <option>Brooklyn</option>
+            <option>Queens</option>
+            <option>The Bronx</option>
+            <option>Staten Island</option>
+          </select>
         </div>
         <div class="field-group">
           <label class="field-label" for="md-hospital">Which hospital or health system was the bill from?</label>
-          <input class="field-input" type="text" id="md-hospital" placeholder="e.g. NYC Health + Hospitals / Bellevue" />
+          <select class="field-select" id="md-hospital">
+            <option value="">Select a hospital</option>
+            <option>NYC Health + Hospitals / Bellevue</option>
+            <option>NYC Health + Hospitals / Elmhurst</option>
+            <option>NYC Health + Hospitals / Kings County</option>
+            <option>NYC Health + Hospitals / Lincoln</option>
+            <option>NYC Health + Hospitals / Harlem</option>
+            <option>NYC Health + Hospitals / Jacobi</option>
+            <option>NYC Health + Hospitals / Metropolitan</option>
+            <option>NYC Health + Hospitals / Woodhull</option>
+            <option>NYC Health + Hospitals / Coney Island</option>
+            <option>Other / not listed</option>
+          </select>
         </div>
         <div class="field-group">
           <label class="field-label" for="md-bill">How much is the bill for?</label>
@@ -618,10 +642,6 @@
             <button class="chip" onclick="selectSingle(this)">Uninsured</button>
             <button class="chip" onclick="selectSingle(this)">Not sure</button>
           </div>
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="md-income">What is your yearly household income? <span style="font-weight:400;color:var(--text-secondary)">(your best guess is fine)</span></label>
-          <input class="field-input" type="number" id="md-income" placeholder="$ e.g. 36,000" min="0" inputmode="numeric" />
         </div>
         <div class="scroll-sentinel" id="sentinel-medicaldebt"></div>
       </div>
@@ -1003,7 +1023,7 @@
 
     document.querySelectorAll('.situation-card').forEach(function(c) { c.classList.remove('selected'); c.setAttribute('aria-pressed','false'); });
     document.getElementById('btn-s1-continue').disabled = true;
-    ['first-name','last-name','contact-input','age-input','household-size-input','md-hospital','md-city','md-state','md-bill','md-income'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
+    ['first-name','last-name','contact-input','age-input','household-size-input','md-hospital','md-city','md-state','md-bill'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
     document.getElementById('saved-note').classList.remove('visible');
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
