@@ -620,10 +620,6 @@
           </div>
         </div>
         <div class="field-group">
-          <label class="field-label" for="md-household">How many people are in your household?</label>
-          <input class="field-input" type="number" id="md-household" placeholder="e.g. 2" min="1" max="20" />
-        </div>
-        <div class="field-group">
           <label class="field-label" for="md-income">What is your yearly household income? <span style="font-weight:400;color:var(--text-secondary)">(your best guess is fine)</span></label>
           <input class="field-input" type="number" id="md-income" placeholder="$ e.g. 36,000" min="0" inputmode="numeric" />
         </div>
@@ -1007,7 +1003,7 @@
 
     document.querySelectorAll('.situation-card').forEach(function(c) { c.classList.remove('selected'); c.setAttribute('aria-pressed','false'); });
     document.getElementById('btn-s1-continue').disabled = true;
-    ['first-name','last-name','contact-input','age-input','household-size-input','md-hospital','md-city','md-state','md-bill','md-household','md-income'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
+    ['first-name','last-name','contact-input','age-input','household-size-input','md-hospital','md-city','md-state','md-bill','md-income'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
     document.getElementById('saved-note').classList.remove('visible');
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
