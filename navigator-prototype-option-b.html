@@ -593,26 +593,38 @@
       <div class="screen-inner">
         <div class="heading-block">
           <h1>Tell us about your medical bill.</h1>
-          <p class="screen-subtext">We'll check if you qualify for help paying it off.</p>
+          <p class="screen-subtext">We'll check if you qualify for charity care to help pay it off.</p>
         </div>
         <div class="field-group">
-          <label class="field-label" for="md-hospital">Hospital or clinic name</label>
-          <input class="field-input" type="text" id="md-hospital" placeholder="e.g. NYC Health + Hospitals / Bellevue" />
+          <label class="field-label" for="md-state">What state was the hospital in?</label>
+          <input class="field-input" type="text" id="md-state" placeholder="e.g. New York" />
         </div>
         <div class="field-group">
-          <label class="field-label" for="md-city">Hospital city</label>
+          <label class="field-label" for="md-city">What city?</label>
           <input class="field-input" type="text" id="md-city" placeholder="e.g. New York" />
         </div>
         <div class="field-group">
-          <label class="field-label" for="md-state">Hospital state</label>
-          <input class="field-input" type="text" id="md-state" placeholder="e.g. NY" />
+          <label class="field-label" for="md-hospital">Which hospital or health system was the bill from?</label>
+          <input class="field-input" type="text" id="md-hospital" placeholder="e.g. NYC Health + Hospitals / Bellevue" />
         </div>
         <div class="field-group">
-          <label class="field-label" for="md-bill">Total bill owed</label>
+          <label class="field-label" for="md-bill">How much is the bill for?</label>
           <input class="field-input" type="number" id="md-bill" placeholder="$ e.g. 2,400" min="0" inputmode="numeric" />
         </div>
         <div class="field-group">
-          <label class="field-label" for="md-income">Yearly household income <span style="font-weight:400;color:var(--text-secondary)">(your best guess is fine)</span></label>
+          <span class="field-label">What is your insurance status?</span>
+          <div class="chip-row hug-content" id="md-insurance-row">
+            <button class="chip" onclick="selectSingle(this)">Insured</button>
+            <button class="chip" onclick="selectSingle(this)">Uninsured</button>
+            <button class="chip" onclick="selectSingle(this)">Not sure</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="md-household">How many people are in your household?</label>
+          <input class="field-input" type="number" id="md-household" placeholder="e.g. 2" min="1" max="20" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="md-income">What is your yearly household income? <span style="font-weight:400;color:var(--text-secondary)">(your best guess is fine)</span></label>
           <input class="field-input" type="number" id="md-income" placeholder="$ e.g. 36,000" min="0" inputmode="numeric" />
         </div>
         <div class="scroll-sentinel" id="sentinel-medicaldebt"></div>
@@ -995,7 +1007,7 @@
 
     document.querySelectorAll('.situation-card').forEach(function(c) { c.classList.remove('selected'); c.setAttribute('aria-pressed','false'); });
     document.getElementById('btn-s1-continue').disabled = true;
-    ['first-name','last-name','contact-input','age-input','household-size-input','md-hospital','md-city','md-state','md-bill','md-income'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
+    ['first-name','last-name','contact-input','age-input','household-size-input','md-hospital','md-city','md-state','md-bill','md-household','md-income'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
     document.getElementById('saved-note').classList.remove('visible');
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
