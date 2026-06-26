@@ -291,6 +291,8 @@
       <div class="progress-seg" id="seg-4"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-5"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-6"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-7"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-8"><span class="seg-fill"></span></div>
     </div>
   </div>
 
@@ -526,6 +528,96 @@
         <div class="scroll-sentinel" id="sentinel-7"></div>
       </div>
       <div class="screen-footer" id="footer-7">
+        <button class="btn-primary" onclick="afterScreen7()">Continue</button>
+      </div>
+    </div>
+
+    <!-- Eviction Prevention (only if "behind on rent" selected on S1) -->
+    <div class="screen step-screen" id="screen-eviction">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Let's check your housing situation.</h1>
+          <p class="screen-subtext">This helps us see if you qualify for free legal help. Select Yes or No for each.</p>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Do you have a pending eviction case in Housing Court?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Have you received a Motion to Restore or Enforce an Eviction?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Have you received a Warrant of Eviction?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Have you been locked out of your apartment by your landlord without a court order or warrant?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Do you have a termination of tenancy case brought by the New York City Housing Authority (NYCHA)?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Does your apartment need serious repairs but your landlord won't make them?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+          </div>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-eviction"></div>
+      </div>
+      <div class="screen-footer" id="footer-eviction">
+        <button class="btn-primary" onclick="afterEviction()">Continue</button>
+      </div>
+    </div>
+
+    <!-- Medical Debt (only if "medical bills I can't pay" selected on S1) -->
+    <div class="screen step-screen" id="screen-medicaldebt">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Tell us about your medical bill.</h1>
+          <p class="screen-subtext">We'll check if you qualify for help paying it off.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="md-hospital">Hospital or clinic name</label>
+          <input class="field-input" type="text" id="md-hospital" placeholder="e.g. NYC Health + Hospitals / Bellevue" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="md-city">Hospital city</label>
+          <input class="field-input" type="text" id="md-city" placeholder="e.g. New York" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="md-state">Hospital state</label>
+          <input class="field-input" type="text" id="md-state" placeholder="e.g. NY" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="md-bill">Total bill owed</label>
+          <input class="field-input" type="number" id="md-bill" placeholder="$ e.g. 2,400" min="0" inputmode="numeric" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="md-income">Yearly household income <span style="font-weight:400;color:var(--text-secondary)">(your best guess is fine)</span></label>
+          <input class="field-input" type="number" id="md-income" placeholder="$ e.g. 36,000" min="0" inputmode="numeric" />
+        </div>
+        <div class="scroll-sentinel" id="sentinel-medicaldebt"></div>
+      </div>
+      <div class="screen-footer" id="footer-medicaldebt">
         <button class="btn-primary" onclick="navigate('results')">Continue</button>
       </div>
     </div>
@@ -603,14 +695,22 @@
   var scopeMode     = null;   // 'myself' | 'household'
   var members       = [];     // [{relation, self, age}]
 
-  // ── Progress — household 6 steps (adds S4), myself 5 steps ──
-  function stepForScreen(key) {
-    if (scopeMode === 'household') {
-      return ({ s1:1, save:2, s3:3, s6:4, s4:5, s7:6 })[key] || 0;
-    }
-    return ({ s1:1, save:2, s3:3, s6:4, s7:5 })[key] || 0;
+  // ── Progress — flow is built dynamically: household adds S4 (add members),
+  //    and the eviction / medical-debt screens appear only if the matching
+  //    situation card was selected on S1. ──
+  function activeFlow() {
+    var flow = ['s1', 'save', 's3', 's6'];
+    if (scopeMode === 'household') flow.push('s4');
+    flow.push('s7');
+    if (selectedCards.has('housing')) flow.push('eviction');
+    if (selectedCards.has('bills'))   flow.push('medicaldebt');
+    return flow;
   }
-  function totalSteps() { return scopeMode === 'household' ? 6 : 5; }
+  function stepForScreen(key) {
+    var i = activeFlow().indexOf(key);
+    return i >= 0 ? i + 1 : 0;
+  }
+  function totalSteps() { return activeFlow().length; }
   function labelForScreen(key) {
     var n = stepForScreen(key);
     return n > 0 ? ('Step ' + n + '/' + totalSteps()) : '';
@@ -650,11 +750,13 @@
     var target    = document.getElementById(prevDomId);
     if (!target || current === target) return;
     var suffix = prevDomId.replace('screen-', '');
-    var prevKey = suffix === 'save'    ? 'save'
-                : suffix === 'results' ? 'results'
-                : suffix === 'confirm' ? 'confirm'
-                : suffix === 'landing' ? 'landing'
-                : suffix === 'consent' ? 'consent'
+    var prevKey = suffix === 'save'        ? 'save'
+                : suffix === 'results'     ? 'results'
+                : suffix === 'confirm'     ? 'confirm'
+                : suffix === 'landing'     ? 'landing'
+                : suffix === 'consent'     ? 'consent'
+                : suffix === 'eviction'    ? 'eviction'
+                : suffix === 'medicaldebt' ? 'medicaldebt'
                 : 's' + suffix;
     if (current) current.classList.remove('active');
     target.classList.add('active');
@@ -699,7 +801,7 @@
   function updateProgress(key) {
     var n = stepForScreen(key);
     var total = totalSteps();
-    for (var i = 1; i <= 6; i++) {
+    for (var i = 1; i <= 8; i++) {
       var seg = document.getElementById('seg-' + i);
       if (i > total) { seg.style.display = 'none'; continue; }
       seg.style.display = '';
@@ -822,6 +924,23 @@
   // After S4 (add family members): go to quick questions (S7)
   function afterHousehold() { navigate('s7'); }
 
+  // After S7: route through the conditional screens based on S1 selections.
+  function afterScreen7() {
+    if (selectedCards.has('housing'))    navigate('eviction');
+    else if (selectedCards.has('bills')) navigate('medicaldebt');
+    else navigate('results');
+  }
+  // After eviction screen: medical debt next if applicable, else results.
+  function afterEviction() {
+    if (selectedCards.has('bills')) navigate('medicaldebt');
+    else navigate('results');
+  }
+  // Single-select Yes/No within one chip-row.
+  function selectSingle(el) {
+    el.parentElement.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+  }
+
   // S6 adapts to path: household hides redundant household-size question + uses a warmer title.
   function prepareScreen6() {
     var name  = document.getElementById('first-name').value.trim();
@@ -876,7 +995,7 @@
 
     document.querySelectorAll('.situation-card').forEach(function(c) { c.classList.remove('selected'); c.setAttribute('aria-pressed','false'); });
     document.getElementById('btn-s1-continue').disabled = true;
-    ['first-name','last-name','contact-input','age-input','household-size-input'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
+    ['first-name','last-name','contact-input','age-input','household-size-input','md-hospital','md-city','md-state','md-bill','md-income'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
     document.getElementById('saved-note').classList.remove('visible');
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
