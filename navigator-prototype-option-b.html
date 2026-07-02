@@ -233,6 +233,7 @@
     .member-list { display: flex; flex-direction: column; gap: var(--space-3); }
     .member-entry { display: flex; flex-direction: column; gap: 8px; }
     .member-inline-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .dob-grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 10px; }
 
     /* Results */
     .results-list { display: flex; flex-direction: column; }
@@ -605,40 +606,46 @@
           <select class="field-select" id="md-state">
             <option value="">Select a state</option>
             <option>New York</option>
-            <option>New Jersey</option>
-            <option>Connecticut</option>
           </select>
         </div>
         <div class="field-group">
           <label class="field-label" for="md-city">What city?</label>
-          <select class="field-select" id="md-city">
+          <select class="field-select" id="md-city" onchange="populateHospitals()">
             <option value="">Select a city</option>
-            <option>Manhattan</option>
+            <option>New York</option>
             <option>Brooklyn</option>
-            <option>Queens</option>
-            <option>The Bronx</option>
+            <option>Bronx</option>
+            <option>Elmhurst</option>
+            <option>Far Rockaway</option>
+            <option>Flushing</option>
+            <option>Forest Hills</option>
+            <option>Fresh Meadows</option>
+            <option>Glen Oaks</option>
+            <option>Jamaica</option>
+            <option>Long Island City</option>
             <option>Staten Island</option>
           </select>
         </div>
         <div class="field-group">
-          <label class="field-label" for="md-hospital">Which hospital or health system was the bill from?</label>
-          <select class="field-select" id="md-hospital">
-            <option value="">Select a hospital</option>
-            <option>NYC Health + Hospitals / Bellevue</option>
-            <option>NYC Health + Hospitals / Elmhurst</option>
-            <option>NYC Health + Hospitals / Kings County</option>
-            <option>NYC Health + Hospitals / Lincoln</option>
-            <option>NYC Health + Hospitals / Harlem</option>
-            <option>NYC Health + Hospitals / Jacobi</option>
-            <option>NYC Health + Hospitals / Metropolitan</option>
-            <option>NYC Health + Hospitals / Woodhull</option>
-            <option>NYC Health + Hospitals / Coney Island</option>
-            <option>Other / not listed</option>
+          <label class="field-label" for="md-hospital">Which hospital was the bill from?</label>
+          <select class="field-select" id="md-hospital" disabled>
+            <option value="">Select a city first</option>
           </select>
         </div>
         <div class="field-group">
-          <label class="field-label" for="md-bill">How much is the bill for?</label>
-          <input class="field-input" type="number" id="md-bill" placeholder="$ e.g. 2,400" min="0" inputmode="numeric" />
+          <span class="field-label">What's the original bill date?</span>
+          <div class="dob-grid-2">
+            <select class="field-select" id="md-billmonth" aria-label="Bill month"><option value="">Month</option></select>
+            <select class="field-select" id="md-billyear" aria-label="Bill year"><option value="">Year</option></select>
+          </div>
+          <p class="field-help">Enter the date that you first received the bill after leaving the hospital. We'll compare it to the deadline for applying for hospital financial assistance at your hospital.</p>
+          <p class="field-help">Start by checking your bill from your most recent hospital visit. You'll be able to add other bills or hospitals later in the process, and the system will check then to see if you're eligible. Not all of your bills may be eligible, depending on the bill date.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="md-bill">What is the total amount you owe?</label>
+          <input class="field-input" type="number" id="md-bill" placeholder="Total owed to hospital" min="0" inputmode="numeric" />
+          <p class="field-help">It's okay to estimate if you haven't received the bill yet or don't remember the exact amount.</p>
+          <p class="field-help">Use the amount you owe after insurance, Medicaid, health shares, or any other payers have contributed. We want to know how much you personally owe to the hospital.</p>
         </div>
         <div class="field-group">
           <span class="field-label">What is your insurance status?</span>
@@ -1051,7 +1058,8 @@
 
     document.querySelectorAll('.situation-card').forEach(function(c) { c.classList.remove('selected'); c.setAttribute('aria-pressed','false'); });
     document.getElementById('btn-s1-continue').disabled = true;
-    ['first-name','last-name','email-input','phone-input','dob-input','household-size-input','md-hospital','md-city','md-state','md-bill'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
+    ['first-name','last-name','email-input','phone-input','dob-input','household-size-input','md-city','md-state','md-bill','md-billmonth','md-billyear'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
+    populateHospitals();
     document.getElementById('saved-note').classList.remove('visible');
     document.getElementById('dob-error').style.display = 'none';
     document.getElementById('scope-myself').classList.remove('selected');
@@ -1077,6 +1085,49 @@
     setTimeout(function() { setupFooterGate(landing, 'landing'); }, 50);
   }
 
+  // ── Medical debt: hospitals by city + bill-date dropdowns ──
+  var HOSPITALS_BY_CITY = {
+    'New York': ['NYC Health + Hospitals / Bellevue', 'NYC Health + Hospitals / Harlem', 'NYC Health + Hospitals / Metropolitan', 'NYC Health + Hospitals / Gouverneur', 'Mount Sinai Beth Israel', 'NewYork-Presbyterian / Lower Manhattan'],
+    'Brooklyn': ['NYC Health + Hospitals / Kings County', 'NYC Health + Hospitals / Woodhull', 'NYC Health + Hospitals / Coney Island', 'Maimonides Medical Center', 'The Brooklyn Hospital Center'],
+    'Bronx': ['NYC Health + Hospitals / Lincoln', 'NYC Health + Hospitals / Jacobi', 'NYC Health + Hospitals / North Central Bronx', 'Montefiore Medical Center', 'BronxCare Health System'],
+    'Elmhurst': ['NYC Health + Hospitals / Elmhurst'],
+    'Far Rockaway': ["St. John's Episcopal Hospital"],
+    'Flushing': ['Flushing Hospital Medical Center', 'NewYork-Presbyterian Queens'],
+    'Forest Hills': ['Forest Hills Hospital'],
+    'Fresh Meadows': ['NewYork-Presbyterian Queens'],
+    'Glen Oaks': ['Long Island Jewish Medical Center'],
+    'Jamaica': ['NYC Health + Hospitals / Queens', 'Jamaica Hospital Medical Center'],
+    'Long Island City': ['Mount Sinai Queens'],
+    'Staten Island': ['Staten Island University Hospital', 'Richmond University Medical Center', 'NYC Health + Hospitals / Sea View']
+  };
+  function populateHospitals() {
+    var city = document.getElementById('md-city').value;
+    var sel  = document.getElementById('md-hospital');
+    var list = HOSPITALS_BY_CITY[city] || [];
+    if (!city) {
+      sel.innerHTML = '<option value="">Select a city first</option>';
+      sel.disabled = true;
+      return;
+    }
+    var opts = '<option value="">Select a hospital</option>';
+    list.forEach(function(h) { opts += '<option>' + h + '</option>'; });
+    opts += '<option>Other / not listed</option>';
+    sel.innerHTML = opts;
+    sel.disabled = false;
+  }
+  // Bill-date: month names + years back to 1 year ago (this prototype is pinned to 2026).
+  function populateBillDate() {
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var mSel = document.getElementById('md-billmonth');
+    var ySel = document.getElementById('md-billyear');
+    if (mSel.options.length <= 1) {
+      months.forEach(function(m) { mSel.insertAdjacentHTML('beforeend', '<option>' + m + '</option>'); });
+    }
+    if (ySel.options.length <= 1) {
+      [2026, 2025].forEach(function(y) { ySel.insertAdjacentHTML('beforeend', '<option>' + y + '</option>'); });
+    }
+  }
+
   // ── Scroll-gate footer ──────────────────────
   function setupFooterGate(screenEl, key) {
     var sentinel = getSentinelEl(key);
@@ -1094,6 +1145,7 @@
   // ── Init ─────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function() {
     if (window.lucide) lucide.createIcons();
+    populateBillDate();
     updateChrome('landing'); updateProgress('landing');
     setTimeout(function() { setupFooterGate(document.getElementById('screen-landing'), 'landing'); }, 100);
   });
