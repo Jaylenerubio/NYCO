@@ -407,7 +407,7 @@
       <div class="screen-inner">
         <div class="heading-block">
           <h1>Don't miss out on getting your bills covered.</h1>
-          <p class="screen-subtext">Share your contact info so we can follow up with personalized support.</p>
+          <p class="screen-subtext">Share a few details so we can follow up with personalized support.</p>
         </div>
         <div class="field-group">
           <label class="field-label" for="first-name">What's your first name?</label>
@@ -416,6 +416,11 @@
         <div class="field-group">
           <label class="field-label" for="last-name">What's your last name?</label>
           <input class="field-input" type="text" id="last-name" placeholder="Enter your last name" oninput="checkSave()" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="dob-input">What's your date of birth?</label>
+          <input class="field-input" type="text" id="dob-input" placeholder="MM/DD/YYYY" inputmode="numeric" maxlength="10" oninput="formatDob(this)" />
+          <p class="field-help dob-error" id="dob-error" style="display:none;color:#B42318;">Please enter a valid date as MM/DD/YYYY.</p>
         </div>
         <div class="field-group">
           <label class="field-label" for="email-input">Email address</label>
@@ -433,7 +438,22 @@
         <div class="scroll-sentinel" id="sentinel-save"></div>
       </div>
       <div class="screen-footer" id="footer-save">
-        <button class="btn-primary" id="btn-save-continue" onclick="navigate('s3')" disabled>Continue</button>
+        <button class="btn-primary" id="btn-save-continue" onclick="navigate('contactpref')" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- Contact preference: reflects back the email/phone they just entered -->
+    <div class="screen step-screen" id="screen-contactpref">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>How should we reach you?</h1>
+          <p class="screen-subtext">Pick whichever is easiest — it's how a benefits worker will follow up.</p>
+        </div>
+        <div class="cards-grid" id="contactpref-list"></div>
+        <div class="scroll-sentinel" id="sentinel-contactpref"></div>
+      </div>
+      <div class="screen-footer" id="footer-contactpref">
+        <button class="btn-primary" id="btn-contactpref-continue" onclick="navigate('s3')" disabled>Continue</button>
       </div>
     </div>
 
@@ -475,11 +495,6 @@
       <div class="screen-inner">
         <div class="heading-block">
           <h1 id="s6-title">Tell us about yourself.</h1>
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="dob-input">What's your date of birth?</label>
-          <input class="field-input" type="text" id="dob-input" placeholder="MM/DD/YYYY" inputmode="numeric" maxlength="10" oninput="formatDob(this)" />
-          <p class="field-help dob-error" id="dob-error" style="display:none;color:#B42318;">Please enter a valid date as MM/DD/YYYY.</p>
         </div>
         <div class="field-group" id="household-size-group">
           <label class="field-label" for="household-size-input">How many people are in your household?</label>
@@ -757,7 +772,7 @@
   //    eviction / medical-debt screens appear only if the matching card was
   //    selected on S1. ──
   function activeFlow() {
-    var flow = ['save', 's3', 's6'];
+    var flow = ['save', 'contactpref', 's3', 's6'];
     if (scopeMode === 'household') flow.push('s4');
     flow.push('s7');
     if (selectedCards.has('housing')) flow.push('eviction');
@@ -815,6 +830,7 @@
                 : suffix === 'consent'     ? 'consent'
                 : suffix === 'eviction'    ? 'eviction'
                 : suffix === 'medicaldebt' ? 'medicaldebt'
+                : suffix === 'contactpref' ? 'contactpref'
                 : 's' + suffix;
     if (current) current.classList.remove('active');
     target.classList.add('active');
@@ -826,6 +842,7 @@
 
   // ── Screen enter hooks ──────────────────────
   function onScreenEnter(key) {
+    if (key === 'contactpref') prepareContactPref();
     if (key === 's4') renderMembers();
     if (key === 's6') prepareScreen6();
     if (key === 's7') prepareScreen7();
@@ -921,6 +938,44 @@
     if (mo < 1 || mo > 12 || yr < 1900 || yr > now) return false;
     var dim = [31, (yr % 4 === 0 && (yr % 100 !== 0 || yr % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     return da >= 1 && da <= dim[mo - 1];
+  }
+
+  // ── Contact preference: reflect back the email/phone they entered ──
+  function prettyPhone(digits) {
+    return digits.length === 10
+      ? '(' + digits.slice(0,3) + ') ' + digits.slice(3,6) + '-' + digits.slice(6)
+      : digits;
+  }
+  function prefCard(icon, title, sub) {
+    return '<button class="situation-card" onclick="selectContactPref(this)" aria-pressed="false">' +
+             '<span class="card-icon"><i data-lucide="' + icon + '"></i></span>' +
+             '<span class="card-body"><span class="card-title">' + title + '</span>' +
+             '<span class="card-sub">' + escHtml(sub) + '</span></span>' +
+           '</button>';
+  }
+  function prepareContactPref() {
+    var email  = document.getElementById('email-input').value.trim();
+    var phone  = document.getElementById('phone-input').value.trim();
+    var digits = phone.replace(/\D/g, '');
+    var list   = document.getElementById('contactpref-list');
+    var html   = '';
+    if (digits.length >= 10) {
+      html += prefCard('message-circle', 'Text me', prettyPhone(digits));
+      html += prefCard('phone', 'Call me', prettyPhone(digits));
+    }
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      html += prefCard('mail', 'Email me', email);
+    }
+    list.innerHTML = html;
+    document.getElementById('btn-contactpref-continue').disabled = true;
+    if (window.lucide) lucide.createIcons();
+  }
+  function selectContactPref(el) {
+    document.querySelectorAll('#contactpref-list .situation-card').forEach(function(c) {
+      c.classList.remove('selected'); c.setAttribute('aria-pressed', 'false');
+    });
+    el.classList.add('selected'); el.setAttribute('aria-pressed', 'true');
+    document.getElementById('btn-contactpref-continue').disabled = false;
   }
 
   // ── S3: scope ───────────────────────────────
@@ -1091,6 +1146,8 @@
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
     document.getElementById('btn-save-continue').disabled = true;
+    document.getElementById('btn-contactpref-continue').disabled = true;
+    document.getElementById('contactpref-list').innerHTML = '';
     document.getElementById('btn-s3-continue').disabled = true;
     document.getElementById('lang-input').value = 'English';
     document.getElementById('consent-checkbox').checked = false;
