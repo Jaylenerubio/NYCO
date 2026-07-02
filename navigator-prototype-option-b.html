@@ -398,7 +398,7 @@
       <div class="screen-inner">
         <div class="heading-block">
           <h1>Don't miss out on getting your bills covered.</h1>
-          <p class="screen-subtext">Please provide a phone number so that we can provide personalized support.</p>
+          <p class="screen-subtext">Share your contact info so we can follow up with personalized support.</p>
         </div>
         <div class="field-group">
           <label class="field-label" for="first-name">What's your first name?</label>
@@ -409,8 +409,12 @@
           <input class="field-input" type="text" id="last-name" placeholder="Enter your last name" oninput="checkSave()" />
         </div>
         <div class="field-group">
-          <label class="field-label" for="contact-input">Enter email or phone number</label>
-          <input class="field-input" type="text" id="contact-input" placeholder="Enter email or phone number" oninput="checkSave()" />
+          <label class="field-label" for="email-input">Email address</label>
+          <input class="field-input" type="email" id="email-input" placeholder="you@example.com" oninput="checkSave()" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="phone-input">Phone number</label>
+          <input class="field-input" type="tel" id="phone-input" placeholder="(555) 555-5555" inputmode="tel" oninput="checkSave()" />
           <p class="field-help">We'll never spam you or share your information without your consent.</p>
         </div>
         <div class="saved-note" id="saved-note">
@@ -464,8 +468,8 @@
           <h1 id="s6-title">Tell us about yourself.</h1>
         </div>
         <div class="field-group">
-          <label class="field-label" for="age-input">How old are you?</label>
-          <input class="field-input" type="number" id="age-input" placeholder="e.g. 30" min="0" max="120" />
+          <label class="field-label" for="dob-input">What's your date of birth?</label>
+          <input class="field-input" type="text" id="dob-input" placeholder="MM/DD/YYYY" inputmode="numeric" maxlength="10" />
         </div>
         <div class="field-group" id="household-size-group">
           <label class="field-label" for="household-size-input">How many people are in your household?</label>
@@ -723,11 +727,12 @@
   var scopeMode     = null;   // 'myself' | 'household'
   var members       = [];     // [{relation, self, age}]
 
-  // ── Progress — flow is built dynamically: household adds S4 (add members),
-  //    and the eviction / medical-debt screens appear only if the matching
-  //    situation card was selected on S1. ──
+  // ── Progress — the numbered steps begin AFTER the situation screen (S1),
+  //    so contact info is Step 1. Household adds S4 (add members), and the
+  //    eviction / medical-debt screens appear only if the matching card was
+  //    selected on S1. ──
   function activeFlow() {
-    var flow = ['s1', 'save', 's3', 's6'];
+    var flow = ['save', 's3', 's6'];
     if (scopeMode === 'household') flow.push('s4');
     flow.push('s7');
     if (selectedCards.has('housing')) flow.push('eviction');
@@ -863,9 +868,10 @@
   // ── Save ────────────────────────────────────
   function checkSave() {
     var firstName = document.getElementById('first-name').value.trim();
-    var contact   = document.getElementById('contact-input').value.trim();
-    var isPhone   = contact.replace(/\D/g,'').length >= 10;
-    var isEmail   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+    var email     = document.getElementById('email-input').value.trim();
+    var phone     = document.getElementById('phone-input').value.trim();
+    var isPhone   = phone.replace(/\D/g,'').length >= 10;
+    var isEmail   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     var valid     = firstName !== '' && (isPhone || isEmail);
     document.getElementById('saved-note').classList.toggle('visible', isPhone || isEmail);
     document.getElementById('btn-save-continue').disabled = !valid;
@@ -1023,7 +1029,7 @@
 
     document.querySelectorAll('.situation-card').forEach(function(c) { c.classList.remove('selected'); c.setAttribute('aria-pressed','false'); });
     document.getElementById('btn-s1-continue').disabled = true;
-    ['first-name','last-name','contact-input','age-input','household-size-input','md-hospital','md-city','md-state','md-bill'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
+    ['first-name','last-name','email-input','phone-input','dob-input','household-size-input','md-hospital','md-city','md-state','md-bill'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
     document.getElementById('saved-note').classList.remove('visible');
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
