@@ -168,6 +168,14 @@
     .field-input:focus, .field-select:focus { outline: none; border-color: var(--color-secondary-base); box-shadow: 0 0 0 3px rgba(40,76,202,0.15); }
     .field-input::placeholder { color: var(--color-gray-500); }
     .field-input:disabled { background: var(--color-neutral-100); color: var(--color-gray-500); cursor: default; }
+    /* Input with a leading $ affix */
+    .input-affix { position: relative; }
+    .input-affix .affix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-black); font-size: 16px; pointer-events: none; }
+    .field-input.has-affix { padding-left: 28px; }
+    /* Progressive-disclosure help toggle */
+    .help-toggle { background: none; border: none; padding: 2px 0; margin-top: 2px; cursor: pointer; font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--color-secondary-base); }
+    .help-toggle:hover { text-decoration: underline; }
+    .help-more[hidden] { display: none; }
     .field-help { font-size: 13px; line-height: 1.4; color: var(--text-secondary); margin-top: 6px; }
 
     /* Saved note */
@@ -638,14 +646,23 @@
             <select class="field-select" id="md-billmonth" aria-label="Bill month"><option value="">Month</option></select>
             <select class="field-select" id="md-billyear" aria-label="Bill year"><option value="">Year</option></select>
           </div>
-          <p class="field-help">Enter the date that you first received the bill after leaving the hospital. We'll compare it to the deadline for applying for hospital financial assistance at your hospital.</p>
-          <p class="field-help">Start by checking your bill from your most recent hospital visit. You'll be able to add other bills or hospitals later in the process, and the system will check then to see if you're eligible. Not all of your bills may be eligible, depending on the bill date.</p>
+          <p class="field-help">Enter the date that you first received the bill after leaving the hospital. We'll compare it to the deadline for applying for hospital financial assistance.</p>
+          <div class="help-more" id="billdate-more" hidden>
+            <p class="field-help">Start by checking your bill from your most recent hospital visit. You'll be able to add other bills or hospitals later in the process, and the system will check then to see if you're eligible. Not all of your bills may be eligible, depending on the bill date.</p>
+          </div>
+          <button type="button" class="help-toggle" onclick="toggleHelp('billdate-more', this)">See more</button>
         </div>
         <div class="field-group">
           <label class="field-label" for="md-bill">What is the total amount you owe?</label>
-          <input class="field-input" type="number" id="md-bill" placeholder="Total owed to hospital" min="0" inputmode="numeric" />
+          <div class="input-affix">
+            <span class="affix">$</span>
+            <input class="field-input has-affix" type="number" id="md-bill" placeholder="e.g. 6,000" min="0" inputmode="numeric" />
+          </div>
           <p class="field-help">It's okay to estimate if you haven't received the bill yet or don't remember the exact amount.</p>
-          <p class="field-help">Use the amount you owe after insurance, Medicaid, health shares, or any other payers have contributed. We want to know how much you personally owe to the hospital.</p>
+          <div class="help-more" id="owed-more" hidden>
+            <p class="field-help">Use the amount you owe after insurance, Medicaid, health shares, or any other payers have contributed. We want to know how much you personally owe to the hospital.</p>
+          </div>
+          <button type="button" class="help-toggle" onclick="toggleHelp('owed-more', this)">See more</button>
         </div>
         <div class="field-group">
           <span class="field-label">What is your insurance status?</span>
@@ -998,6 +1015,13 @@
     if (selectedCards.has('bills')) navigate('medicaldebt');
     else navigate('results');
   }
+  // Progressive-disclosure: reveal/hide the secondary help paragraph.
+  function toggleHelp(id, btn) {
+    var el = document.getElementById(id);
+    if (el.hasAttribute('hidden')) { el.removeAttribute('hidden'); btn.textContent = 'See less'; }
+    else { el.setAttribute('hidden', ''); btn.textContent = 'See more'; }
+  }
+
   // Single-select Yes/No within one chip-row.
   function selectSingle(el) {
     el.parentElement.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
@@ -1062,6 +1086,8 @@
     populateHospitals();
     document.getElementById('saved-note').classList.remove('visible');
     document.getElementById('dob-error').style.display = 'none';
+    ['billdate-more','owed-more'].forEach(function(id){ var el=document.getElementById(id); if(el) el.setAttribute('hidden',''); });
+    document.querySelectorAll('.help-toggle').forEach(function(b){ b.textContent = 'See more'; });
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
     document.getElementById('btn-save-continue').disabled = true;
