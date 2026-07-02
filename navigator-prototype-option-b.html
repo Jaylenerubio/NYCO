@@ -469,7 +469,8 @@
         </div>
         <div class="field-group">
           <label class="field-label" for="dob-input">What's your date of birth?</label>
-          <input class="field-input" type="text" id="dob-input" placeholder="MM/DD/YYYY" inputmode="numeric" maxlength="10" />
+          <input class="field-input" type="text" id="dob-input" placeholder="MM/DD/YYYY" inputmode="numeric" maxlength="10" oninput="formatDob(this)" />
+          <p class="field-help dob-error" id="dob-error" style="display:none;color:#B42318;">Please enter a valid date as MM/DD/YYYY.</p>
         </div>
         <div class="field-group" id="household-size-group">
           <label class="field-label" for="household-size-input">How many people are in your household?</label>
@@ -541,7 +542,7 @@
       <div class="screen-inner">
         <div class="heading-block">
           <h1>Let's check your housing situation.</h1>
-          <p class="screen-subtext">This helps us see if you qualify for free legal help. Select Yes or No for each.</p>
+          <p class="screen-subtext">This helps us see if you qualify for free legal help.</p>
         </div>
         <div class="field-group">
           <span class="field-label">Do you have a pending eviction case in Housing Court?</span>
@@ -877,6 +878,27 @@
     document.getElementById('btn-save-continue').disabled = !valid;
   }
 
+  // Auto-format DOB as MM/DD/YYYY while typing, and validate a real calendar date.
+  function formatDob(el) {
+    var digits = el.value.replace(/\D/g, '').slice(0, 8);
+    var out = digits.slice(0, 2);
+    if (digits.length >= 3) out += '/' + digits.slice(2, 4);
+    if (digits.length >= 5) out += '/' + digits.slice(4, 8);
+    el.value = out;
+    var err = document.getElementById('dob-error');
+    // Only flag once a full date has been entered.
+    err.style.display = (digits.length === 8 && !isValidDob(out)) ? '' : 'none';
+  }
+  function isValidDob(str) {
+    var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(str);
+    if (!m) return false;
+    var mo = +m[1], da = +m[2], yr = +m[3];
+    var now = 2026;
+    if (mo < 1 || mo > 12 || yr < 1900 || yr > now) return false;
+    var dim = [31, (yr % 4 === 0 && (yr % 100 !== 0 || yr % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    return da >= 1 && da <= dim[mo - 1];
+  }
+
   // ── S3: scope ───────────────────────────────
   function selectScope(mode) {
     scopeMode = mode;
@@ -1031,6 +1053,7 @@
     document.getElementById('btn-s1-continue').disabled = true;
     ['first-name','last-name','email-input','phone-input','dob-input','household-size-input','md-hospital','md-city','md-state','md-bill'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
     document.getElementById('saved-note').classList.remove('visible');
+    document.getElementById('dob-error').style.display = 'none';
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
     document.getElementById('btn-save-continue').disabled = true;
