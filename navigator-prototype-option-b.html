@@ -901,10 +901,10 @@
     var list   = document.getElementById('contactpref-list');
     var html   = '';
     if (digits.length >= 10) {
-      html += prefCard('message-circle', 'Phone number', prettyPhone(digits));
+      html += prefCard('message-circle', 'Text me', prettyPhone(digits));
     }
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      html += prefCard('mail', 'Email address', email);
+      html += prefCard('mail', 'Email me', email);
     }
     list.innerHTML = html;
     document.getElementById('btn-contactpref-continue').disabled = true;
