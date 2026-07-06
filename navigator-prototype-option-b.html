@@ -486,28 +486,6 @@
       </div>
     </div>
 
-    <!-- S6: About you (myself: Step 4/5 · household: Step 5/6) -->
-    <div class="screen step-screen" id="screen-6">
-      <div class="screen-inner">
-        <div class="heading-block">
-          <h1 id="s6-title">A bit about your household.</h1>
-        </div>
-        <div class="field-group">
-          <span class="field-label">What was your total household income over the last 30 days? <span style="font-weight:400;color:var(--text-secondary)">(Give your best guess if you're not sure.)</span></span>
-          <div class="chip-grid-2">
-            <button class="chip" id="income-0" onclick="selectIncome(0)">$0&ndash;$1,500</button>
-            <button class="chip" id="income-1" onclick="selectIncome(1)">$1,501&ndash;$3,000</button>
-            <button class="chip" id="income-2" onclick="selectIncome(2)">$3,001&ndash;$5,000</button>
-            <button class="chip" id="income-3" onclick="selectIncome(3)">$5,000+</button>
-          </div>
-        </div>
-        <div class="scroll-sentinel" id="sentinel-6"></div>
-      </div>
-      <div class="screen-footer" id="footer-6">
-        <button class="btn-primary" onclick="navigate('s7')">Continue</button>
-      </div>
-    </div>
-
     <!-- S7: Quick questions (Step 5/5) -->
     <div class="screen step-screen" id="screen-7">
       <div class="screen-inner">
@@ -515,19 +493,17 @@
           <h1>Answer a few more quick questions.</h1>
           <p class="screen-subtext">Give your best guess if you're not sure.</p>
         </div>
-        <div id="s7-individual-extra">
-          <div class="field-group">
-            <label class="field-label" for="s7-household-size">How many people are in your household?</label>
-            <input class="field-input" type="number" id="s7-household-size" placeholder="e.g. 2" min="1" max="20" />
-          </div>
-          <div class="field-group">
-            <span class="field-label">What was your total household income over the last 30 days? <span style="font-weight:400;color:var(--text-secondary)">(Give your best guess if you're not sure.)</span></span>
-            <div class="chip-grid-2">
-              <button class="chip" id="inc7-0" onclick="selectIncome7(0)">$0&ndash;$1,500</button>
-              <button class="chip" id="inc7-1" onclick="selectIncome7(1)">$1,501&ndash;$3,000</button>
-              <button class="chip" id="inc7-2" onclick="selectIncome7(2)">$3,001&ndash;$5,000</button>
-              <button class="chip" id="inc7-3" onclick="selectIncome7(3)">$5,000+</button>
-            </div>
+        <div class="field-group" id="s7-householdsize-group">
+          <label class="field-label" for="s7-household-size">How many people are in your household?</label>
+          <input class="field-input" type="number" id="s7-household-size" placeholder="e.g. 2" min="1" max="20" />
+        </div>
+        <div class="field-group">
+          <span class="field-label">What was your total household income over the last 30 days? <span style="font-weight:400;color:var(--text-secondary)">(Give your best guess if you're not sure.)</span></span>
+          <div class="chip-grid-2">
+            <button class="chip" id="inc7-0" onclick="selectIncome7(0)">$0&ndash;$1,500</button>
+            <button class="chip" id="inc7-1" onclick="selectIncome7(1)">$1,501&ndash;$3,000</button>
+            <button class="chip" id="inc7-2" onclick="selectIncome7(2)">$3,001&ndash;$5,000</button>
+            <button class="chip" id="inc7-3" onclick="selectIncome7(3)">$5,000+</button>
           </div>
         </div>
         <div class="field-group">
@@ -625,7 +601,7 @@
         </div>
         <div class="field-group">
           <span class="field-label">What is your insurance status?</span>
-          <div class="chip-row hug-content" id="md-insurance-row">
+          <div class="chip-grid-2" id="md-insurance-row">
             <button class="chip" onclick="selectSingle(this)">Insured</button>
             <button class="chip" onclick="selectSingle(this)">Uninsured</button>
           </div>
@@ -718,7 +694,7 @@
     var flow = ['save', 'contactpref', 's3'];
     // Household path: add-members, then a household-income screen. Individual
     // path skips both — household size + income live on the questions screen.
-    if (scopeMode === 'household') flow.push('s4', 's6');
+    if (scopeMode === 'household') flow.push('s4');
     flow.push('s7');
     if (selectedCards.has('bills')) flow.push('medicaldebt');
     return flow;
@@ -788,7 +764,6 @@
   function onScreenEnter(key) {
     if (key === 'contactpref') prepareContactPref();
     if (key === 's4') renderMembers();
-    if (key === 's6') prepareScreen6();
     if (key === 's7') prepareScreen7();
     if (key === 'results') {
       var rname = document.getElementById('first-name').value.trim();
@@ -999,8 +974,8 @@
   }
   function removeMember(i) { members.splice(i, 1); renderMembers(); }
 
-  // After S4 (add family members): go to the household-income screen (S6).
-  function afterHousehold() { navigate('s6'); }
+  // After S4 (add family members): go to the questions screen (S7).
+  function afterHousehold() { navigate('s7'); }
 
   // After S7: medical-bill deep-dive if applicable, else results.
   function afterScreen7() {
@@ -1020,15 +995,7 @@
     el.classList.add('selected');
   }
 
-  // S6 is the household-only income screen.
-  function prepareScreen6() {
-    document.getElementById('s6-title').textContent = 'A bit about your household.';
-  }
-
-  // ── Income selects (S6 household, S7 individual) ──
-  function selectIncome(idx) {
-    for (var i = 0; i < 4; i++) document.getElementById('income-' + i).classList.toggle('selected', i === idx);
-  }
+  // ── Income select (S7, both paths) ──
   function selectIncome7(idx) {
     for (var i = 0; i < 4; i++) document.getElementById('inc7-' + i).classList.toggle('selected', i === idx);
   }
@@ -1047,9 +1014,9 @@
   // ── S7: quick questions ──────────────────────
   function prepareScreen7() {
     var hh = (scopeMode === 'household');
-    // Household size + income only appear here on the individual path;
-    // for households they're captured via members + the income screen.
-    document.getElementById('s7-individual-extra').style.display = hh ? 'none' : '';
+    // Household size is only asked on the individual path (households derive it
+    // from the members list). Income is asked on both paths here.
+    document.getElementById('s7-householdsize-group').style.display = hh ? 'none' : '';
     document.getElementById('snap-label').textContent = hh
       ? 'Has anyone in your household ever applied for SNAP before in NYC?'
       : 'Have you ever applied for SNAP before in NYC?';
