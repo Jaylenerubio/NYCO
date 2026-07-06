@@ -218,7 +218,7 @@
     .pref-card.selected .pref-icon { color: var(--color-secondary-base); }
     .pref-icon svg { width: 28px; height: 28px; }
     .pref-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-    .pref-title { font-size: 18px; font-weight: 600; color: var(--color-black); line-height: 1.3; }
+    .pref-title { font-size: 18px; font-weight: 400; color: var(--color-black); line-height: 1.3; }
     .pref-value { font-size: 15px; color: var(--text-secondary); line-height: 1.4; }
 
     /* Chips */
@@ -497,8 +497,7 @@
     <div class="screen step-screen" id="screen-contactpref">
       <div class="screen-inner">
         <div class="heading-block">
-          <h1>How should we reach you?</h1>
-          <p class="screen-subtext">Pick whichever is easiest — it's how a benefits worker will follow up.</p>
+          <h1>What's your preferred method of contact?</h1>
         </div>
         <div class="cards-grid" id="contactpref-list"></div>
         <div class="scroll-sentinel" id="sentinel-contactpref"></div>
@@ -937,10 +936,10 @@
     var list   = document.getElementById('contactpref-list');
     var html   = '';
     if (digits.length >= 10) {
-      html += prefCard('message-circle', 'Phone number', prettyPhone(digits));
+      html += prefCard('message-circle', 'Text me', prettyPhone(digits));
     }
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      html += prefCard('mail', 'Email address', email);
+      html += prefCard('mail', 'Email me', email);
     }
     list.innerHTML = html;
     document.getElementById('btn-contactpref-continue').disabled = true;
