@@ -173,7 +173,7 @@
     .input-affix .affix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-black); font-size: 16px; pointer-events: none; }
     .field-input.has-affix { padding-left: 28px; }
     /* Progressive-disclosure help toggle */
-    .help-toggle { background: none; border: none; padding: 2px 0; margin-top: 2px; cursor: pointer; font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--color-secondary-base); }
+    .help-toggle { display: block; align-self: flex-start; text-align: left; background: none; border: none; padding: 2px 0; margin-top: 2px; cursor: pointer; font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--color-secondary-base); }
     .help-toggle:hover { text-decoration: underline; }
     .help-more[hidden] { display: none; }
     .field-help { font-size: 13px; line-height: 1.4; color: var(--text-secondary); margin-top: 6px; }
@@ -314,8 +314,6 @@
           <h1>Get your bills covered</h1>
           <p class="screen-subtext">You're close to getting help with healthcare, food, rent, and more.</p>
         </div>
-        <span class="pill-time">3-5 minutes</span>
-        <div class="divider"></div>
         <div class="field-group">
           <label class="field-label" for="lang-input">Select language</label>
           <select class="field-select" id="lang-input">
@@ -332,7 +330,6 @@
       </div>
       <div class="screen-footer" id="footer-landing">
         <button class="btn-primary" onclick="navigate('consent')">Get started</button>
-        <p class="footer-note">No account needed</p>
       </div>
     </div>
 
@@ -406,30 +403,29 @@
     <div class="screen step-screen" id="screen-save">
       <div class="screen-inner">
         <div class="heading-block">
-          <h1>Don't miss out on getting your bills covered.</h1>
-          <p class="screen-subtext">Share a few details so we can follow up with personalized support.</p>
+          <h1>Don't miss out on personalized support.</h1>
+          <p class="screen-subtext">Tell us how to keep in touch — we'll never spam you or share your information without your consent.</p>
         </div>
         <div class="field-group">
-          <label class="field-label" for="first-name">What's your first name?</label>
-          <input class="field-input" type="text" id="first-name" placeholder="Enter your first name" oninput="checkSave()" />
+          <label class="field-label" for="first-name">First name</label>
+          <input class="field-input" type="text" id="first-name" placeholder="First name" oninput="checkSave()" />
         </div>
         <div class="field-group">
-          <label class="field-label" for="last-name">What's your last name?</label>
-          <input class="field-input" type="text" id="last-name" placeholder="Enter your last name" oninput="checkSave()" />
+          <label class="field-label" for="last-name">Last name</label>
+          <input class="field-input" type="text" id="last-name" placeholder="Last name" oninput="checkSave()" />
         </div>
         <div class="field-group">
-          <label class="field-label" for="dob-input">What's your date of birth?</label>
-          <input class="field-input" type="text" id="dob-input" placeholder="MM/DD/YYYY" inputmode="numeric" maxlength="10" oninput="formatDob(this)" />
+          <label class="field-label" for="dob-input">When were you born?</label>
+          <input class="field-input" type="text" id="dob-input" placeholder="MM/DD/YYYY" inputmode="numeric" maxlength="10" oninput="formatDob(this); checkSave();" />
           <p class="field-help dob-error" id="dob-error" style="display:none;color:#B42318;">Please enter a valid date as MM/DD/YYYY.</p>
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="email-input">Email address</label>
-          <input class="field-input" type="email" id="email-input" placeholder="you@example.com" oninput="checkSave()" />
         </div>
         <div class="field-group">
           <label class="field-label" for="phone-input">Phone number</label>
           <input class="field-input" type="tel" id="phone-input" placeholder="(555) 555-5555" inputmode="tel" oninput="checkSave()" />
-          <p class="field-help">We'll never spam you or share your information without your consent.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="email-input">Email</label>
+          <input class="field-input" type="email" id="email-input" placeholder="you@example.com" oninput="checkSave()" />
         </div>
         <div class="saved-note" id="saved-note">
           <i data-lucide="check"></i>
@@ -461,11 +457,11 @@
     <div class="screen step-screen" id="screen-3">
       <div class="screen-inner">
         <div class="heading-block">
-          <h1>Would you like to check for just yourself or your household?</h1>
+          <h1>Is this support for you, or your whole household?</h1>
         </div>
         <div class="scope-stack">
-          <button class="scope-btn" id="scope-myself" onclick="selectScope('myself')">Myself</button>
-          <button class="scope-btn" id="scope-household" onclick="selectScope('household')">Household</button>
+          <button class="scope-btn" id="scope-myself" onclick="selectScope('myself')">Just me</button>
+          <button class="scope-btn" id="scope-household" onclick="selectScope('household')">My household</button>
         </div>
         <div class="scroll-sentinel" id="sentinel-3"></div>
       </div>
@@ -482,10 +478,10 @@
           <p class="screen-subtext">Include people living with you who are family members, dependents, or make income for the family.</p>
         </div>
         <div class="member-list" id="member-list"></div>
-        <button class="add-member" onclick="addMember()"><i data-lucide="plus"></i> Add member</button>
         <div class="scroll-sentinel" id="sentinel-4"></div>
       </div>
       <div class="screen-footer" id="footer-4">
+        <button class="add-member" onclick="addMember()"><i data-lucide="plus"></i> Add family member</button>
         <button class="btn-primary" onclick="afterHousehold()">Continue</button>
       </div>
     </div>
@@ -494,11 +490,7 @@
     <div class="screen step-screen" id="screen-6">
       <div class="screen-inner">
         <div class="heading-block">
-          <h1 id="s6-title">Tell us about yourself.</h1>
-        </div>
-        <div class="field-group" id="household-size-group">
-          <label class="field-label" for="household-size-input">How many people are in your household?</label>
-          <input class="field-input" type="number" id="household-size-input" placeholder="e.g. 2" min="1" max="20" />
+          <h1 id="s6-title">A bit about your household.</h1>
         </div>
         <div class="field-group">
           <span class="field-label">What was your total household income over the last 30 days? <span style="font-weight:400;color:var(--text-secondary)">(Give your best guess if you're not sure.)</span></span>
@@ -512,7 +504,7 @@
         <div class="scroll-sentinel" id="sentinel-6"></div>
       </div>
       <div class="screen-footer" id="footer-6">
-        <button class="btn-primary" onclick="afterScreen6()">Continue</button>
+        <button class="btn-primary" onclick="navigate('s7')">Continue</button>
       </div>
     </div>
 
@@ -522,6 +514,21 @@
         <div class="heading-block">
           <h1>Answer a few more quick questions.</h1>
           <p class="screen-subtext">Give your best guess if you're not sure.</p>
+        </div>
+        <div id="s7-individual-extra">
+          <div class="field-group">
+            <label class="field-label" for="s7-household-size">How many people are in your household?</label>
+            <input class="field-input" type="number" id="s7-household-size" placeholder="e.g. 2" min="1" max="20" />
+          </div>
+          <div class="field-group">
+            <span class="field-label">What was your total household income over the last 30 days? <span style="font-weight:400;color:var(--text-secondary)">(Give your best guess if you're not sure.)</span></span>
+            <div class="chip-grid-2">
+              <button class="chip" id="inc7-0" onclick="selectIncome7(0)">$0&ndash;$1,500</button>
+              <button class="chip" id="inc7-1" onclick="selectIncome7(1)">$1,501&ndash;$3,000</button>
+              <button class="chip" id="inc7-2" onclick="selectIncome7(2)">$3,001&ndash;$5,000</button>
+              <button class="chip" id="inc7-3" onclick="selectIncome7(3)">$5,000+</button>
+            </div>
+          </div>
         </div>
         <div class="field-group">
           <span class="field-label" id="snap-label">Have you ever applied for SNAP before in NYC?</span>
@@ -561,75 +568,12 @@
       </div>
     </div>
 
-    <!-- Eviction Prevention (only if "behind on rent" selected on S1) -->
-    <div class="screen step-screen" id="screen-eviction">
-      <div class="screen-inner">
-        <div class="heading-block">
-          <h1>Let's check your housing situation.</h1>
-          <p class="screen-subtext">This helps us see if you qualify for free legal help.</p>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Do you have a pending eviction case in Housing Court?</span>
-          <div class="chip-row">
-            <button class="chip" onclick="selectSingle(this)">Yes</button>
-            <button class="chip" onclick="selectSingle(this)">No</button>
-          </div>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Have you received a Motion to Restore or Enforce an Eviction?</span>
-          <div class="chip-row">
-            <button class="chip" onclick="selectSingle(this)">Yes</button>
-            <button class="chip" onclick="selectSingle(this)">No</button>
-          </div>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Have you received a Warrant of Eviction?</span>
-          <div class="chip-row">
-            <button class="chip" onclick="selectSingle(this)">Yes</button>
-            <button class="chip" onclick="selectSingle(this)">No</button>
-          </div>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Have you been locked out of your apartment by your landlord without a court order or warrant?</span>
-          <div class="chip-row">
-            <button class="chip" onclick="selectSingle(this)">Yes</button>
-            <button class="chip" onclick="selectSingle(this)">No</button>
-          </div>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Do you have a termination of tenancy case brought by the New York City Housing Authority (NYCHA)?</span>
-          <div class="chip-row">
-            <button class="chip" onclick="selectSingle(this)">Yes</button>
-            <button class="chip" onclick="selectSingle(this)">No</button>
-          </div>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Does your apartment need serious repairs but your landlord won't make them?</span>
-          <div class="chip-row">
-            <button class="chip" onclick="selectSingle(this)">Yes</button>
-            <button class="chip" onclick="selectSingle(this)">No</button>
-          </div>
-        </div>
-        <div class="scroll-sentinel" id="sentinel-eviction"></div>
-      </div>
-      <div class="screen-footer" id="footer-eviction">
-        <button class="btn-primary" onclick="afterEviction()">Continue</button>
-      </div>
-    </div>
-
     <!-- Medical Debt (only if "medical bills I can't pay" selected on S1) -->
     <div class="screen step-screen" id="screen-medicaldebt">
       <div class="screen-inner">
         <div class="heading-block">
           <h1>Tell us about your medical bill.</h1>
           <p class="screen-subtext">We'll check if you qualify for charity care to help pay it off.</p>
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="md-state">What state was the hospital in?</label>
-          <select class="field-select" id="md-state">
-            <option value="">Select a state</option>
-            <option>New York</option>
-          </select>
         </div>
         <div class="field-group">
           <label class="field-label" for="md-city">What city?</label>
@@ -684,7 +628,6 @@
           <div class="chip-row hug-content" id="md-insurance-row">
             <button class="chip" onclick="selectSingle(this)">Insured</button>
             <button class="chip" onclick="selectSingle(this)">Uninsured</button>
-            <button class="chip" onclick="selectSingle(this)">Not sure</button>
           </div>
         </div>
         <div class="scroll-sentinel" id="sentinel-medicaldebt"></div>
@@ -697,7 +640,7 @@
     <!-- Results -->
     <div class="screen" id="screen-results">
       <div class="screen-inner">
-        <h2 id="results-title">Here's what you could save.</h2>
+        <h2 id="results-title">Here's what we found for you.</h2>
         <div class="results-list">
           <div class="result-card">
             <div class="result-card-header">
@@ -734,7 +677,7 @@
         <div class="scroll-sentinel" id="sentinel-results"></div>
       </div>
       <div class="screen-footer" id="footer-results">
-        <button class="btn-primary" onclick="navigate('confirm')">Connect me with a benefits worker</button>
+        <button class="btn-primary" onclick="navigate('confirm')">TBD</button>
       </div>
     </div>
 
@@ -772,11 +715,12 @@
   //    eviction / medical-debt screens appear only if the matching card was
   //    selected on S1. ──
   function activeFlow() {
-    var flow = ['save', 'contactpref', 's3', 's6'];
-    if (scopeMode === 'household') flow.push('s4');
+    var flow = ['save', 'contactpref', 's3'];
+    // Household path: add-members, then a household-income screen. Individual
+    // path skips both — household size + income live on the questions screen.
+    if (scopeMode === 'household') flow.push('s4', 's6');
     flow.push('s7');
-    if (selectedCards.has('housing')) flow.push('eviction');
-    if (selectedCards.has('bills'))   flow.push('medicaldebt');
+    if (selectedCards.has('bills')) flow.push('medicaldebt');
     return flow;
   }
   function stepForScreen(key) {
@@ -849,8 +793,8 @@
     if (key === 'results') {
       var rname = document.getElementById('first-name').value.trim();
       document.getElementById('results-title').textContent = rname
-        ? ("Here's what you could save, " + rname + ".")
-        : "Here's what you could save.";
+        ? ("Here's what we found for you, " + rname + ".")
+        : "Here's what we found for you.";
     }
     if (key === 'confirm') {
       var cname = document.getElementById('first-name').value.trim();
@@ -910,12 +854,15 @@
   // ── Save ────────────────────────────────────
   function checkSave() {
     var firstName = document.getElementById('first-name').value.trim();
+    var lastName  = document.getElementById('last-name').value.trim();
+    var dob       = document.getElementById('dob-input').value.trim();
     var email     = document.getElementById('email-input').value.trim();
     var phone     = document.getElementById('phone-input').value.trim();
     var isPhone   = phone.replace(/\D/g,'').length >= 10;
     var isEmail   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    var valid     = firstName !== '' && (isPhone || isEmail);
-    document.getElementById('saved-note').classList.toggle('visible', isPhone || isEmail);
+    // Every field is required to continue.
+    var valid = firstName !== '' && lastName !== '' && isValidDob(dob) && isPhone && isEmail;
+    document.getElementById('saved-note').classList.toggle('visible', valid);
     document.getElementById('btn-save-continue').disabled = !valid;
   }
 
@@ -961,7 +908,6 @@
     var html   = '';
     if (digits.length >= 10) {
       html += prefCard('message-circle', 'Text me', prettyPhone(digits));
-      html += prefCard('phone', 'Call me', prettyPhone(digits));
     }
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       html += prefCard('mail', 'Email me', email);
@@ -986,7 +932,10 @@
     document.getElementById('btn-s3-continue').disabled = false;
   }
   function continueFromScope() {
-    navigate('s6');
+    // Household: add-members first, then income (S6). Individual: straight to
+    // the questions screen (which carries household size + income).
+    if (scopeMode === 'household') { prepareScreen4(); navigate('s4'); }
+    else navigate('s7');
   }
 
   // ── S4: household members (inline Relation + Age) ──
@@ -1050,23 +999,11 @@
   }
   function removeMember(i) { members.splice(i, 1); renderMembers(); }
 
-  // After S6 (about you): household → add family members (S4); myself → quick questions (S7)
-  function afterScreen6() {
-    if (scopeMode === 'household') { prepareScreen4(); navigate('s4'); }
-    else navigate('s7');
-  }
+  // After S4 (add family members): go to the household-income screen (S6).
+  function afterHousehold() { navigate('s6'); }
 
-  // After S4 (add family members): go to quick questions (S7)
-  function afterHousehold() { navigate('s7'); }
-
-  // After S7: route through the conditional screens based on S1 selections.
+  // After S7: medical-bill deep-dive if applicable, else results.
   function afterScreen7() {
-    if (selectedCards.has('housing'))    navigate('eviction');
-    else if (selectedCards.has('bills')) navigate('medicaldebt');
-    else navigate('results');
-  }
-  // After eviction screen: medical debt next if applicable, else results.
-  function afterEviction() {
     if (selectedCards.has('bills')) navigate('medicaldebt');
     else navigate('results');
   }
@@ -1083,22 +1020,17 @@
     el.classList.add('selected');
   }
 
-  // S6 adapts to path: household hides redundant household-size question + uses a warmer title.
+  // S6 is the household-only income screen.
   function prepareScreen6() {
-    var name  = document.getElementById('first-name').value.trim();
-    var title = document.getElementById('s6-title');
-    if (scopeMode === 'household') {
-      title.textContent = name ? ("Let's start with " + name + ".") : "Let's start with you.";
-      document.getElementById('household-size-group').style.display = 'none';
-    } else {
-      title.textContent = "Tell us about yourself.";
-      document.getElementById('household-size-group').style.display = '';
-    }
+    document.getElementById('s6-title').textContent = 'A bit about your household.';
   }
 
-  // ── S6: about you (myself only) ─────────────
+  // ── Income selects (S6 household, S7 individual) ──
   function selectIncome(idx) {
     for (var i = 0; i < 4; i++) document.getElementById('income-' + i).classList.toggle('selected', i === idx);
+  }
+  function selectIncome7(idx) {
+    for (var i = 0; i < 4; i++) document.getElementById('inc7-' + i).classList.toggle('selected', i === idx);
   }
   function selectYN(group, val) {
     var y  = document.getElementById(group + '-yes');
@@ -1115,6 +1047,9 @@
   // ── S7: quick questions ──────────────────────
   function prepareScreen7() {
     var hh = (scopeMode === 'household');
+    // Household size + income only appear here on the individual path;
+    // for households they're captured via members + the income screen.
+    document.getElementById('s7-individual-extra').style.display = hh ? 'none' : '';
     document.getElementById('snap-label').textContent = hh
       ? 'Has anyone in your household ever applied for SNAP before in NYC?'
       : 'Have you ever applied for SNAP before in NYC?';
@@ -1137,7 +1072,7 @@
 
     document.querySelectorAll('.situation-card').forEach(function(c) { c.classList.remove('selected'); c.setAttribute('aria-pressed','false'); });
     document.getElementById('btn-s1-continue').disabled = true;
-    ['first-name','last-name','email-input','phone-input','dob-input','household-size-input','md-city','md-state','md-bill','md-billmonth','md-billyear'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
+    ['first-name','last-name','email-input','phone-input','dob-input','s7-household-size','md-city','md-bill','md-billmonth','md-billyear'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
     populateHospitals();
     document.getElementById('saved-note').classList.remove('visible');
     document.getElementById('dob-error').style.display = 'none';
