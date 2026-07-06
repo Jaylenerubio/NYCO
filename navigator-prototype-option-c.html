@@ -10,9 +10,7 @@
     :root {
       --color-primary-base:    #050560;
       --color-primary-dark:    #030339;
-      --color-secondary-light: #D3DEFA;
       --color-secondary-base:  #284CCA;
-      --color-secondary-dark:  #182D79;
       --color-white:           #FFFFFF;
       --color-neutral-100:     #F5F5F5;
       --color-neutral-200:     #EEEEEE;
@@ -20,185 +18,184 @@
       --color-gray-400:        #C2C2C2;
       --color-gray-500:        #AAAAAA;
       --color-black:           #191919;
-      --color-navy-text:       #121C3D;
       --text-secondary:        #6B6B7A;
-      --color-success-bg:      #ECFFF5;
       --color-success-text:    #006333;
-      --color-warning-bg:      #F9FFA6;
-      --color-warning-text:    #8A8800;
       --color-error-base:      #EC131E;
-      --color-error-light:     #F8D9DE;
-
-      --bg-primary:   var(--color-white);
-      --bg-secondary: var(--color-neutral-100);
-      --border-default: var(--color-neutral-300);
-
-      --duration-open:  220ms;
-      --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
-
-      --focus-ring-color:  var(--color-secondary-base);
-      --focus-ring-width:  3px;
-      --focus-ring-offset: 2px;
-
-      --font-display: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
-      --font-body:    'Public Sans', system-ui, -apple-system, sans-serif;
-
-      --space-1: 8px;
-      --space-2: 16px;
-      --space-3: 24px;
-      --space-4: 32px;
+      --bg-primary:            var(--color-white);
+      --bg-secondary:          var(--color-neutral-100);
+      --border-default:        var(--color-neutral-300);
+      --ease-out:              cubic-bezier(0.16, 1, 0.3, 1);
+      --font-display:          'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+      --font-body:             'Public Sans', system-ui, -apple-system, sans-serif;
+      --space-1: 8px; --space-2: 16px; --space-3: 24px; --space-4: 32px;
+      --focus-ring-color:      var(--color-secondary-base);
+      --focus-ring-width:      3px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { height: 100%; }
     body {
-      height: 100%;
-      background: var(--bg-secondary);
-      font-family: var(--font-body);
-      color: var(--color-black);
-      font-size: 16px;
-      line-height: 1.5;
-      display: flex;
-      justify-content: center;
+      height: 100%; background: var(--bg-secondary); font-family: var(--font-body);
+      color: var(--color-black); font-size: 16px; line-height: 1.5;
+      display: flex; justify-content: center;
     }
-
     #app {
-      width: 100%;
-      max-width: 390px;
-      height: 100%;
-      background: var(--bg-primary);
-      box-shadow: 0 0 60px rgba(0,0,0,0.18);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      width: 100%; max-width: 390px; height: 100%; background: var(--bg-primary);
+      box-shadow: 0 0 60px rgba(0,0,0,0.18); display: flex; flex-direction: column; overflow: hidden;
     }
     @media (max-width: 430px) { #app { box-shadow: none; } }
 
     /* Supernav */
     .supernav {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border-default);
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
+      background: var(--bg-secondary); border-bottom: 1px solid var(--border-default);
+      padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
     }
     .nyc-logo { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; }
-    .supernav-title { font-size: 13px; font-weight: 500; color: var(--text-secondary); line-height: 1.2; }
 
     /* Back row */
     .nav-chrome {
-      background: var(--bg-primary);
-      border-bottom: 1px solid var(--border-default);
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
+      background: var(--bg-primary); border-bottom: 1px solid var(--border-default);
+      padding: 16px; display: flex; align-items: center; flex-shrink: 0;
     }
     .nav-chrome.hidden { display: none; }
     .back-btn {
-      background: none; border: none; cursor: pointer;
-      color: var(--color-black);
-      font-family: var(--font-body);
-      font-size: 16px; font-weight: 400;
-      display: flex; align-items: center; gap: 8px;
-      padding: 0;
+      background: none; border: none; cursor: pointer; color: var(--color-black);
+      font-family: var(--font-body); font-size: 16px; font-weight: 400;
+      display: flex; align-items: center; gap: 8px; padding: 0;
     }
     .back-btn svg { width: 24px; height: 24px; }
 
     /* Progress */
     .progress-wrap { padding: 24px 16px 16px; flex-shrink: 0; }
+    .progress-wrap.enter { animation: progEnter .45s ease both; }
+    @keyframes progEnter { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: translateY(0); } }
     .progress-label { font-size: 12px; line-height: 1.6; text-transform: uppercase; color: var(--color-black); margin-bottom: 13px; }
-    .progress-track { display: flex; gap: 2px; }
-    .progress-seg { flex: 1; height: 8px; border-radius: 20px; background: var(--color-neutral-100); transition: background var(--duration-open) var(--ease-out); }
-    .progress-seg.filled { background: var(--color-secondary-base); }
+.progress-track { display: flex; gap: 2px; }
+    .progress-seg { flex: 1; height: 8px; border-radius: 20px; background: var(--color-neutral-200); overflow: hidden; }
+    .progress-seg .seg-fill { display: block; height: 100%; width: 0; background: var(--color-secondary-base); border-radius: 20px; transition: width .45s cubic-bezier(.4,0,.2,1); }
+    .progress-seg.filled .seg-fill { width: 100%; }
 
     /* Screens */
     .screens-wrapper { flex: 1; min-height: 0; position: relative; overflow: hidden; }
     .screen { position: absolute; inset: 0; overflow-y: auto; display: none; flex-direction: column; }
     .screen.active { display: flex; }
-
     .screen-inner { width: 100%; padding: 24px 16px; flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+    #screen-landing .screen-inner { padding-top: 56px; }
     .screen-inner.centered { justify-content: center; align-items: center; text-align: center; }
 
-    /* Typography */
-    h1 { font-family: var(--font-display); font-weight: 400; font-size: 32px; line-height: 1.3; color: var(--color-black); }
+    /* Typography — matches uploaded screener */
+    h1 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 1.14; letter-spacing: -.5px; color: var(--color-black); }
+    .step-screen h1 { font-size: 28px; line-height: 1.3; letter-spacing: normal; }
     h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.3; color: var(--color-black); }
     .heading-block { display: flex; flex-direction: column; gap: var(--space-1); }
-    .screen-subtext { font-size: 16px; color: var(--text-secondary); line-height: 1.5; }
+    .screen-subtext { font-size: 18px; color: var(--text-secondary); line-height: 1.5; text-wrap: pretty; }
+
+    /* Landing */
+    .pill-time { display: inline-block; align-self: flex-start; background: #DCEFD2; color: #2F7D32; border-radius: 999px; padding: 6px 16px; font-size: 14px; font-weight: 500; }
+    .divider { height: 1px; background: var(--border-default); width: 100%; }
+    .footer-note { text-align: center; font-size: 14px; color: var(--text-secondary); margin-top: 12px; }
+
+    /* Consent */
+    .consent-body { font-size: 16px; color: var(--text-secondary); line-height: 1.6; }
+    .consent-more { display: none; }
+    .consent-more.open { display: block; }
+    .consent-fade-wrap { position: relative; }
+    .consent-fade-wrap::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to bottom, transparent, #ffffff); pointer-events: none; }
+    .consent-fade-wrap.expanded::after { display: none; }
+    .btn-readmore { align-self: center; background: var(--color-neutral-100); border: none; border-radius: 999px; padding: 12px 28px; font-family: var(--font-body); font-size: 16px; font-weight: 600; color: var(--color-black); cursor: pointer; }
+    .btn-readmore:hover { background: var(--color-neutral-200); }
+    .consent-check { display: flex; gap: 12px; align-items: flex-start; }
+    .consent-check input {
+      -webkit-appearance: none; appearance: none;
+      width: 24px; height: 24px; flex-shrink: 0; margin-top: 1px;
+      border: 2px solid var(--color-neutral-300); border-radius: 8px;
+      background: var(--color-white); cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background 150ms ease, border-color 150ms ease;
+    }
+    .consent-check input:checked { background: var(--color-secondary-base); border-color: var(--color-secondary-base); }
+    .consent-check input:checked::after {
+      content: ''; width: 6px; height: 11px;
+      border: solid var(--color-white); border-width: 0 2.5px 2.5px 0;
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
+    .consent-check input:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: 2px; }
+    .consent-check label { font-size: 16px; line-height: 1.5; color: var(--color-black); cursor: pointer; }
 
     /* Buttons */
     .btn-primary {
-      display: block; width: 100%;
-      padding: 16px 24px;
-      background: var(--color-primary-base);
-      color: var(--color-white);
+      display: block; width: 100%; padding: 16px 24px;
+      background: var(--color-primary-base); color: var(--color-white);
       border: 2px solid transparent; border-radius: 4px;
       font-family: var(--font-body); font-size: 18px; font-weight: 600; line-height: 22px;
-      text-align: center; cursor: pointer;
-      transition: background 150ms ease;
+      text-align: center; cursor: pointer; transition: background 150ms ease;
     }
     .btn-primary:hover:not(:disabled) { background: var(--color-primary-dark); }
     .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-primary:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
-
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 20px;
-      background: transparent;
-      color: var(--color-primary-base);
-      border: 1.5px solid var(--color-neutral-300); border-radius: 4px;
-      font-family: var(--font-body); font-size: 16px; font-weight: 600;
-      cursor: pointer; transition: background 150ms ease, border-color 150ms ease;
-    }
-    .btn-secondary:hover { background: var(--color-neutral-100); border-color: var(--color-gray-400); }
-    .btn-secondary svg { width: 18px; height: 18px; }
 
     .btn-text-danger {
-      background: none; border: none; cursor: pointer;
-      color: var(--color-error-base);
+      background: none; border: none; cursor: pointer; color: var(--color-error-base);
       font-family: var(--font-body); font-size: 14px; font-weight: 500;
       display: inline-flex; align-items: center; gap: 4px; padding: 4px 0;
     }
     .btn-text-danger svg { width: 14px; height: 14px; }
 
+    /* Scope buttons — full-width stacked */
+    .scope-stack { display: flex; flex-direction: column; gap: 14px; }
+    .scope-btn {
+      display: block; width: 100%; padding: 18px;
+      border: 1px solid var(--color-neutral-300); border-radius: 6px;
+      background: var(--color-white); color: var(--color-black);
+      font-family: var(--font-body); font-size: 16px; font-weight: 400;
+      cursor: pointer; text-align: center;
+      transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+    }
+    .scope-btn:hover { border-color: var(--color-secondary-base); }
+    .scope-btn.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+
     /* Fields */
     .field-group { display: flex; flex-direction: column; gap: 8px; }
-    .field-label { font-size: 16px; font-weight: 600; color: var(--color-black); }
+    .field-label { font-size: 16px; font-weight: 400; color: var(--color-black); }
     .field-input, .field-select {
       width: 100%; padding: 12px 14px;
       border: 1.5px solid var(--border-default); border-radius: 4px;
       font-family: var(--font-body); font-size: 16px; color: var(--color-black);
       background: var(--color-white); transition: border-color 150ms ease;
     }
-    .field-select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23191919' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px; cursor: pointer; }
+    .field-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23191919' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px; cursor: pointer;
+    }
     .field-input:focus, .field-select:focus { outline: none; border-color: var(--color-secondary-base); box-shadow: 0 0 0 3px rgba(40,76,202,0.15); }
     .field-input::placeholder { color: var(--color-gray-500); }
+    .field-input:disabled { background: var(--color-neutral-100); color: var(--color-gray-500); cursor: default; }
+    /* Input with a leading $ affix */
+    .input-affix { position: relative; }
+    .input-affix .affix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-black); font-size: 16px; pointer-events: none; }
+    .field-input.has-affix { padding-left: 28px; }
+    /* Progressive-disclosure help toggle */
+    .help-toggle { display: block; align-self: flex-start; text-align: left; background: none; border: none; padding: 2px 0; margin-top: 2px; cursor: pointer; font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--color-secondary-base); }
+    .help-toggle:hover { text-decoration: underline; }
+    .help-more[hidden] { display: none; }
+    .field-help { font-size: 13px; line-height: 1.4; color: var(--text-secondary); margin-top: 6px; }
 
-    /* Landing */
-    .landing-eyebrow { font-size: 12px; line-height: 1.6; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-secondary-base); font-weight: 600; }
-    .landing-art {
-      width: 96px; height: 96px; border-radius: 50%;
-      background: var(--color-secondary-light);
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto var(--space-1);
-    }
-    .landing-art svg { width: 44px; height: 44px; color: var(--color-secondary-base); }
+    /* Saved note */
+    .saved-note { display: none; font-size: 14px; line-height: 1.5; color: var(--color-success-text); align-items: flex-start; gap: 6px; }
+    .saved-note.visible { display: flex; }
+    .saved-note svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
 
     /* Situation cards */
     .cards-grid { display: flex; flex-direction: column; gap: var(--space-1); }
     .situation-card {
       display: flex; align-items: flex-start; gap: var(--space-1);
-      padding: 8px 16px;
-      background: var(--color-white);
+      padding: 8px 16px; background: var(--color-white);
       border: 2px solid var(--color-neutral-200); border-radius: 8px;
       cursor: pointer; text-align: left; width: 100%;
       transition: border-color 150ms ease, background 150ms ease;
     }
     .situation-card:hover { border-color: var(--color-secondary-base); }
-    .situation-card.selected { border-color: var(--color-secondary-base); background: #EEF2FD; }
+    .situation-card.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
     .card-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--color-black); display: flex; align-items: center; justify-content: center; margin-top: 14px; }
     .situation-card.selected .card-icon { color: var(--color-secondary-base); }
     .card-icon svg { width: 24px; height: 24px; }
@@ -206,89 +203,131 @@
     .card-title { font-size: 16px; font-weight: 400; color: var(--color-black); line-height: 1.5; }
     .card-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
 
+    /* Contact-method cards (icon left, bold title, value beneath) */
+    #contactpref-list { gap: 14px; }
+    .pref-card {
+      display: flex; align-items: center; gap: 16px; width: 100%;
+      padding: 18px 20px; background: var(--color-white);
+      border: 1px solid var(--color-neutral-300); border-radius: 12px;
+      cursor: pointer; text-align: left;
+      transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+    }
+    .pref-card:hover { border-color: var(--color-secondary-base); }
+    .pref-card.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+    .pref-icon { flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: var(--color-black); }
+    .pref-card.selected .pref-icon { color: var(--color-secondary-base); }
+    .pref-icon svg { width: 28px; height: 28px; }
+    .pref-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .pref-title { font-size: 18px; font-weight: 600; color: var(--color-black); line-height: 1.3; }
+    .pref-value { font-size: 15px; color: var(--text-secondary); line-height: 1.4; }
+
     /* Chips */
     .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip-row.hug-content { flex-wrap: wrap; }
     .chip-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .chip {
-      flex: 1; min-width: 0;
-      padding: 10px 16px;
-      background: var(--color-white);
-      border: 2px solid var(--border-default); border-radius: 4px;
+      flex: 1; min-width: 0; padding: 18px 8px;
+      background: var(--color-white); border: 1px solid var(--color-neutral-300); border-radius: 8px;
       font-family: var(--font-body); font-size: 16px; font-weight: 400; color: var(--color-black);
       cursor: pointer; text-align: center;
-      transition: border-color 150ms ease, background 150ms ease;
+      transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease, transform .12s ease;
     }
+    .chip-row.hug-content .chip { flex: 0 1 auto; padding: 18px 22px; white-space: nowrap; }
     .chip:hover { border-color: var(--color-secondary-base); }
-    .chip.selected { border-color: var(--color-secondary-base); background: #EEF2FD; color: var(--color-secondary-base); }
+    .chip:active { transform: scale(.97); }
+    .chip.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
 
     /* Info chip */
-    .info-chip {
-      background: var(--color-neutral-100); border-radius: 8px;
-      padding: 16px;
-      display: flex; gap: 8px; align-items: flex-start;
-    }
+    .info-chip { background: var(--color-neutral-100); border-radius: 8px; padding: 16px; display: flex; gap: 8px; align-items: flex-start; }
     .info-chip-icon { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-black); margin-top: 2px; }
     .info-chip-icon svg { width: 20px; height: 20px; }
     .info-chip-text { font-size: 14px; line-height: 1.5; color: var(--color-black); }
-    .info-chip-text.italic { font-style: italic; font-size: 16px; line-height: 1.4; }
 
-    /* Field helptext */
-    .field-help { font-size: 13px; line-height: 1.4; color: var(--color-gray-700); margin-top: 6px; }
-
-    /* Saved note */
-    .saved-note { display: none; font-size: 14px; line-height: 1.5; color: var(--color-success-text); align-items: flex-start; gap: 6px; }
-    .saved-note.visible { display: flex; }
-    .saved-note svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+    /* Add member (outlined pill) */
+    .add-member {
+      display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+      border: 1px solid var(--color-secondary-base); border-radius: 999px;
+      background: var(--color-white); color: var(--color-secondary-base);
+      font-family: var(--font-body); font-size: 18px; font-weight: 600;
+      cursor: pointer; padding: 16px;
+      transition: transform .12s ease, background 150ms ease;
+      -webkit-user-select: none; user-select: none;
+    }
+    .add-member:hover { background: var(--color-neutral-100); }
+    .add-member:active { transform: scale(.93); }
+    .add-member svg { width: 18px; height: 18px; }
 
     /* Household member rows */
-    .member-list { display: flex; flex-direction: column; gap: var(--space-2); }
-    .member-row { display: flex; flex-direction: column; gap: 8px; }
-    .member-row-head { display: flex; align-items: center; justify-content: space-between; }
+    .member-list { display: flex; flex-direction: column; gap: var(--space-3); }
+    .member-entry { display: flex; flex-direction: column; gap: 8px; }
+    .member-inline-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .dob-grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 10px; }
 
     /* Results */
     .results-list { display: flex; flex-direction: column; }
-    .result-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 16px 8px; }
-    .result-divider { height: 1px; background: var(--color-neutral-300); width: 100%; }
-    .result-info { display: flex; flex-direction: column; gap: 6px; }
-    .result-name { font-size: 20px; color: var(--color-black); line-height: 1.3; }
-    .result-value { font-size: 15px; color: var(--text-secondary); }
-    .match-badge { flex-shrink: 0; padding: 6px 14px; border-radius: 30px; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap; }
-    .match-badge.strong { background: #DCEFD2; color: #2F7D32; }
-    .match-badge.possible { background: #F4E8CE; color: #8A6A22; }
-    .result-note {
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-      background: var(--color-neutral-100); border-radius: 8px; padding: 16px;
-      font-size: 15px; line-height: 1.5; color: var(--color-black);
-    }
-    .result-note-close { background: none; border: none; cursor: pointer; flex-shrink: 0; color: var(--color-black); padding: 0; display: flex; }
-    .result-note-close svg { width: 20px; height: 20px; }
+    .result-card { display: flex; flex-direction: column; gap: 8px; padding: 20px 0; }
+    .result-card-header { display: flex; align-items: center; gap: 12px; }
+    .result-card-icon { flex-shrink: 0; color: var(--color-black); display: flex; }
+    .result-card-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+    .result-card-name { font-size: 20px; font-weight: 600; color: var(--color-black); line-height: 1.2; }
+    .result-card-desc { font-size: 16px; color: var(--text-secondary); line-height: 1.55; padding-left: 34px; }
+    .result-divider { height: 1px; background: var(--color-neutral-200, #E5E5E5); width: 100%; }
 
     /* Confirmation */
     .confirm-icon {
-      width: 80px; height: 80px; background: var(--color-success-text);
+      width: 80px; height: 80px; background: #DCEFD2;
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       margin: 0 auto var(--space-3);
     }
-    .confirm-icon svg { width: 40px; height: 40px; stroke: white; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-    .ref-number {
-      font-size: 16px; font-weight: 600; color: var(--text-secondary);
-      background: var(--color-neutral-100); border: 1.5px solid var(--border-default);
-      border-radius: 4px; padding: 10px 16px; text-align: center; letter-spacing: 0.05em;
-      margin-top: var(--space-3);
-    }
+    .confirm-icon svg { width: 36px; height: 36px; stroke: #2F7D32; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .confirm-lead { font-weight: 400; color: var(--color-black); font-size: 16px; line-height: 1.5; }
 
     /* Scroll-gate footer */
     .screen-footer {
-      position: sticky; bottom: 0;
-      background: var(--bg-primary);
-      padding: 16px 16px 24px;
-      flex-shrink: 0;
+      position: sticky; bottom: 0; background: var(--bg-primary);
+      padding: 16px 16px 24px; flex-shrink: 0;
       display: flex; flex-direction: column; gap: var(--space-1);
-      opacity: 0; pointer-events: none;
-      transition: opacity 200ms var(--ease-out);
+      opacity: 0; pointer-events: none; transition: opacity 200ms var(--ease-out);
     }
     .screen-footer.footer-visible { opacity: 1; pointer-events: auto; }
+    /* Last two screens: button hugs the content instead of pinning to the bottom */
+    #screen-results .screen-inner, #screen-confirm .screen-inner { flex: 0 0 auto; }
+    #screen-confirm .screen-inner.centered { justify-content: flex-start; padding-top: 72px; }
     .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
+
+    /* ── Tablet (≥768px): widen the frame into a centered card instead of a
+       full-bleed phone screen, and let choice grids use the extra width. ── */
+    @media (min-width: 768px) {
+      body { padding: 40px 0; }
+      #app { max-width: 640px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.18); }
+
+      .supernav { padding: 14px 48px; }
+      .nav-chrome { padding: 20px 48px; }
+      .progress-wrap { padding: 32px 48px 20px; }
+      .screen-inner { padding: 40px 48px; gap: var(--space-4); }
+      #screen-landing .screen-inner { padding-top: 72px; }
+      .screen-footer { padding: 20px 48px 32px; }
+
+      h1 { font-size: 44px; }
+      .step-screen h1 { font-size: 32px; }
+      h2 { font-size: 32px; }
+      .screen-subtext { font-size: 19px; }
+
+      .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+      .scope-stack { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+      .scope-btn { padding: 28px 18px; font-size: 17px; }
+      .situation-card { padding: 12px 20px; }
+      .pref-card { padding: 20px 24px; }
+      .chip { padding: 20px 10px; font-size: 16px; }
+      .btn-primary { font-size: 19px; padding: 18px 24px; }
+      .add-member { font-size: 19px; padding: 18px; }
+      .member-inline-row, .dob-grid-2 { gap: 16px; }
+    }
+
+    /* ── Larger tablets / landscape (≥1024px) ── */
+    @media (min-width: 1024px) {
+      #app { max-width: 720px; }
+    }
   </style>
 </head>
 <body>
@@ -300,51 +339,83 @@
     </a>
   </div>
 
-  <div class="nav-chrome hidden" id="nav-chrome" role="navigation" aria-label="Back">
+  <div class="nav-chrome hidden" id="nav-chrome" role="navigation">
     <button class="back-btn" id="back-btn" aria-label="Go back" onclick="goBack()">
       <i data-lucide="arrow-left"></i> Back
     </button>
   </div>
 
   <div class="progress-wrap" id="progress-wrap" style="display:none">
-    <div class="progress-label" id="progress-label-text">Step 1/7</div>
+    <div class="progress-label" id="progress-label-text">Step 1/5</div>
     <div class="progress-track">
-      <div class="progress-seg" id="seg-1"></div>
-      <div class="progress-seg" id="seg-2"></div>
-      <div class="progress-seg" id="seg-3"></div>
-      <div class="progress-seg" id="seg-4"></div>
-      <div class="progress-seg" id="seg-5"></div>
-      <div class="progress-seg" id="seg-6"></div>
-      <div class="progress-seg" id="seg-7"></div>
+      <div class="progress-seg" id="seg-1"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-2"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-3"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-4"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-5"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-6"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-7"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-8"><span class="seg-fill"></span></div>
     </div>
   </div>
 
   <div class="screens-wrapper">
 
-    <!-- Screen 0: Landing (no progress) -->
+    <!-- Landing -->
     <div class="screen active" id="screen-landing">
-      <div class="screen-inner centered">
-        <div>
-          <div class="landing-art"><i data-lucide="hand-heart"></i></div>
-          <p class="landing-eyebrow">NYC Health + Affordability Corps</p>
-          <h1 style="margin-top:8px;">Get started on getting your bills covered.</h1>
-          <p class="screen-subtext" style="margin-top:var(--space-2);">
-            Answer a few quick questions and we'll match you with healthcare, food, rent, and bill-relief programs you may qualify for.
-          </p>
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Get your bills covered</h1>
+          <p class="screen-subtext">You're close to getting help with healthcare, food, rent, and more.</p>
+        </div>
+        <div class="divider"></div>
+        <div class="field-group">
+          <label class="field-label" for="lang-input">Select language</label>
+          <select class="field-select" id="lang-input">
+            <option value="" disabled>Select language</option>
+            <option selected>English</option>
+            <option>Spanish</option>
+            <option>Korean</option>
+            <option>French</option>
+            <option>Japanese</option>
+            <option>Chinese</option>
+          </select>
         </div>
         <div class="scroll-sentinel" id="sentinel-landing"></div>
       </div>
       <div class="screen-footer" id="footer-landing">
-        <button class="btn-primary" onclick="navigate('s1')">Let's see what you qualify for</button>
+        <button class="btn-primary" onclick="navigate('consent')">Get started</button>
       </div>
     </div>
 
-    <!-- Screen 1: How can we help? (STEP 1/5) -->
-    <div class="screen" id="screen-1">
+    <!-- Consent -->
+    <div class="screen" id="screen-consent">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2>How can we help?</h2>
-          <p class="screen-subtext">Take 2 minutes to share what's going on. We'll automatically match you with the right programs and services for you.</p>
+          <h2>What you should know before we begin</h2>
+        </div>
+        <div class="consent-fade-wrap" id="consent-fade-wrap">
+          <p class="consent-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <p class="consent-body consent-more" id="consent-more">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        <button class="btn-readmore" id="readmore-btn" onclick="toggleReadMore()">Read more</button>
+        <div class="consent-check">
+          <input type="checkbox" id="consent-checkbox" onchange="checkConsent()" />
+          <label for="consent-checkbox">I have read, understand, and agree to the Privacy Policy, and Terms of Use.</label>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-consent"></div>
+      </div>
+      <div class="screen-footer" id="footer-consent">
+        <button class="btn-primary" id="btn-consent-continue" onclick="navigate('s1')" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- S1: How can we help (Step 1/5) -->
+    <div class="screen step-screen" id="screen-1">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>How can we help?</h1>
+          <p class="screen-subtext">Select all that apply.</p>
         </div>
         <div class="cards-grid">
           <button class="situation-card" id="card-health" onclick="toggleCard('health')" aria-pressed="false">
@@ -383,33 +454,33 @@
       </div>
     </div>
 
-    <!-- Screen save: phone (no progress) -->
-    <div class="screen" id="screen-save">
+    <!-- Save: contact info (Step 2/5) -->
+    <div class="screen step-screen" id="screen-save">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2>Don't miss out on getting your bills covered.</h2>
-          <p class="screen-subtext">Please provide a phone number so that we can provide personalized support.</p>
+          <h1>Don't miss out on personalized support.</h1>
+          <p class="screen-subtext">Tell us how to keep in touch — we'll never spam you or share your information without your consent.</p>
         </div>
         <div class="field-group">
-          <label class="field-label" for="lang-input-save">What is your preferred language?</label>
-          <select class="field-select" id="lang-input-save">
-            <option value="">Select a language</option>
-            <option>English</option>
-            <option>Spanish</option>
-            <option>Korean</option>
-            <option>French</option>
-            <option>Japanese</option>
-            <option>Chinese</option>
-          </select>
+          <label class="field-label" for="first-name">First name</label>
+          <input class="field-input" type="text" id="first-name" placeholder="First name" oninput="checkSave()" />
         </div>
         <div class="field-group">
-          <label class="field-label" for="first-name">What's your first name?</label>
-          <input class="field-input" type="text" id="first-name" placeholder="Enter preferred name" oninput="checkSave()" />
+          <label class="field-label" for="last-name">Last name</label>
+          <input class="field-input" type="text" id="last-name" placeholder="Last name" oninput="checkSave()" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="dob-input">When were you born?</label>
+          <input class="field-input" type="text" id="dob-input" placeholder="MM/DD/YYYY" inputmode="numeric" maxlength="10" oninput="formatDob(this); checkSave();" />
+          <p class="field-help dob-error" id="dob-error" style="display:none;color:#B42318;">Please enter a valid date as MM/DD/YYYY.</p>
         </div>
         <div class="field-group">
           <label class="field-label" for="phone-input">Phone number</label>
-          <input class="field-input" type="tel" id="phone-input" placeholder="Enter phone number" oninput="checkSave()" maxlength="14" />
-          <p class="field-help">We'll never spam you or share your information without your consent.</p>
+          <input class="field-input" type="tel" id="phone-input" placeholder="(555) 555-5555" inputmode="tel" oninput="checkSave()" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="email-input">Email</label>
+          <input class="field-input" type="email" id="email-input" placeholder="you@example.com" oninput="checkSave()" />
         </div>
         <div class="saved-note" id="saved-note">
           <i data-lucide="check"></i>
@@ -418,19 +489,34 @@
         <div class="scroll-sentinel" id="sentinel-save"></div>
       </div>
       <div class="screen-footer" id="footer-save">
-        <button class="btn-primary" onclick="navigate('s3')">Continue</button>
+        <button class="btn-primary" id="btn-save-continue" onclick="navigate('contactpref')" disabled>Continue</button>
       </div>
     </div>
 
-    <!-- Screen 3: Myself / Household (STEP 2/5) -->
-    <div class="screen" id="screen-3">
+    <!-- Contact preference: reflects back the email/phone they just entered -->
+    <div class="screen step-screen" id="screen-contactpref">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2>Are you applying for yourself or your household?</h2>
+          <h1>How should we reach you?</h1>
+          <p class="screen-subtext">Pick whichever is easiest — it's how a benefits worker will follow up.</p>
         </div>
-        <div class="chip-row">
-          <button class="chip" id="scope-myself" onclick="selectScope('myself')">Myself</button>
-          <button class="chip" id="scope-household" onclick="selectScope('household')">Household</button>
+        <div class="cards-grid" id="contactpref-list"></div>
+        <div class="scroll-sentinel" id="sentinel-contactpref"></div>
+      </div>
+      <div class="screen-footer" id="footer-contactpref">
+        <button class="btn-primary" id="btn-contactpref-continue" onclick="navigate('s3')" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- S3: Myself / Household (Step 3/5) -->
+    <div class="screen step-screen" id="screen-3">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Is this support for you, or your whole household?</h1>
+        </div>
+        <div class="scope-stack">
+          <button class="scope-btn" id="scope-myself" onclick="selectScope('myself')">Just me</button>
+          <button class="scope-btn" id="scope-household" onclick="selectScope('household')">My household</button>
         </div>
         <div class="scroll-sentinel" id="sentinel-3"></div>
       </div>
@@ -439,116 +525,53 @@
       </div>
     </div>
 
-    <!-- Screen 4: Household members (STEP 3/5) -->
-    <div class="screen" id="screen-4">
+    <!-- S4: Household members — Relation + Age inline (Step 4/5, household path) -->
+    <div class="screen step-screen" id="screen-4">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2>Who is part of your household?</h2>
+          <h1>Who is part of your household?</h1>
           <p class="screen-subtext">Include people living with you who are family members, dependents, or make income for the family.</p>
         </div>
         <div class="member-list" id="member-list"></div>
-        <div>
-          <button class="btn-secondary" onclick="addMember()"><i data-lucide="plus"></i> Add member</button>
-        </div>
         <div class="scroll-sentinel" id="sentinel-4"></div>
       </div>
       <div class="screen-footer" id="footer-4">
-        <button class="btn-primary" onclick="startMemberLoop()">Continue</button>
+        <button class="add-member" onclick="addMember()"><i data-lucide="plus"></i> Add family member</button>
+        <button class="btn-primary" onclick="afterHousehold()">Continue</button>
       </div>
     </div>
 
-    <!-- Screen 5: Per-member details (STEP 3/5, loops) -->
-    <div class="screen" id="screen-5">
+    <!-- S7: Quick questions (Step 5/5) -->
+    <div class="screen step-screen" id="screen-7">
       <div class="screen-inner">
         <div class="heading-block">
-          <h2 id="s5-title">Tell us about your relative</h2>
+          <h1>Answer a few more quick questions.</h1>
+          <p class="screen-subtext">Give your best guess if you're not sure.</p>
         </div>
-        <div class="field-group">
-          <label class="field-label" for="s5-age">Age</label>
-          <input class="field-input" type="number" id="s5-age" placeholder="e.g. 30" min="0" max="120" />
-        </div>
-        <div class="field-group">
-          <span class="field-label">Do they have a disability?</span>
-          <div class="chip-row">
-            <button class="chip" id="s5-disability-yes" onclick="selectMemberQ('disability','yes')">Yes</button>
-            <button class="chip" id="s5-disability-no" onclick="selectMemberQ('disability','no')">No</button>
-          </div>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Are they a U.S. citizen?</span>
-          <div class="chip-row">
-            <button class="chip" id="s5-citizen-yes" onclick="selectMemberQ('citizen','yes')">Yes</button>
-            <button class="chip" id="s5-citizen-no" onclick="selectMemberQ('citizen','no')">No</button>
-          </div>
-        </div>
-        <div class="scroll-sentinel" id="sentinel-5"></div>
-      </div>
-      <div class="screen-footer" id="footer-5">
-        <button class="btn-primary" onclick="nextMember()">Continue</button>
-      </div>
-    </div>
-
-    <!-- Screen 6: About you (STEP 4/5) -->
-    <div class="screen" id="screen-6">
-      <div class="screen-inner">
-        <div class="heading-block">
-          <h2 id="s6-title">Let's get to know you.</h2>
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="age-input">How old are you?</label>
-          <input class="field-input" type="number" id="age-input" placeholder="e.g. 30" min="0" max="120" />
-        </div>
-        <div class="field-group" id="household-size-group">
-          <label class="field-label" for="household-size-input">How many people are in your household?</label>
-          <input class="field-input" type="number" id="household-size-input" placeholder="e.g. 2" min="1" max="20" />
+        <div class="field-group" id="s7-householdsize-group">
+          <label class="field-label" for="s7-household-size">How many people are in your household?</label>
+          <input class="field-input" type="number" id="s7-household-size" placeholder="e.g. 2" min="1" max="20" />
         </div>
         <div class="field-group">
           <span class="field-label">What was your total household income over the last 30 days? <span style="font-weight:400;color:var(--text-secondary)">(Give your best guess if you're not sure.)</span></span>
           <div class="chip-grid-2">
-            <button class="chip" id="income-0" onclick="selectIncome(0)">$0&ndash;$1,500</button>
-            <button class="chip" id="income-1" onclick="selectIncome(1)">$1,501&ndash;$3,000</button>
-            <button class="chip" id="income-2" onclick="selectIncome(2)">$3,001&ndash;$5,000</button>
-            <button class="chip" id="income-3" onclick="selectIncome(3)">$5,000+</button>
+            <button class="chip" id="inc7-0" onclick="selectIncome7(0)">$0&ndash;$1,500</button>
+            <button class="chip" id="inc7-1" onclick="selectIncome7(1)">$1,501&ndash;$3,000</button>
+            <button class="chip" id="inc7-2" onclick="selectIncome7(2)">$3,001&ndash;$5,000</button>
+            <button class="chip" id="inc7-3" onclick="selectIncome7(3)">$5,000+</button>
           </div>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Do you have a disability?</span>
-          <div class="chip-row">
-            <button class="chip" id="disability-yes" onclick="selectYN('disability','yes')">Yes</button>
-            <button class="chip" id="disability-no" onclick="selectYN('disability','no')">No</button>
-          </div>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Are you a U.S. citizen?</span>
-          <div class="chip-row">
-            <button class="chip" id="citizen-yes" onclick="selectYN('citizen','yes')">Yes</button>
-            <button class="chip" id="citizen-no" onclick="selectYN('citizen','no')">No</button>
-          </div>
-        </div>
-        <div class="scroll-sentinel" id="sentinel-6"></div>
-      </div>
-      <div class="screen-footer" id="footer-6">
-        <button class="btn-primary" onclick="navigate('s7')">Next</button>
-      </div>
-    </div>
-
-    <!-- Screen 7: A few more questions (STEP 4/5) -->
-    <div class="screen" id="screen-7">
-      <div class="screen-inner">
-        <div class="heading-block">
-          <h2>Answer a few more quick questions.</h2>
-          <p class="screen-subtext">Give your best guess if you're not sure.</p>
         </div>
         <div class="field-group">
           <span class="field-label" id="snap-label">Have you ever applied for SNAP before in NYC?</span>
           <div class="chip-row">
             <button class="chip" id="snap-yes" onclick="selectYN('snap','yes')">Yes</button>
             <button class="chip" id="snap-no" onclick="selectYN('snap','no')">No</button>
+            <button class="chip" id="snap-notsure" onclick="selectYN('snap','notsure')">Not sure</button>
           </div>
         </div>
         <div class="field-group">
           <span class="field-label" id="medicaid-label">Do you have Medicaid or Medicare?</span>
-          <div class="chip-grid-2">
+          <div class="chip-row hug-content">
             <button class="chip" id="medicaid-0" onclick="selectMedicaid(0)">Medicaid only</button>
             <button class="chip" id="medicaid-1" onclick="selectMedicaid(1)">Medicare only</button>
             <button class="chip" id="medicaid-2" onclick="selectMedicaid(2)">Both Medicaid and Medicare</button>
@@ -562,73 +585,144 @@
             <button class="chip" id="pregnant-no" onclick="selectYN('pregnant','no')">No</button>
           </div>
         </div>
+        <div class="field-group" id="s7-disability-group">
+          <span class="field-label" id="s7-disability-label">Do you have a disability?</span>
+          <div class="chip-row">
+            <button class="chip" id="s7disability-yes" onclick="selectYN('s7disability','yes')">Yes</button>
+            <button class="chip" id="s7disability-no" onclick="selectYN('s7disability','no')">No</button>
+          </div>
+        </div>
         <div class="scroll-sentinel" id="sentinel-7"></div>
       </div>
       <div class="screen-footer" id="footer-7">
+        <button class="btn-primary" onclick="afterScreen7()">Continue</button>
+      </div>
+    </div>
+
+    <!-- Medical Debt (only if "medical bills I can't pay" selected on S1) -->
+    <div class="screen step-screen" id="screen-medicaldebt">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Tell us about your medical bill.</h1>
+          <p class="screen-subtext">We'll check if you qualify for charity care to help pay it off.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="md-city">What city?</label>
+          <select class="field-select" id="md-city" onchange="populateHospitals()">
+            <option value="">Select a city</option>
+            <option>New York</option>
+            <option>Brooklyn</option>
+            <option>Bronx</option>
+            <option>Elmhurst</option>
+            <option>Far Rockaway</option>
+            <option>Flushing</option>
+            <option>Forest Hills</option>
+            <option>Fresh Meadows</option>
+            <option>Glen Oaks</option>
+            <option>Jamaica</option>
+            <option>Long Island City</option>
+            <option>Staten Island</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="md-hospital">Which hospital was the bill from?</label>
+          <select class="field-select" id="md-hospital" disabled>
+            <option value="">Select a city first</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <span class="field-label">What's the original bill date?</span>
+          <div class="dob-grid-2">
+            <select class="field-select" id="md-billmonth" aria-label="Bill month"><option value="">Month</option></select>
+            <select class="field-select" id="md-billyear" aria-label="Bill year"><option value="">Year</option></select>
+          </div>
+          <p class="field-help">Enter the date that you first received the bill after leaving the hospital. We'll compare it to the deadline for applying for hospital financial assistance.</p>
+          <div class="help-more" id="billdate-more" hidden>
+            <p class="field-help">Start by checking your bill from your most recent hospital visit. You'll be able to add other bills or hospitals later in the process, and the system will check then to see if you're eligible. Not all of your bills may be eligible, depending on the bill date.</p>
+          </div>
+          <button type="button" class="help-toggle" onclick="toggleHelp('billdate-more', this)">See more</button>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="md-bill">What is the total amount you owe?</label>
+          <div class="input-affix">
+            <span class="affix">$</span>
+            <input class="field-input has-affix" type="number" id="md-bill" placeholder="e.g. 6,000" min="0" inputmode="numeric" />
+          </div>
+          <p class="field-help">It's okay to estimate if you haven't received the bill yet or don't remember the exact amount.</p>
+          <div class="help-more" id="owed-more" hidden>
+            <p class="field-help">Use the amount you owe after insurance, Medicaid, health shares, or any other payers have contributed. We want to know how much you personally owe to the hospital.</p>
+          </div>
+          <button type="button" class="help-toggle" onclick="toggleHelp('owed-more', this)">See more</button>
+        </div>
+        <div class="field-group">
+          <span class="field-label">What is your insurance status?</span>
+          <div class="chip-grid-2" id="md-insurance-row">
+            <button class="chip" onclick="selectSingle(this)">Insured</button>
+            <button class="chip" onclick="selectSingle(this)">Uninsured</button>
+          </div>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-medicaldebt"></div>
+      </div>
+      <div class="screen-footer" id="footer-medicaldebt">
         <button class="btn-primary" onclick="navigate('results')">Continue</button>
       </div>
     </div>
 
-    <!-- Results: Here's what you could save (no progress) -->
+    <!-- Results -->
     <div class="screen" id="screen-results">
       <div class="screen-inner">
-        <h2>Here's what you could save.</h2>
+        <h2 id="results-title">Here's what we found for you.</h2>
         <div class="results-list">
-          <div class="result-row">
-            <div class="result-info">
-              <span class="result-name">Health Coverage</span>
-              <span class="result-value">est. value $2,400/yr</span>
+          <div class="result-card">
+            <div class="result-card-header">
+              <span class="result-card-icon"><i data-lucide="stethoscope"></i></span>
+              <span class="result-card-name">Medicaid health insurance</span>
             </div>
-            <span class="match-badge strong">Strong match</span>
+            <p class="result-card-desc">Free coverage for doctor visits, hospital stays, mental health care, vision and dental, prescriptions, and more.</p>
           </div>
           <div class="result-divider"></div>
-          <div class="result-row">
-            <div class="result-info">
-              <span class="result-name">Food &amp; cash help</span>
-              <span class="result-value">est. value $3,000/yr</span>
+          <div class="result-card">
+            <div class="result-card-header">
+              <span class="result-card-icon"><i data-lucide="apple"></i></span>
+              <span class="result-card-name">Food assistance</span>
             </div>
-            <span class="match-badge strong">Strong match</span>
+            <p class="result-card-desc">Get help paying for groceries with SNAP, also known as EBT or food stamps. You'll get money on a debit card that can be used at most grocery stores and farmers markets.</p>
           </div>
           <div class="result-divider"></div>
-          <div class="result-row">
-            <div class="result-info">
-              <span class="result-name">Eviction help</span>
-              <span class="result-value">-----</span>
+          <div class="result-card">
+            <div class="result-card-header">
+              <span class="result-card-icon"><i data-lucide="plug"></i></span>
+              <span class="result-card-name">Energy assistance</span>
             </div>
-            <span class="match-badge possible">Possible match</span>
+            <p class="result-card-desc">Prevent utility shutoffs with discounts from your energy providers.</p>
           </div>
           <div class="result-divider"></div>
-          <div class="result-row">
-            <div class="result-info">
-              <span class="result-name">Medical debt relief</span>
-              <span class="result-value">est. value $5,000/yr</span>
+          <div class="result-card">
+            <div class="result-card-header">
+              <span class="result-card-icon"><i data-lucide="tram-front"></i></span>
+              <span class="result-card-name">Transit discounts</span>
             </div>
-            <span class="match-badge possible">Possible match</span>
+            <p class="result-card-desc">Ride the subway, buses, LIRR, and Metro-North Railroad for half price.</p>
           </div>
-        </div>
-        <div class="result-note" id="result-note">
-          <span>These results have been sent to your phone number for you to refer to.</span>
-          <button class="result-note-close" aria-label="Dismiss" onclick="document.getElementById('result-note').style.display='none'"><i data-lucide="x"></i></button>
         </div>
         <div class="scroll-sentinel" id="sentinel-results"></div>
       </div>
       <div class="screen-footer" id="footer-results">
-        <button class="btn-primary" onclick="navigate('confirm')">Connect me with a benefits worker</button>
+        <button class="btn-primary" onclick="navigate('confirm')">TBD</button>
       </div>
     </div>
 
-    <!-- Confirmation (no progress, no nav) -->
+    <!-- Confirmation -->
     <div class="screen" id="screen-confirm">
       <div class="screen-inner centered">
         <div>
           <div class="confirm-icon">
             <svg viewBox="0 0 40 40"><polyline points="8 21 16 29 32 11"/></svg>
           </div>
-          <h2>You're in the system!</h2>
-          <p style="margin-top:var(--space-2);color:var(--text-secondary);font-size:16px;line-height:1.6;">
-            A benefits worker will follow up to help you get started with your applications. Watch for a text or call within 24 hours.
+          <h2 id="confirm-title">We got you.</h2>
+          <p class="confirm-lead" style="margin-top:var(--space-3);color:var(--text-secondary);font-size:16px;line-height:1.6;">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
-          <div class="ref-number" id="ref-number">NYC-2026-XXXXX</div>
         </div>
         <div class="scroll-sentinel" id="sentinel-confirm"></div>
       </div>
@@ -644,21 +738,38 @@
   // ── State ──────────────────────────────────
   var navHistory    = [];
   var selectedCards = new Set();
-  var scopeMode     = null;        // 'myself' | 'household'
-  var members       = [];          // [{relation, age, disability, citizen}]
-  var memberIdx     = 0;           // pointer for per-member loop
+  var scopeMode     = null;   // 'myself' | 'household'
+  var members       = [];     // [{relation, self, age}]
 
-  // Progress: filled segments per screen (0 = hide bar)
-  var stepForScreen = { landing:0, s1:1, save:2, s3:3, s4:4, s5:5, s6:5, s7:6, results:0, confirm:0 };
-  var labelForScreen = { s1:'Step 1/7', save:'Step 2/7', s3:'Step 3/7', s4:'Step 4/7', s5:'Step 5/7', s6:'Step 5/7', s7:'Step 6/7' };
+  // ── Progress — the numbered steps begin AFTER the situation screen (S1),
+  //    so contact info is Step 1. Household adds S4 (add members), and the
+  //    eviction / medical-debt screens appear only if the matching card was
+  //    selected on S1. ──
+  function activeFlow() {
+    var flow = ['save', 'contactpref', 's3'];
+    // Household path: add-members, then a household-income screen. Individual
+    // path skips both — household size + income live on the questions screen.
+    if (scopeMode === 'household') flow.push('s4');
+    flow.push('s7');
+    if (selectedCards.has('bills')) flow.push('medicaldebt');
+    return flow;
+  }
+  function stepForScreen(key) {
+    var i = activeFlow().indexOf(key);
+    return i >= 0 ? i + 1 : 0;
+  }
+  function totalSteps() { return activeFlow().length; }
+  function labelForScreen(key) {
+    var n = stepForScreen(key);
+    return n > 0 ? ('Step ' + n + '/' + totalSteps()) : '';
+  }
 
   // ── ID helpers ──────────────────────────────
   function elSuffix(key) {
-    if (key === 'landing') return 'landing';
-    if (key === 'save') return 'save';
+    if (key === 'save')    return 'save';
     if (key === 'results') return 'results';
     if (key === 'confirm') return 'confirm';
-    if (/^s/.test(key)) return key.slice(1);
+    if (/^s/.test(key))    return key.slice(1);
     return key;
   }
   function getScreenEl(key)   { return document.getElementById('screen-'   + elSuffix(key)); }
@@ -666,16 +777,13 @@
   function getSentinelEl(key) { return document.getElementById('sentinel-' + elSuffix(key)); }
 
   // ── Navigate ────────────────────────────────
-  function navigate(toKey, isBack) {
-    isBack = !!isBack;
+  function navigate(toKey) {
     var current = document.querySelector('.screen.active');
     var target  = getScreenEl(toKey);
     if (!target || current === target) return;
-
-    if (!isBack && current) navHistory.push(current.id);
+    if (current) navHistory.push(current.id);
     if (current) current.classList.remove('active');
     target.classList.add('active');
-
     updateChrome(toKey);
     updateProgress(toKey);
     onScreenEnter(toKey);
@@ -689,11 +797,15 @@
     var current   = document.querySelector('.screen.active');
     var target    = document.getElementById(prevDomId);
     if (!target || current === target) return;
-    var suffix  = prevDomId.replace('screen-','');
-    var prevKey = suffix === 'landing' ? 'landing'
-                : suffix === 'save' ? 'save'
-                : suffix === 'results' ? 'results'
-                : suffix === 'confirm' ? 'confirm'
+    var suffix = prevDomId.replace('screen-', '');
+    var prevKey = suffix === 'save'        ? 'save'
+                : suffix === 'results'     ? 'results'
+                : suffix === 'confirm'     ? 'confirm'
+                : suffix === 'landing'     ? 'landing'
+                : suffix === 'consent'     ? 'consent'
+                : suffix === 'eviction'    ? 'eviction'
+                : suffix === 'medicaldebt' ? 'medicaldebt'
+                : suffix === 'contactpref' ? 'contactpref'
                 : 's' + suffix;
     if (current) current.classList.remove('active');
     target.classList.add('active');
@@ -705,31 +817,50 @@
 
   // ── Screen enter hooks ──────────────────────
   function onScreenEnter(key) {
-    if (key === 's5') renderMemberQuestion();
-    if (key === 's6') prepareScreen6();
+    if (key === 'contactpref') prepareContactPref();
+    if (key === 's4') renderMembers();
     if (key === 's7') prepareScreen7();
-    if (key === 'confirm') document.getElementById('ref-number').textContent = 'NYC-2026-' + genRef();
+    if (key === 'results') {
+      var rname = document.getElementById('first-name').value.trim();
+      document.getElementById('results-title').textContent = rname
+        ? ("Here's what we found for you, " + rname + ".")
+        : "Here's what we found for you.";
+    }
+    if (key === 'confirm') {
+      var cname = document.getElementById('first-name').value.trim();
+      document.getElementById('confirm-title').textContent = cname ? ('We got you, ' + cname + '.') : 'We got you.';
+    }
   }
 
   // ── Chrome & progress ───────────────────────
   function updateChrome(key) {
     var chrome   = document.getElementById('nav-chrome');
     var progWrap = document.getElementById('progress-wrap');
-    // Landing and confirmation hide the back row.
     var hideBack = (key === 'landing' || key === 'confirm');
     chrome.classList.toggle('hidden', hideBack);
-    var steps = stepForScreen[key] || 0;
+    var steps     = stepForScreen(key);
+    var wasHidden = (progWrap.style.display === 'none');
     progWrap.style.display = steps > 0 ? '' : 'none';
+    if (steps > 0 && wasHidden) {
+      progWrap.classList.remove('enter');
+      void progWrap.offsetWidth;
+      progWrap.classList.add('enter');
+    }
   }
   function updateProgress(key) {
-    var n = stepForScreen[key] || 0;
-    for (var i = 1; i <= 7; i++) {
-      document.getElementById('seg-' + i).classList.toggle('filled', i <= n);
+    var n = stepForScreen(key);
+    var total = totalSteps();
+    for (var i = 1; i <= 8; i++) {
+      var seg = document.getElementById('seg-' + i);
+      if (i > total) { seg.style.display = 'none'; continue; }
+      seg.style.display = '';
+      seg.querySelector('.seg-fill').style.width = (i <= n ? 100 : 0) + '%';
     }
-    if (labelForScreen[key]) document.getElementById('progress-label-text').textContent = labelForScreen[key];
+    var label = labelForScreen(key);
+    if (label) document.getElementById('progress-label-text').textContent = label;
   }
 
-  // ── Screen 1: situation cards ───────────────
+  // ── S1: situation cards ─────────────────────
   function toggleCard(key) {
     var el = document.getElementById('card-' + key);
     if (selectedCards.has(key)) { selectedCards.delete(key); el.classList.remove('selected'); el.setAttribute('aria-pressed','false'); }
@@ -737,14 +868,93 @@
     document.getElementById('btn-s1-continue').disabled = (selectedCards.size === 0);
   }
 
-  // ── Screen save: phone ──────────────────────
-  function checkSave() {
-    var name  = document.getElementById('first-name').value.trim();
-    var phone = document.getElementById('phone-input').value.replace(/\D/g,'');
-    document.getElementById('saved-note').classList.toggle('visible', name.length > 0 && phone.length >= 10);
+  // ── Consent ─────────────────────────────────
+  function toggleReadMore() {
+    var more = document.getElementById('consent-more');
+    var btn  = document.getElementById('readmore-btn');
+    var wrap = document.getElementById('consent-fade-wrap');
+    var open = more.classList.toggle('open');
+    wrap.classList.toggle('expanded', open);
+    btn.textContent = open ? 'Read less' : 'Read more';
+  }
+  function checkConsent() {
+    document.getElementById('btn-consent-continue').disabled = !document.getElementById('consent-checkbox').checked;
   }
 
-  // ── Screen 3: scope ─────────────────────────
+  // ── Save ────────────────────────────────────
+  function checkSave() {
+    var firstName = document.getElementById('first-name').value.trim();
+    var lastName  = document.getElementById('last-name').value.trim();
+    var dob       = document.getElementById('dob-input').value.trim();
+    var email     = document.getElementById('email-input').value.trim();
+    var phone     = document.getElementById('phone-input').value.trim();
+    var isPhone   = phone.replace(/\D/g,'').length >= 10;
+    var isEmail   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    // Every field is required to continue.
+    var valid = firstName !== '' && lastName !== '' && isValidDob(dob) && isPhone && isEmail;
+    document.getElementById('saved-note').classList.toggle('visible', valid);
+    document.getElementById('btn-save-continue').disabled = !valid;
+  }
+
+  // Auto-format DOB as MM/DD/YYYY while typing, and validate a real calendar date.
+  function formatDob(el) {
+    var digits = el.value.replace(/\D/g, '').slice(0, 8);
+    var out = digits.slice(0, 2);
+    if (digits.length >= 3) out += '/' + digits.slice(2, 4);
+    if (digits.length >= 5) out += '/' + digits.slice(4, 8);
+    el.value = out;
+    var err = document.getElementById('dob-error');
+    // Only flag once a full date has been entered.
+    err.style.display = (digits.length === 8 && !isValidDob(out)) ? '' : 'none';
+  }
+  function isValidDob(str) {
+    var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(str);
+    if (!m) return false;
+    var mo = +m[1], da = +m[2], yr = +m[3];
+    var now = 2026;
+    if (mo < 1 || mo > 12 || yr < 1900 || yr > now) return false;
+    var dim = [31, (yr % 4 === 0 && (yr % 100 !== 0 || yr % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    return da >= 1 && da <= dim[mo - 1];
+  }
+
+  // ── Contact preference: reflect back the email/phone they entered ──
+  function prettyPhone(digits) {
+    return digits.length === 10
+      ? '(' + digits.slice(0,3) + ') ' + digits.slice(3,6) + '-' + digits.slice(6)
+      : digits;
+  }
+  function prefCard(icon, title, sub) {
+    return '<button class="pref-card" onclick="selectContactPref(this)" aria-pressed="false">' +
+             '<span class="pref-icon"><i data-lucide="' + icon + '"></i></span>' +
+             '<span class="pref-body"><span class="pref-title">' + title + '</span>' +
+             '<span class="pref-value">' + escHtml(sub) + '</span></span>' +
+           '</button>';
+  }
+  function prepareContactPref() {
+    var email  = document.getElementById('email-input').value.trim();
+    var phone  = document.getElementById('phone-input').value.trim();
+    var digits = phone.replace(/\D/g, '');
+    var list   = document.getElementById('contactpref-list');
+    var html   = '';
+    if (digits.length >= 10) {
+      html += prefCard('message-circle', 'Phone number', prettyPhone(digits));
+    }
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      html += prefCard('mail', 'Email address', email);
+    }
+    list.innerHTML = html;
+    document.getElementById('btn-contactpref-continue').disabled = true;
+    if (window.lucide) lucide.createIcons();
+  }
+  function selectContactPref(el) {
+    document.querySelectorAll('#contactpref-list .pref-card').forEach(function(c) {
+      c.classList.remove('selected'); c.setAttribute('aria-pressed', 'false');
+    });
+    el.classList.add('selected'); el.setAttribute('aria-pressed', 'true');
+    document.getElementById('btn-contactpref-continue').disabled = false;
+  }
+
+  // ── S3: scope ───────────────────────────────
   function selectScope(mode) {
     scopeMode = mode;
     document.getElementById('scope-myself').classList.toggle('selected', mode === 'myself');
@@ -752,114 +962,116 @@
     document.getElementById('btn-s3-continue').disabled = false;
   }
   function continueFromScope() {
+    // Household: add-members first, then income (S6). Individual: straight to
+    // the questions screen (which carries household size + income).
     if (scopeMode === 'household') { prepareScreen4(); navigate('s4'); }
-    else navigate('s6');
+    else navigate('s7');
   }
 
-  // ── Screen 4: household members ─────────────
+  // ── S4: household members (inline Relation + Age) ──
+  var RELATIONS = ['Your spouse','Your child','Your parent','Your sibling','Other relative','Other'];
+
   function prepareScreen4() {
-    if (members.length === 0) members = [{ relation:'You', self:true, age:'', disability:null, citizen:null }];
+    // Age is collected on the prior "about you" screen, so S4 starts empty —
+    // just the "Add member" button until the user adds family members.
     renderMembers();
   }
-  var RELATIONS = ['Your spouse','Your child','Your parent','Your sibling','Other relative','Other'];
+
   function renderMembers() {
-    var list = document.getElementById('member-list');
+    var list      = document.getElementById('member-list');
+    var firstName = document.getElementById('first-name').value.trim();
     list.innerHTML = '';
     members.forEach(function(m, i) {
-      var row = document.createElement('div');
-      row.className = 'member-row';
+      var entry = document.createElement('div');
+      entry.className = 'member-entry';
       if (m.self) {
-        row.innerHTML =
-          '<label class="field-label">Relation</label>' +
-          '<input class="field-input" type="text" value="You" disabled />';
+        entry.innerHTML =
+          '<div class="member-inline-row">' +
+            '<div class="field-group">' +
+              '<label class="field-label">Relation</label>' +
+              '<input class="field-input" type="text" value="' + escHtml(firstName || '(Name auto-filled)') + '" disabled />' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label">Age</label>' +
+              '<input class="field-input" type="number" placeholder="e.g 32" min="0" max="120" value="' + escHtml(m.age) + '" oninput="members[' + i + '].age=this.value" />' +
+            '</div>' +
+          '</div>';
       } else {
-        var opts = RELATIONS.map(function(r){
-          return '<option' + (m.relation === r ? ' selected' : '') + '>' + r + '</option>';
-        }).join('');
-        row.innerHTML =
-          '<div class="member-row-head">' +
-            '<label class="field-label">Relation</label>' +
+        var opts = '<option value="">Select relation</option>' +
+          RELATIONS.map(function(r) {
+            return '<option' + (m.relation === r ? ' selected' : '') + '>' + escHtml(r) + '</option>';
+          }).join('');
+        entry.innerHTML =
+          '<div style="display:flex;justify-content:flex-end;">' +
             '<button class="btn-text-danger" onclick="removeMember(' + i + ')"><i data-lucide="x"></i> Remove</button>' +
           '</div>' +
-          '<select class="field-select" onchange="members[' + i + '].relation=this.value">' +
-            '<option value="">Select relation</option>' + opts +
-          '</select>';
+          '<div class="member-inline-row">' +
+            '<div class="field-group">' +
+              '<label class="field-label">Relation</label>' +
+              '<select class="field-select" onchange="members[' + i + '].relation=this.value">' + opts + '</select>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label">Age</label>' +
+              '<input class="field-input" type="number" placeholder="e.g 32" min="0" max="120" value="' + escHtml(m.age) + '" oninput="members[' + i + '].age=this.value" />' +
+            '</div>' +
+          '</div>';
       }
-      list.appendChild(row);
+      list.appendChild(entry);
     });
     if (window.lucide) lucide.createIcons();
   }
+
   function addMember() {
-    members.push({ relation:'', self:false, age:'', disability:null, citizen:null });
+    members.push({ relation: '', self: false, age: '' });
     renderMembers();
+    var s4 = document.getElementById('screen-4');
+    if (s4) requestAnimationFrame(function() { s4.scrollTop = s4.scrollHeight; });
   }
-  function removeMember(i) { members.splice(i,1); renderMembers(); }
+  function removeMember(i) { members.splice(i, 1); renderMembers(); }
 
-  // ── Per-member loop (screen 5) ──────────────
-  function startMemberLoop() {
-    // members needing detail = non-self with a relation chosen
-    var extras = members.filter(function(m){ return !m.self; });
-    if (extras.length === 0) { navigate('s6'); return; }
-    memberIdx = members.findIndex(function(m){ return !m.self; });
-    navigate('s5');
+  // After S4 (add family members): go to the questions screen (S7).
+  function afterHousehold() { navigate('s7'); }
+
+  // After S7: medical-bill deep-dive if applicable, else results.
+  function afterScreen7() {
+    if (selectedCards.has('bills')) navigate('medicaldebt');
+    else navigate('results');
   }
-  function renderMemberQuestion() {
-    var m = members[memberIdx];
-    var rel = (m && m.relation) ? m.relation.toLowerCase() : 'relative';
-    document.getElementById('s5-title').textContent = 'Tell us about ' + (rel.indexOf('your') === 0 ? rel : 'your ' + rel) + '.';
-    document.getElementById('s5-age').value = m && m.age ? m.age : '';
-    ['disability','citizen'].forEach(function(q){
-      document.getElementById('s5-' + q + '-yes').classList.toggle('selected', m && m[q] === 'yes');
-      document.getElementById('s5-' + q + '-no').classList.toggle('selected', m && m[q] === 'no');
-    });
-  }
-  function selectMemberQ(q, val) {
-    members[memberIdx][q] = val;
-    document.getElementById('s5-' + q + '-yes').classList.toggle('selected', val === 'yes');
-    document.getElementById('s5-' + q + '-no').classList.toggle('selected', val === 'no');
-  }
-  function nextMember() {
-    members[memberIdx].age = document.getElementById('s5-age').value;
-    // find next non-self member after current index
-    var next = -1;
-    for (var i = memberIdx + 1; i < members.length; i++) { if (!members[i].self) { next = i; break; } }
-    if (next >= 0) {
-      memberIdx = next;
-      navHistory.push('screen-5');
-      renderMemberQuestion();
-      var t = document.getElementById('screen-5'); t.scrollTop = 0;
-      setTimeout(function(){ getFooterEl('s5').classList.remove('footer-visible'); setupFooterGate(t,'s5'); }, 50);
-    } else {
-      navigate('s6');
-    }
+  // Progressive-disclosure: reveal/hide the secondary help paragraph.
+  function toggleHelp(id, btn) {
+    var el = document.getElementById(id);
+    if (el.hasAttribute('hidden')) { el.removeAttribute('hidden'); btn.textContent = 'See less'; }
+    else { el.setAttribute('hidden', ''); btn.textContent = 'See more'; }
   }
 
-  // ── Screen 6: about you ─────────────────────
-  function prepareScreen6() {
-    var name = document.getElementById('first-name').value.trim();
-    if (scopeMode === 'household') {
-      document.getElementById('s6-title').textContent = name ? ("Let's get to know " + name + " first.") : "Let's get to know you first.";
-    } else {
-      document.getElementById('s6-title').textContent = "Tell us about yourself.";
-    }
-    // hide household-size question on the household path (already collected members)
-    document.getElementById('household-size-group').style.display = (scopeMode === 'household') ? 'none' : '';
+  // Single-select Yes/No within one chip-row.
+  function selectSingle(el) {
+    el.parentElement.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
   }
-  function selectIncome(idx) {
-    for (var i=0;i<4;i++) document.getElementById('income-'+i).classList.toggle('selected', i===idx);
+
+  // ── Income select (S7, both paths) ──
+  function selectIncome7(idx) {
+    for (var i = 0; i < 4; i++) document.getElementById('inc7-' + i).classList.toggle('selected', i === idx);
   }
   function selectYN(group, val) {
-    var y = document.getElementById(group+'-yes'), n = document.getElementById(group+'-no');
-    if (y) y.classList.toggle('selected', val==='yes');
-    if (n) n.classList.toggle('selected', val==='no');
+    var y  = document.getElementById(group + '-yes');
+    var n  = document.getElementById(group + '-no');
+    var ns = document.getElementById(group + '-notsure');
+    if (y)  y.classList.toggle('selected', val === 'yes');
+    if (n)  n.classList.toggle('selected', val === 'no');
+    if (ns) ns.classList.toggle('selected', val === 'notsure');
   }
   function selectMedicaid(idx) {
-    for (var i=0;i<4;i++) document.getElementById('medicaid-'+i).classList.toggle('selected', i===idx);
+    for (var i = 0; i < 4; i++) document.getElementById('medicaid-' + i).classList.toggle('selected', i === idx);
   }
 
-  // ── Screen 7: household-aware copy ──────────
+  // ── S7: quick questions ──────────────────────
   function prepareScreen7() {
     var hh = (scopeMode === 'household');
+    // Household size is only asked on the individual path (households derive it
+    // from the members list). Income is asked on both paths here.
+    document.getElementById('s7-householdsize-group').style.display = hh ? 'none' : '';
     document.getElementById('snap-label').textContent = hh
       ? 'Has anyone in your household ever applied for SNAP before in NYC?'
       : 'Have you ever applied for SNAP before in NYC?';
@@ -869,35 +1081,91 @@
     document.getElementById('pregnant-label').textContent = hh
       ? 'Are you or anyone in your household pregnant?'
       : 'Are you pregnant?';
+    document.getElementById('s7-disability-label').textContent = hh
+      ? 'Do you or anyone in your household have a disability?'
+      : 'Do you have a disability?';
   }
 
   // ── Helpers ─────────────────────────────────
-  function genRef() { return String(Math.floor(10000 + Math.random()*90000)); }
+  function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
   function resetToStart() {
-    selectedCards.clear(); scopeMode = null; members = []; memberIdx = 0; navHistory = [];
-    document.querySelectorAll('.situation-card').forEach(function(c){ c.classList.remove('selected'); c.setAttribute('aria-pressed','false'); });
+    selectedCards.clear(); scopeMode = null; members = []; navHistory = [];
+
+    document.querySelectorAll('.situation-card').forEach(function(c) { c.classList.remove('selected'); c.setAttribute('aria-pressed','false'); });
     document.getElementById('btn-s1-continue').disabled = true;
-    document.getElementById('first-name').value = '';
-    document.getElementById('phone-input').value = '';
+    ['first-name','last-name','email-input','phone-input','dob-input','s7-household-size','md-city','md-bill','md-billmonth','md-billyear'].forEach(function(id) { var el = document.getElementById(id); if(el) el.value = ''; });
+    populateHospitals();
     document.getElementById('saved-note').classList.remove('visible');
+    document.getElementById('dob-error').style.display = 'none';
+    ['billdate-more','owed-more'].forEach(function(id){ var el=document.getElementById(id); if(el) el.setAttribute('hidden',''); });
+    document.querySelectorAll('.help-toggle').forEach(function(b){ b.textContent = 'See more'; });
     document.getElementById('scope-myself').classList.remove('selected');
     document.getElementById('scope-household').classList.remove('selected');
+    document.getElementById('btn-save-continue').disabled = true;
+    document.getElementById('btn-contactpref-continue').disabled = true;
+    document.getElementById('contactpref-list').innerHTML = '';
     document.getElementById('btn-s3-continue').disabled = true;
-    document.getElementById('lang-input-save').value = '';
-    document.getElementById('age-input').value = '';
-    document.getElementById('household-size-input').value = '';
-    document.getElementById('s5-age').value = '';
-    document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('selected'); });
-    document.querySelectorAll('.screen-footer').forEach(function(f){ f.classList.remove('footer-visible'); });
+    document.getElementById('lang-input').value = 'English';
+    document.getElementById('consent-checkbox').checked = false;
+    document.getElementById('btn-consent-continue').disabled = true;
+    document.getElementById('consent-more').classList.remove('open');
+    document.getElementById('consent-fade-wrap').classList.remove('expanded');
+    document.getElementById('readmore-btn').textContent = 'Read more';
+    document.getElementById('member-list').innerHTML = '';
+    document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+    document.querySelectorAll('.screen-footer').forEach(function(f) { f.classList.remove('footer-visible'); });
 
-    var cur = document.querySelector('.screen.active');
+    var cur     = document.querySelector('.screen.active');
     var landing = document.getElementById('screen-landing');
     if (cur && cur !== landing) cur.classList.remove('active');
     landing.classList.add('active');
     updateChrome('landing'); updateProgress('landing');
     landing.scrollTop = 0;
-    setTimeout(function(){ setupFooterGate(landing,'landing'); }, 50);
+    setTimeout(function() { setupFooterGate(landing, 'landing'); }, 50);
+  }
+
+  // ── Medical debt: hospitals by city + bill-date dropdowns ──
+  var HOSPITALS_BY_CITY = {
+    'New York': ['NYC Health + Hospitals / Bellevue', 'NYC Health + Hospitals / Harlem', 'NYC Health + Hospitals / Metropolitan', 'NYC Health + Hospitals / Gouverneur', 'Mount Sinai Beth Israel', 'NewYork-Presbyterian / Lower Manhattan'],
+    'Brooklyn': ['NYC Health + Hospitals / Kings County', 'NYC Health + Hospitals / Woodhull', 'NYC Health + Hospitals / Coney Island', 'Maimonides Medical Center', 'The Brooklyn Hospital Center'],
+    'Bronx': ['NYC Health + Hospitals / Lincoln', 'NYC Health + Hospitals / Jacobi', 'NYC Health + Hospitals / North Central Bronx', 'Montefiore Medical Center', 'BronxCare Health System'],
+    'Elmhurst': ['NYC Health + Hospitals / Elmhurst'],
+    'Far Rockaway': ["St. John's Episcopal Hospital"],
+    'Flushing': ['Flushing Hospital Medical Center', 'NewYork-Presbyterian Queens'],
+    'Forest Hills': ['Forest Hills Hospital'],
+    'Fresh Meadows': ['NewYork-Presbyterian Queens'],
+    'Glen Oaks': ['Long Island Jewish Medical Center'],
+    'Jamaica': ['NYC Health + Hospitals / Queens', 'Jamaica Hospital Medical Center'],
+    'Long Island City': ['Mount Sinai Queens'],
+    'Staten Island': ['Staten Island University Hospital', 'Richmond University Medical Center', 'NYC Health + Hospitals / Sea View']
+  };
+  function populateHospitals() {
+    var city = document.getElementById('md-city').value;
+    var sel  = document.getElementById('md-hospital');
+    var list = HOSPITALS_BY_CITY[city] || [];
+    if (!city) {
+      sel.innerHTML = '<option value="">Select a city first</option>';
+      sel.disabled = true;
+      return;
+    }
+    var opts = '<option value="">Select a hospital</option>';
+    list.forEach(function(h) { opts += '<option>' + h + '</option>'; });
+    opts += '<option>Other / not listed</option>';
+    sel.innerHTML = opts;
+    sel.disabled = false;
+  }
+  // Bill-date: month names + years back to 1 year ago (this prototype is pinned to 2026).
+  function populateBillDate() {
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var mSel = document.getElementById('md-billmonth');
+    var ySel = document.getElementById('md-billyear');
+    if (mSel.options.length <= 1) {
+      months.forEach(function(m) { mSel.insertAdjacentHTML('beforeend', '<option>' + m + '</option>'); });
+    }
+    if (ySel.options.length <= 1) {
+      [2026, 2025].forEach(function(y) { ySel.insertAdjacentHTML('beforeend', '<option>' + y + '</option>'); });
+    }
   }
 
   // ── Scroll-gate footer ──────────────────────
@@ -917,8 +1185,9 @@
   // ── Init ─────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function() {
     if (window.lucide) lucide.createIcons();
+    populateBillDate();
     updateChrome('landing'); updateProgress('landing');
-    setTimeout(function() { setupFooterGate(document.getElementById('screen-landing'),'landing'); }, 100);
+    setTimeout(function() { setupFooterGate(document.getElementById('screen-landing'), 'landing'); }, 100);
   });
 </script>
 </body>
