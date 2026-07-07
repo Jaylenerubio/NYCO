@@ -293,33 +293,52 @@
     #screen-confirm .screen-inner.centered { justify-content: flex-start; padding-top: 72px; }
     .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
 
-    /* ── Tablet: widen the app into a centered card ── */
-    @media (min-width: 768px) {
+    /* ── Responsive: phone → centered card that scales up to desktop ── */
+
+    /* Small tablets / large phones: lift the app into a centered card */
+    @media (min-width: 600px) {
       body { align-items: center; padding: 32px 0; }
       #app {
-        max-width: 620px;
+        max-width: 480px;
         height: calc(100dvh - 64px);
-        max-height: 940px;
+        max-height: 900px;
         border-radius: 22px;
         box-shadow: 0 14px 54px rgba(0,0,0,0.16);
       }
-      .screen-inner { padding: 32px 40px; gap: var(--space-4); }
-      #screen-landing .screen-inner { padding-top: 64px; }
-      .nav-chrome { padding: 18px 40px; }
-      .progress-wrap { padding: 28px 40px 16px; }
-      .screen-footer { padding: 20px 40px 28px; }
-      h1 { font-size: 48px; }
+      .screen-inner { padding: 32px 36px; }
+      #screen-landing .screen-inner { padding-top: 60px; }
+      .nav-chrome { padding: 18px 36px; }
+      .progress-wrap { padding: 28px 36px 16px; }
+      .screen-footer { padding: 20px 36px 28px; }
+    }
+
+    /* Tablet: wider card, roomier type, two-column grids */
+    @media (min-width: 768px) {
+      #app { max-width: 640px; }
+      .screen-inner { padding: 36px 44px; gap: var(--space-4); }
+      .nav-chrome { padding: 18px 44px; }
+      .progress-wrap { padding: 28px 44px 16px; }
+      .screen-footer { padding: 20px 44px 28px; }
+      h1 { font-size: 46px; }
       .step-screen h1 { font-size: 34px; }
       h2 { font-size: 34px; }
       .screen-subtext { font-size: 19px; }
-      /* Two-column layouts for the card and scope grids */
       .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
       .scope-stack { display: grid; grid-template-columns: 1fr 1fr; }
     }
+
+    /* Desktop */
     @media (min-width: 1024px) {
-      #app { max-width: 720px; }
+      body { padding: 40px 0; }
+      #app { max-width: 720px; max-height: 960px; }
       .screen-inner { padding-left: 56px; padding-right: 56px; }
       .nav-chrome, .progress-wrap, .screen-footer { padding-left: 56px; padding-right: 56px; }
+      h1 { font-size: 50px; }
+    }
+
+    /* Large desktop: cap width so form lines stay readable */
+    @media (min-width: 1440px) {
+      #app { max-width: 760px; }
     }
   </style>
 </head>
