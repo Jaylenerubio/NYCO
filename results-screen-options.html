@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NYCO — Results Screen Design Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#050560; --blue:#284CCA; --black:#121212; --grey:#6b6b72;
+    --line:#E5E5E5; --chipbg:#F1F4FD; --green-bg:#DCEFD2; --green:#2F7D32;
+    --neutral-100:#F5F5F5;
+    --serif:'Source Serif 4',Georgia,serif; --body:'Public Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:#ececed;font-family:var(--body);color:var(--black);padding:40px 24px 80px;}
+  .page-head{max-width:1700px;margin:0 auto 8px;}
+  .page-head h1{font-family:var(--serif);color:var(--navy);font-size:30px;margin:0 0 6px;}
+  .page-head p{color:var(--grey);font-size:16px;margin:0;max-width:760px;line-height:1.5;}
+  .row{display:flex;gap:28px;flex-wrap:wrap;max-width:1700px;margin:32px auto 0;align-items:flex-start;}
+  .col{flex:0 0 390px;}
+  .col > .tag{display:inline-block;font-weight:600;color:var(--blue);font-size:15px;margin-bottom:4px;}
+  .col > .note{color:var(--grey);font-size:13px;line-height:1.45;margin:0 0 12px;min-height:54px;}
+
+  /* phone frame */
+  .frame{width:390px;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);}
+  .frame .hdr{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line);
+    font-weight:600;font-size:17px;}
+  .frame .hdr .arrow{font-size:20px;}
+  .inner{padding:22px 20px 24px;}
+  h2.title{font-family:var(--serif);color:var(--navy);font-size:24px;line-height:1.2;margin:0 0 4px;}
+  .count{color:var(--blue);font-weight:600;font-size:15px;margin:6px 0 4px;}
+
+  .prog{padding:14px 0;}
+  .prog .ph{display:flex;align-items:center;gap:8px;}
+  .prog .ph .ico{font-size:18px;}
+  .prog .ph .nm{font-weight:600;color:var(--navy);font-size:16px;}
+  .prog .desc{color:var(--grey);font-style:italic;font-size:14px;line-height:1.45;margin:6px 0 0 28px;}
+  .divider{height:1px;background:var(--line);}
+
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0 28px;}
+  .chip{background:var(--chipbg);color:var(--blue);font-weight:600;font-size:12px;
+    padding:4px 10px;border-radius:20px;}
+
+  .note-banner{display:flex;gap:10px;align-items:flex-start;background:var(--neutral-100);
+    border-radius:8px;padding:13px 14px;font-style:italic;font-size:14px;color:var(--black);margin-top:14px;}
+
+  .btn{display:block;width:100%;background:var(--navy);color:#fff;text-align:center;
+    font-weight:600;font-size:16px;border:none;border-radius:10px;padding:18px;margin-top:18px;cursor:pointer;}
+
+  /* completion header */
+  .complete{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;margin-bottom:6px;}
+  .check{width:60px;height:60px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;}
+  .check svg{width:28px;height:28px;stroke:var(--green);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;}
+  .progbar{display:flex;gap:5px;width:100%;margin:4px 0 2px;}
+  .progbar span{flex:1;height:7px;border-radius:20px;background:var(--blue);}
+  .complete .small{color:var(--grey);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+
+  /* next steps */
+  .steps{margin:16px 0 0;background:var(--neutral-100);border-radius:12px;padding:16px;}
+  .steps .sh{font-weight:700;color:var(--navy);font-size:15px;margin-bottom:12px;}
+  .step{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;}
+  .step:last-child{margin-bottom:0;}
+  .step .num{flex:0 0 24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;
+    font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  .step .stxt{font-size:14px;line-height:1.4;color:var(--black);}
+  .step .stxt b{color:var(--navy);}
+</style>
+</head>
+<body>
+  <div class="page-head">
+    <h1>NYCO — Results Screen Design Options</h1>
+    <p>Four honest directions to make the results feel like a payoff — replacing the “match signal” and “estimated value” we removed, without making any eligibility or dollar promises.</p>
+  </div>
+
+  <div class="row">
+
+    <!-- OPTION 1 -->
+    <div class="col">
+      <span class="tag">Option 1 — Reframe + count</span>
+      <p class="note">New honest headline ties results back to their answers; the “4 programs” count carries the magnitude/payoff signal.</p>
+      <div class="frame">
+        <div class="hdr"><span class="arrow">←</span> Back</div>
+        <div class="inner">
+          <h2 class="title">Based on what you told us, here’s where we can help, Jake.</h2>
+          <div class="count">4 programs matched to your situation</div>
+          <div style="height:6px"></div>
+          <div class="prog"><div class="ph"><span class="ico">🩺</span><span class="nm">Medicaid health insurance</span></div><div class="desc">Free coverage for doctor visits, hospital stays, mental health care, vision and dental, and more.</div></div>
+          <div class="divider"></div>
+          <div class="prog"><div class="ph"><span class="ico">🍎</span><span class="nm">Food assistance</span></div><div class="desc">Help paying for groceries with SNAP (EBT / food stamps) on a debit card.</div></div>
+          <div class="divider"></div>
+          <div class="prog"><div class="ph"><span class="ico">⚡</span><span class="nm">Energy assistance</span></div><div class="desc">Prevent utility shutoffs with discounts from your energy providers.</div></div>
+          <div class="divider"></div>
+          <div class="prog"><div class="ph"><span class="ico">🚃</span><span class="nm">Transit discounts</span></div><div class="desc">Ride the subway, buses, LIRR, and Metro-North for half price.</div></div>
+          <button class="btn">Connect me with a benefits worker</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 2 -->
+    <div class="col">
+      <span class="tag">Option 2 — Attribute chips</span>
+      <p class="note">Factual, defensible chips per program (Free · Renews yearly · Debit card · 50% off) stand in for est. $ value without claims.</p>
+      <div class="frame">
+        <div class="hdr"><span class="arrow">←</span> Back</div>
+        <div class="inner">
+          <h2 class="title">Here’s where we can help.</h2>
+          <div class="count">4 programs matched to your situation</div>
+          <div style="height:6px"></div>
+          <div class="prog">
+            <div class="ph"><span class="ico">🩺</span><span class="nm">Medicaid health insurance</span></div>
+            <div class="desc">Free coverage for doctor visits, hospital stays, vision, dental, and prescriptions.</div>
+            <div class="chips"><span class="chip">Free</span><span class="chip">Renews yearly</span></div>
+          </div>
+          <div class="divider"></div>
+          <div class="prog">
+            <div class="ph"><span class="ico">🍎</span><span class="nm">Food assistance</span></div>
+            <div class="desc">Help paying for groceries with SNAP, also known as EBT or food stamps.</div>
+            <div class="chips"><span class="chip">Debit card</span><span class="chip">Monthly</span></div>
+          </div>
+          <div class="divider"></div>
+          <div class="prog">
+            <div class="ph"><span class="ico">⚡</span><span class="nm">Energy assistance</span></div>
+            <div class="desc">Prevent utility shutoffs with discounts from your energy providers.</div>
+            <div class="chips"><span class="chip">Bill discount</span></div>
+          </div>
+          <div class="divider"></div>
+          <div class="prog">
+            <div class="ph"><span class="ico">🚃</span><span class="nm">Transit discounts</span></div>
+            <div class="desc">Ride the subway, buses, LIRR, and Metro-North.</div>
+            <div class="chips"><span class="chip">50% off</span></div>
+          </div>
+          <button class="btn">Connect me with a benefits worker</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 3 -->
+    <div class="col">
+      <span class="tag">Option 3 — What happens next</span>
+      <p class="note">A numbered next-steps block gives closure and sets expectations — satisfying without promising approval.</p>
+      <div class="frame">
+        <div class="hdr"><span class="arrow">←</span> Back</div>
+        <div class="inner">
+          <h2 class="title">Here’s where we can help.</h2>
+          <div class="count">4 programs matched to your situation</div>
+          <div style="height:6px"></div>
+          <div class="prog"><div class="ph"><span class="ico">🩺</span><span class="nm">Medicaid health insurance</span></div><div class="desc">Free coverage for doctor visits, hospital stays, vision, dental, and more.</div></div>
+          <div class="divider"></div>
+          <div class="prog"><div class="ph"><span class="ico">🍎</span><span class="nm">Food assistance</span></div><div class="desc">Help paying for groceries with SNAP (EBT / food stamps).</div></div>
+          <div class="divider"></div>
+          <div class="prog"><div class="ph"><span class="ico">⚡</span><span class="nm">Energy assistance</span></div><div class="desc">Discounts that help prevent utility shutoffs.</div></div>
+          <div class="divider"></div>
+          <div class="prog"><div class="ph"><span class="ico">🚃</span><span class="nm">Transit discounts</span></div><div class="desc">Half-price subway, buses, LIRR, and Metro-North.</div></div>
+
+          <div class="steps">
+            <div class="sh">What happens next</div>
+            <div class="step"><span class="num">1</span><span class="stxt"><b>We review</b> what you shared and pull together your applications.</span></div>
+            <div class="step"><span class="num">2</span><span class="stxt"><b>A benefits worker texts you</b> within 24 hours.</span></div>
+            <div class="step"><span class="num">3</span><span class="stxt"><b>You apply together</b> — no paperwork on your own.</span></div>
+          </div>
+          <button class="btn">Connect me with a benefits worker</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 4 -->
+    <div class="col">
+      <span class="tag">Option 4 — Completion moment</span>
+      <p class="note">Top-of-screen accomplishment cue: filled progress bar + green check + “You’re all set,” so the list reads as a reward you earned.</p>
+      <div class="frame">
+        <div class="hdr"><span class="arrow">←</span> Back</div>
+        <div class="inner">
+          <div class="complete">
+            <div class="progbar"><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="check"><svg viewBox="0 0 40 40"><polyline points="8 21 16 29 32 11"/></svg></div>
+            <div class="small">You’re all set</div>
+            <h2 class="title" style="margin-top:2px">Here’s where we can help, Jake.</h2>
+            <div class="count">4 programs matched to your situation</div>
+          </div>
+          <div style="height:10px"></div>
+          <div class="prog"><div class="ph"><span class="ico">🩺</span><span class="nm">Medicaid health insurance</span></div><div class="desc">Free coverage for doctor visits, hospital stays, vision, dental, and more.</div></div>
+          <div class="divider"></div>
+          <div class="prog"><div class="ph"><span class="ico">🍎</span><span class="nm">Food assistance</span></div><div class="desc">Help paying for groceries with SNAP (EBT / food stamps).</div></div>
+          <div class="divider"></div>
+          <div class="prog"><div class="ph"><span class="ico">⚡</span><span class="nm">Energy assistance</span></div><div class="desc">Discounts that help prevent utility shutoffs.</div></div>
+          <div class="divider"></div>
+          <div class="prog"><div class="ph"><span class="ico">🚃</span><span class="nm">Transit discounts</span></div><div class="desc">Half-price subway, buses, LIRR, and Metro-North.</div></div>
+          <button class="btn">Connect me with a benefits worker</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
