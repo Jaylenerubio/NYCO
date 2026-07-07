@@ -3,1330 +3,567 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NYC Health + Affordability Corps Navigator — Option C</title>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:wght@400&display=swap" rel="stylesheet" />
+  <title>NYC Health + Affordability Corps — Application (Option C)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
-    /* ── Design tokens ─────────────────────────────────────── */
     :root {
-      /* ── Foundation colors ── */
-      --color-primary-light:   #CCCCE5;
       --color-primary-base:    #050560;
       --color-primary-dark:    #030339;
-      --color-secondary-light: #D3DEFA;
       --color-secondary-base:  #284CCA;
-      --color-secondary-dark:  #182D79;
       --color-white:           #FFFFFF;
-      --color-gray-100:        #F5F5F5;
-      --color-gray-200:        #EEEEEE;
-      --color-gray-300:        #DDDDDD;
+      --color-neutral-100:     #F5F5F5;
+      --color-neutral-200:     #EEEEEE;
+      --color-neutral-300:     #DDDDDD;
       --color-gray-400:        #C2C2C2;
       --color-gray-500:        #AAAAAA;
-      --color-gray-700:        #767676;
-      --color-gray-900:        #333333;
       --color-black:           #191919;
-      --color-success-base:    #008703;
-      --color-success-light:   #E2F2D5;
-      --color-error-base:      #EC131E;
-      --color-error-light:     #F8D9DE;
-
-      /* ── Semantic layer ── */
-      --text-primary:            var(--color-black);
-      --text-secondary:          var(--color-gray-700);
-      --text-link:               var(--color-secondary-base);
-      --text-link-hover:         var(--color-secondary-dark);
-      --color-interactive:       var(--color-secondary-base);
-      --button-primary-bg:       var(--color-primary-base);
-      --button-primary-hover:    var(--color-primary-dark);
-      --button-secondary-bg:     var(--color-secondary-base);
-      --button-secondary-hover:  var(--color-secondary-dark);
-      --border-default:          var(--color-gray-300);
-      --border-focus:            var(--color-interactive);
-      --border-error:            var(--color-error-base);
-      --bg-primary:              var(--color-white);
-      --bg-secondary:            var(--color-gray-100);
-
-      /* ── Motion ── */
-      --duration-open:           220ms;
-      --duration-close:          140ms;
-      --duration-backdrop-close: 180ms;
-      --ease-out:                cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-in:                 cubic-bezier(0.4, 0.0, 1, 1);
-
-      /* ── Focus ── */
-      --focus-ring-color:  var(--color-interactive);
-      --focus-ring-width:  3px;
-      --focus-ring-offset: 2px;
-
-      /* ── Disabled ── */
-      --disabled-opacity: 0.4;
-
-      /* ── Typography tokens ── */
-      --font-display:  'Source Serif 4', 'Source Serif Pro', Georgia, serif;
-      --font-body:     'Public Sans', system-ui, -apple-system, sans-serif;
-      --type-body-size:          18px;
-      --type-body-weight:        400;
-      --type-body-line-height:   150%;
-      --type-ui-16-size:         16px;
-      --type-ui-14-size:         14px;
-      --type-button-size:        18px;
-      --type-button-weight:      600;
-      --type-button-line-height: 22px;
-      --type-h1-size:            40px;
-      --type-h2-size:            32px;
-      --type-h3-size:            26px;
-
-      /* ── Spacing ── */
-      --space-1: 8px;
-      --space-2: 16px;
-      --space-3: 24px;
-      --space-4: 32px;
-      --space-5: 40px;
-      --space-6: 48px;
+      --text-secondary:        #6B6B7A;
+      --color-success-text:    #006333;
+      --success-bg:            #DCEFD2;
+      --success-fg:            #2F7D32;
+      --chip-bg:               #F1F4FD;
+      --bg-primary:            var(--color-white);
+      --bg-secondary:          var(--color-neutral-100);
+      --border-default:        var(--color-neutral-300);
+      --ease-out:              cubic-bezier(0.16, 1, 0.3, 1);
+      --font-display:          'Source Serif 4', Georgia, serif;
+      --font-body:             'Public Sans', system-ui, -apple-system, sans-serif;
+      --space-1: 8px; --space-2: 16px; --space-3: 24px; --space-4: 32px;
     }
-
-    /* ── Reset ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
+    html { height: 100%; }
     body {
-      font-family: var(--font-body);
-      font-size: var(--type-body-size);
-      font-weight: var(--type-body-weight);
-      line-height: var(--type-body-line-height);
-      color: var(--text-primary);
-      background: var(--bg-secondary);
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
+      height: 100%; background: var(--bg-secondary); font-family: var(--font-body);
+      color: var(--color-black); font-size: 16px; line-height: 1.5;
+      display: flex; justify-content: center;
     }
-
-    /* ── App shell ─────────────────────────────────────────── */
     #app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      background: var(--bg-primary);
-      box-shadow: 0 0 40px rgba(0,0,0,0.12);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
+      width: 100%; max-width: 390px; height: 100%; background: var(--bg-primary);
+      box-shadow: 0 0 60px rgba(0,0,0,0.18); display: flex; flex-direction: column; overflow: hidden;
     }
+    @media (max-width: 430px) { #app { box-shadow: none; } }
 
-    /* ── Top bar ───────────────────────────────────────────── */
-    .top-bar {
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      padding: 6px var(--space-2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      gap: var(--space-1);
+    .supernav {
+      background: var(--bg-secondary); border-bottom: 1px solid var(--border-default);
+      padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
     }
-    .top-bar-left {
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-      flex-wrap: wrap;
-    }
-    .free-badge {
-      background: var(--color-success-base);
-      color: var(--color-white);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-    .top-bar-tagline {
-      font-size: 11px;
-      color: rgba(255,255,255,0.85);
-      white-space: nowrap;
-    }
-    .lang-toggles {
-      display: flex;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-    .lang-btn {
-      background: none;
-      border: 1px solid rgba(255,255,255,0.4);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-size: 10px;
-      font-weight: 500;
-      padding: 2px 5px;
-      border-radius: 4px;
-      cursor: pointer;
-      line-height: 1.4;
-      transition: background 0.15s;
-    }
-    .lang-btn:hover { background: rgba(255,255,255,0.15); }
-    .lang-btn.active { background: rgba(255,255,255,0.25); border-color: white; }
-    .lang-btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-    }
+    .brandmark { background: var(--color-secondary-base); color: #fff; font-weight: 800; font-size: 13px; letter-spacing: -.02em; padding: 4px 6px; border-radius: 3px; line-height: 1; }
+    .brandtext { font-size: 11px; font-weight: 600; color: var(--color-black); line-height: 1.2; }
 
-    /* ── Nav chrome ────────────────────────────────────────── */
     .nav-chrome {
-      background: var(--bg-primary);
-      border-bottom: 1px solid var(--border-default);
-      padding: 10px var(--space-2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      gap: var(--space-1);
+      background: var(--bg-primary); border-bottom: 1px solid var(--border-default);
+      padding: 16px; display: flex; align-items: center; flex-shrink: 0;
     }
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-    }
+    .nav-chrome.hidden { display: none; }
     .back-btn {
-      background: none;
-      border: none;
-      color: var(--text-link);
-      font-size: 20px;
-      cursor: pointer;
-      padding: 4px 8px 4px 0;
-      display: flex;
-      align-items: center;
-      line-height: 1;
-      font-weight: 600;
-      transition: color var(--duration-close) var(--ease-out);
+      background: none; border: none; cursor: pointer; color: var(--color-black);
+      font-family: var(--font-body); font-size: 16px; display: flex; align-items: center; gap: 8px; padding: 0;
     }
-    .back-btn:hover { color: var(--text-link-hover); }
-    .back-btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
-      border-radius: 4px;
-    }
-    .back-btn.hidden { visibility: hidden; pointer-events: none; }
-    .nyc-logo {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      text-decoration: none;
-    }
-    .nyc-logo-block {
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 4px 6px;
-      border-radius: 3px;
-      letter-spacing: 0.5px;
-      line-height: 1;
-    }
-    .nyc-logo-label {
-      font-family: var(--font-body);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--color-primary-base);
-      line-height: 1.3;
-      max-width: 160px;
-    }
-    .hamburger-btn {
-      background: none;
-      border: none;
-      font-size: 22px;
-      color: var(--color-primary-base);
-      cursor: pointer;
-      padding: 4px;
-      line-height: 1;
-    }
-    .hamburger-btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 4px;
-    }
+    .back-btn svg { width: 24px; height: 24px; }
 
-    /* ── Progress bar ──────────────────────────────────────── */
-    .progress-wrap {
-      padding: 8px var(--space-2) 0;
-      flex-shrink: 0;
-    }
-    .progress-label {
-      font-size: 11px;
-      color: var(--color-gray-700);
-      margin-bottom: 4px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .progress-track {
-      height: 6px;
-      background: var(--color-gray-300);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: var(--color-secondary-base);
-      border-radius: 999px;
-      transition: width var(--duration-open) var(--ease-out);
-    }
+    /* Application progress */
+    .appbar { padding: 20px 16px 12px; flex-shrink: 0; }
+    .appbar.hidden { display: none; }
+    .appbar-label { font-size: 12px; text-transform: uppercase; letter-spacing: .02em; color: var(--text-secondary); margin-bottom: 10px; font-weight: 600; }
+    .appbar-track { display: flex; gap: 4px; }
+    .appbar-seg { flex: 1; height: 6px; border-radius: 20px; background: var(--color-neutral-200); overflow: hidden; }
+    .appbar-seg .fill { display: block; height: 100%; width: 0; background: var(--success-fg); border-radius: 20px; transition: width .4s var(--ease-out); }
+    .appbar-seg.done .fill { width: 100%; }
 
-    /* ── Screen container ──────────────────────────────────── */
-    .screens-wrapper {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
-    .screen {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      overflow-y: auto;
-      transform: translateX(100%);
-      transition: transform var(--duration-open) var(--ease-out);
-      display: flex;
-      flex-direction: column;
-    }
-    .screen.active {
-      transform: translateX(0%);
-    }
-    .screen.exit-left {
-      transform: translateX(-100%);
-    }
-    .screen.exit-right {
-      transform: translateX(100%);
-    }
-    .screen.no-transition {
-      transition: none;
-    }
+    /* Screens */
+    .screens-wrapper { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+    .screen { position: absolute; inset: 0; overflow-y: auto; display: none; flex-direction: column; }
+    .screen.active { display: flex; }
+    .screen-inner { width: 100%; padding: 24px 16px 12px; flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+    .screen-inner.centered { justify-content: center; }
 
-    /* ── Screen body ───────────────────────────────────────── */
-    .screen-body {
-      padding: var(--space-3) var(--space-2) var(--space-5);
-      flex: 1;
-      position: relative;
-    }
+    h1 { font-family: var(--font-display); font-weight: 400; font-size: 30px; line-height: 1.15; letter-spacing: -.4px; color: var(--color-black); }
+    h2 { font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.2; color: var(--color-black); }
+    .subtext { font-size: 16px; color: var(--text-secondary); line-height: 1.55; }
+    .heading-block { display: flex; flex-direction: column; gap: var(--space-1); }
 
-    /* ── Layer annotation badges ───────────────────────────── */
-    .layer-badge-wrap {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      display: flex;
-      gap: 4px;
-      z-index: 10;
-    }
-    .layer-badge {
-      font-size: 10px;
-      font-weight: 600;
-      font-family: var(--font-body);
-      padding: 2px 8px;
-      border-radius: 999px;
-      color: white;
-      white-space: nowrap;
-      line-height: 1.5;
-    }
-    .layer-badge.layer-a { background: #7C3AED; }
-    .layer-badge.layer-b { background: #050560; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
+      background: var(--success-bg); color: var(--success-fg); font-weight: 700; font-size: 12px;
+      text-transform: uppercase; letter-spacing: .05em; padding: 6px 12px; border-radius: 999px; }
+    .eyebrow svg { width: 14px; height: 14px; }
 
-    /* ── Typography helpers ────────────────────────────────── */
-    .screen-headline {
-      font-family: var(--font-display);
-      font-size: var(--type-h3-size);
-      font-weight: 400;
-      color: var(--text-primary);
-      line-height: 1.25;
-      margin-bottom: var(--space-2);
-    }
-    .screen-header {
-      font-family: var(--font-body);
-      font-size: var(--type-h2-size);
-      font-weight: 600;
-      color: var(--text-primary);
-      line-height: 1.25;
-      margin-bottom: 6px;
-    }
-    .screen-subtext {
-      font-size: var(--type-ui-16-size);
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: var(--space-3);
-    }
-    .tip-note {
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-style: italic;
-      margin-bottom: var(--space-3);
-      line-height: 1.4;
-    }
-    .small-note {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-style: italic;
-      line-height: 1.4;
-      margin-top: var(--space-2);
-    }
-
-    /* ── Buttons ───────────────────────────────────────────── */
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 14px 24px;
-      border-radius: 8px;
-      border: none;
-      font-family: var(--font-body);
-      font-size: var(--type-button-size);
-      font-weight: var(--type-button-weight);
-      line-height: var(--type-button-line-height);
-      cursor: pointer;
-      text-align: center;
-      transition: background var(--duration-close) var(--ease-out), transform var(--duration-close) var(--ease-out), color var(--duration-close) var(--ease-out), border-color var(--duration-close) var(--ease-out);
-    }
-    .btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
-    }
+    /* Buttons */
     .btn-primary {
-      background: var(--button-primary-bg);
-      color: var(--color-white);
+      width: 100%; background: var(--color-primary-base); color: #fff; border: none; border-radius: 10px;
+      padding: 18px; font-family: var(--font-body); font-size: 16px; font-weight: 600; cursor: pointer;
+      transition: background 150ms ease, transform .12s ease;
     }
-    .btn-primary:hover:not(:disabled) {
-      background: var(--button-primary-hover);
-      transform: translateY(-1px);
+    .btn-primary:hover { background: var(--color-primary-dark); }
+    .btn-primary:active { transform: scale(.99); }
+    .btn-primary:disabled { background: var(--color-gray-400); cursor: default; }
+    .btn-secondary {
+      width: 100%; background: transparent; border: none; color: var(--color-secondary-base);
+      font-family: var(--font-body); font-size: 16px; font-weight: 600; padding: 12px; cursor: pointer; border-radius: 8px;
     }
-    .btn-primary:disabled {
-      opacity: var(--disabled-opacity);
-      cursor: not-allowed;
-    }
-    .btn-ghost {
-      background: transparent;
-      color: var(--color-primary-base);
-      border: 2px solid var(--color-primary-base);
-    }
-    .btn-ghost:hover { background: var(--bg-secondary); }
-    .btn-success {
-      background: var(--color-success-base);
-      color: var(--color-white);
-    }
-    .btn-success:hover { background: #006602; }
-    .btn-stack {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-top: var(--space-3);
-    }
+    .btn-secondary:hover { background: var(--color-neutral-100); }
 
-    /* ── Screen 0: Landing ─────────────────────────────────── */
-    .landing-wrap {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 100%;
-      padding: var(--space-4) var(--space-2) var(--space-5);
-    }
-    .landing-icon {
-      font-size: 48px;
-      margin-bottom: var(--space-3);
-      text-align: center;
-    }
-    .landing-body {
-      font-size: var(--type-ui-16-size);
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: var(--space-5);
-    }
-    .no-account-note {
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-top: var(--space-2);
-    }
+    .screen-footer { position: sticky; bottom: 0; background: var(--bg-primary); padding: 16px 16px 24px; flex-shrink: 0; display: flex; flex-direction: column; gap: var(--space-1); border-top: 1px solid var(--color-neutral-200); }
 
-    /* ── Screen 1: Situation cards ─────────────────────────── */
-    .situation-cards {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-3);
-    }
-    .situation-card {
-      border: 1px solid var(--border-default);
-      border-radius: 12px;
-      padding: var(--space-2) var(--space-2);
-      min-height: 80px;
-      cursor: pointer;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      position: relative;
-      background: var(--bg-primary);
-      transition: box-shadow var(--duration-open) var(--ease-out), transform var(--duration-open) var(--ease-out);
-      text-align: left;
-    }
-    .situation-card:hover {
-      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-      transform: translateY(-2px);
-    }
-    .situation-card:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
-    }
-    .situation-card.selected {
-      border-left: 4px solid var(--color-primary-base);
-      background: #EEF2FF;
-    }
-    .card-emoji {
-      font-size: 28px;
-      flex-shrink: 0;
-      line-height: 1;
-      margin-top: 2px;
-    }
-    .card-text { flex: 1; }
-    .card-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 3px;
-    }
-    .card-desc {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.4;
-    }
-    .card-check {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--color-primary-base);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-    .situation-card.selected .card-check { opacity: 1; }
+    /* Results program list */
+    .prog-list { display: flex; flex-direction: column; }
+    .prog-line { display: flex; gap: 12px; padding: 16px 2px; align-items: flex-start; }
+    .prog-line + .prog-line { border-top: 1px solid var(--color-neutral-200); }
+    .prog-ic { flex-shrink: 0; width: 26px; color: var(--color-black); display: flex; }
+    .prog-ic svg { width: 24px; height: 24px; stroke-width: 1.75; }
+    .prog-name { font-size: 17px; font-weight: 600; color: var(--color-primary-base); }
+    .prog-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-top: 2px; }
 
-    .bg-working-note {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      font-style: italic;
-      opacity: 0;
-      transition: opacity 0.4s;
-      margin-bottom: var(--space-2);
-      min-height: 20px;
-    }
-    .bg-working-note.visible { opacity: 1; }
-
-    /* ── Screen 2: Form fields ─────────────────────────────── */
-    .reassurance-box {
-      background: #E6F4E6;
-      border: 1px solid #A3D4A3;
-      border-radius: 8px;
-      padding: var(--space-2);
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: var(--space-3);
-      font-size: 14px;
-      color: #1a5c1a;
-      line-height: 1.4;
-    }
-    .reassurance-icon {
-      font-size: 18px;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      margin-bottom: var(--space-3);
-    }
-    .field-wrap { display: flex; flex-direction: column; gap: 5px; }
-    .field-label {
-      font-size: var(--type-ui-14-size);
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .field-input {
-      width: 100%;
-      padding: 11px 12px;
-      border: 1.5px solid var(--border-default);
-      border-radius: 8px;
+    /* OTP */
+    .otp-row { display: flex; gap: 8px; }
+    .otp-input {
+      flex: 1; height: 60px; text-align: center; font-size: 24px; font-weight: 600;
+      border: 1.5px solid var(--border-default); border-radius: 10px; background: #fff; color: var(--color-black);
       font-family: var(--font-body);
-      font-size: var(--type-ui-16-size);
-      color: var(--text-primary);
-      background: var(--bg-primary);
-      transition: border-color var(--duration-close) var(--ease-out);
-      appearance: none;
-      -webkit-appearance: none;
     }
-    .field-input:focus {
-      border-color: var(--border-focus);
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
-    }
-    .field-input::placeholder { color: var(--text-secondary); }
-    .field-sub-note {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-style: italic;
-    }
-    .field-success {
-      font-size: 13px;
-      color: var(--color-success-base);
-      font-weight: 500;
-      display: none;
-    }
-    .field-success.visible { display: block; }
+    .otp-input:focus { outline: none; border-color: var(--color-secondary-base); box-shadow: 0 0 0 3px rgba(40,76,202,.15); }
+    .verify-target { display: flex; align-items: center; gap: 12px; background: var(--color-neutral-100); border-radius: 10px; padding: 14px 16px; }
+    .verify-target svg { width: 22px; height: 22px; flex-shrink: 0; color: var(--color-secondary-base); }
+    .verify-target .vt-label { font-size: 13px; color: var(--text-secondary); }
+    .verify-target .vt-val { font-size: 16px; font-weight: 600; }
+    .link-inline { background: none; border: none; color: var(--color-secondary-base); font-weight: 600; font-family: var(--font-body); font-size: 15px; cursor: pointer; padding: 0; align-self: flex-start; }
 
-    /* ── Screen 3: Chip cards ──────────────────────────────── */
-    .benefit-chips {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-2);
+    /* Application deck cards */
+    .deck { display: flex; flex-direction: column; gap: 12px; }
+    .app-card {
+      display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
+      background: #fff; border: 1px solid var(--border-default); border-radius: 14px; padding: 18px;
+      cursor: pointer; font-family: var(--font-body); transition: border-color 150ms ease, box-shadow 150ms ease;
     }
-    .benefit-chip {
-      border: 2px solid var(--color-primary-base);
-      border-radius: 12px;
-      padding: 14px var(--space-2);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-2);
-      background: var(--bg-primary);
-      color: var(--color-primary-base);
-      font-family: var(--font-body);
-      font-size: 15px;
-      font-weight: 600;
-      text-align: left;
-      transition: background var(--duration-close) var(--ease-out), color var(--duration-close) var(--ease-out);
-    }
-    .benefit-chip.selected {
-      background: var(--color-primary-base);
-      color: var(--color-white);
-    }
-    .benefit-chip:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
-    }
-    .chip-check {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: 2px solid currentColor;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      flex-shrink: 0;
-      transition: background 0.15s;
-    }
-    .benefit-chip.selected .chip-check {
-      background: var(--color-white);
-      color: var(--color-primary-base);
-      border-color: var(--color-white);
-    }
-    .live-counter {
-      font-size: var(--type-ui-14-size);
-      color: var(--text-secondary);
-      margin-bottom: var(--space-3);
-      font-weight: 500;
-    }
-    .live-counter span { color: var(--color-primary-base); font-weight: 600; }
+    .app-card:hover { border-color: var(--color-secondary-base); }
+    .app-card.done { background: #FAFDF8; border-color: var(--success-bg); }
+    .app-card-ic { flex-shrink: 0; width: 40px; height: 40px; border-radius: 10px; background: var(--chip-bg); color: var(--color-secondary-base); display: flex; align-items: center; justify-content: center; }
+    .app-card.done .app-card-ic { background: var(--success-bg); color: var(--success-fg); }
+    .app-card-ic svg { width: 22px; height: 22px; }
+    .app-card-body { flex: 1; min-width: 0; }
+    .app-card-name { font-size: 16px; font-weight: 600; color: var(--color-black); }
+    .app-card-meta { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+    .app-card-status { flex-shrink: 0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; padding: 4px 9px; border-radius: 999px; }
+    .status-start { background: var(--chip-bg); color: var(--color-secondary-base); }
+    .status-quick { background: #FDF3E2; color: #9A5B08; }
+    .status-done { background: var(--success-bg); color: var(--success-fg); }
+    .tag-first { display: inline-block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--color-secondary-base); background: var(--chip-bg); padding: 1px 7px; border-radius: 4px; margin-left: 6px; }
 
-    /* ── Screen 4: Deep dive ───────────────────────────────── */
-    .privacy-note {
-      font-size: 13px;
-      color: var(--text-secondary);
-      background: var(--bg-secondary);
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin-top: var(--space-2);
-      line-height: 1.4;
-    }
-    .sensitive-note {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-style: italic;
-      margin-bottom: var(--space-3);
-    }
+    .save-note { display: flex; gap: 10px; align-items: flex-start; background: var(--color-neutral-100); border-radius: 10px; padding: 14px; font-size: 14px; color: var(--color-black); line-height: 1.5; }
+    .save-note svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-secondary-base); margin-top: 1px; }
 
-    /* ── Screen 5: Results ─────────────────────────────────── */
-    .result-cards {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-3);
-    }
-    .result-card {
-      border: 1px solid var(--border-default);
-      border-radius: 12px;
-      padding: var(--space-2);
-      background: var(--bg-primary);
-    }
-    .result-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-      gap: var(--space-1);
-    }
-    .result-card-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .match-badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-    .match-badge.strong {
-      background: #E6F4E6;
-      color: #1a5c1a;
-    }
-    .match-badge.possible {
-      background: #FFF3CD;
-      color: #7a4f00;
-    }
-    .result-value {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--color-success-base);
-      margin-bottom: 4px;
-    }
-    .result-desc {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.4;
-    }
+    /* Easy-apply pre-filled rows */
+    .app-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-secondary); margin-bottom: -6px; }
+    .prefill-card { border: 1px solid var(--color-neutral-200); border-radius: 12px; overflow: hidden; }
+    .prefill-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
+    .prefill-row + .prefill-row { border-top: 1px solid var(--color-neutral-200); }
+    .prefill-check { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--success-bg); color: var(--success-fg); display: flex; align-items: center; justify-content: center; }
+    .prefill-check svg { width: 14px; height: 14px; }
+    .prefill-row .pl { font-size: 13px; color: var(--text-secondary); }
+    .prefill-row .pv { font-size: 15px; font-weight: 500; color: var(--color-black); }
+    .reused-banner { display: flex; gap: 10px; align-items: center; background: var(--success-bg); color: var(--success-fg); border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600; }
+    .reused-banner svg { width: 20px; height: 20px; flex-shrink: 0; }
 
-    .claim-box {
-      background: var(--bg-secondary);
-      border-radius: 10px;
-      padding: var(--space-3) var(--space-2);
-      margin-bottom: var(--space-2);
+    /* Fields */
+    .field-group { display: flex; flex-direction: column; gap: var(--space-1); }
+    .field-label { font-size: 16px; color: var(--color-black); }
+    .field-input, .field-select {
+      width: 100%; padding: 12px 14px; border: 1.5px solid var(--border-default); border-radius: 4px;
+      font-family: var(--font-body); font-size: 16px; color: var(--color-black); background: #fff;
     }
-    .claim-box-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: var(--space-2);
-    }
-    .claim-fields {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-    }
+    .field-select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23191919' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px; }
+    .field-input:focus, .field-select:focus { outline: none; border-color: var(--color-secondary-base); box-shadow: 0 0 0 3px rgba(40,76,202,.15); }
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip { flex: 1; min-width: 0; padding: 16px 10px; background: #fff; border: 1px solid var(--color-neutral-300); border-radius: 8px; font-family: var(--font-body); font-size: 16px; color: var(--color-black); cursor: pointer; text-align: center; transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease; }
+    .chip:hover { border-color: var(--color-secondary-base); }
+    .chip.selected { border-color: var(--color-secondary-base); background: var(--chip-bg); box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+    .input-affix { position: relative; }
+    .input-affix .affix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-black); pointer-events: none; }
+    .field-input.has-affix { padding-left: 28px; }
 
-    /* ── Screen 6: Confirmation ────────────────────────────── */
-    .confirm-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 100%;
-      padding: var(--space-5) var(--space-3);
-    }
-    .confirm-check-wrap {
-      margin-bottom: var(--space-4);
-    }
-    .confirm-check-wrap svg {
-      width: 80px;
-      height: 80px;
-    }
-    .confirm-headline {
-      font-family: var(--font-display);
-      font-size: 28px;
-      font-weight: 400;
-      color: var(--text-primary);
-      margin-bottom: var(--space-2);
-      line-height: 1.2;
-    }
-    .confirm-body {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: var(--space-3);
-      max-width: 320px;
-    }
-    .confirm-ref {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      background: var(--bg-secondary);
-      border-radius: 6px;
-      padding: 8px 16px;
-      margin-bottom: var(--space-4);
-      display: inline-block;
-    }
-    .confirm-done-btn {
-      width: 100%;
-      max-width: 300px;
-    }
+    /* Link MyFile card */
+    .link-card { display: flex; align-items: center; gap: 14px; border: 1px solid var(--border-default); border-radius: 14px; padding: 16px; cursor: pointer; background: #fff; width: 100%; text-align: left; font-family: var(--font-body); transition: border-color 150ms ease; }
+    .link-card:hover { border-color: var(--color-secondary-base); }
+    .link-card.linked { background: #FAFDF8; border-color: var(--success-bg); }
+    .link-card-ic { flex-shrink: 0; width: 44px; height: 44px; border-radius: 10px; background: var(--color-primary-base); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; letter-spacing: -.02em; }
+    .link-card.linked .link-card-ic { background: var(--success-fg); }
+    .link-card-body { flex: 1; }
+    .link-card-name { font-size: 16px; font-weight: 600; }
+    .link-card-sub { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+    .link-card-cta { flex-shrink: 0; font-size: 14px; font-weight: 600; color: var(--color-secondary-base); }
+    .link-card.linked .link-card-cta { color: var(--success-fg); }
 
-    /* ── Utility ───────────────────────────────────────────── */
-    .visually-hidden {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-    .mt-1 { margin-top: var(--space-1); }
-    .mt-2 { margin-top: var(--space-2); }
-    .mt-3 { margin-top: var(--space-3); }
+    /* Confirmation / tracker */
+    .confirm-icon { width: 76px; height: 76px; background: var(--success-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-2); }
+    .confirm-icon svg { width: 34px; height: 34px; stroke: var(--success-fg); fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .track-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; }
+    .track-row + .track-row { border-top: 1px solid var(--color-neutral-200); }
+    .track-ic { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .track-ic.ok { background: var(--success-bg); color: var(--success-fg); }
+    .track-ic.wait { background: #FDF3E2; color: #9A5B08; }
+    .track-ic svg { width: 15px; height: 15px; }
+    .track-name { flex: 1; font-size: 16px; font-weight: 500; }
+    .track-state { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--text-secondary); }
 
-    /* ── Media: full-screen mobile ─────────────────────────── */
-    @media (max-width: 430px) {
-      #app { box-shadow: none; }
+    /* Responsive: card that scales up */
+    @media (min-width: 600px) {
+      body { align-items: center; padding: 32px 0; }
+      #app { max-width: 480px; height: calc(100dvh - 64px); max-height: 900px; border-radius: 22px; box-shadow: 0 14px 54px rgba(0,0,0,0.16); }
+      .screen-inner { padding: 32px 36px 12px; }
+      .nav-chrome { padding: 18px 36px; }
+      .appbar { padding: 24px 36px 12px; }
+      .screen-footer { padding: 20px 36px 28px; }
     }
+    @media (min-width: 768px) {
+      #app { max-width: 640px; }
+      .screen-inner { padding: 36px 44px 12px; gap: var(--space-4); }
+      .nav-chrome, .appbar, .screen-footer { padding-left: 44px; padding-right: 44px; }
+      h1 { font-size: 38px; }
+      h2 { font-size: 30px; }
+      .subtext { font-size: 18px; }
+    }
+    @media (min-width: 1024px) {
+      body { padding: 40px 0; }
+      #app { max-width: 720px; max-height: 960px; }
+      .screen-inner, .nav-chrome, .appbar, .screen-footer { padding-left: 56px; padding-right: 56px; }
+    }
+    @media (min-width: 1440px) { #app { max-width: 760px; } }
   </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ── Top bar (persistent) ──────────────────────────────── -->
-  <div class="top-bar" role="banner">
-    <div class="top-bar-left">
-      <span class="free-badge">100% Free</span>
-      <span class="top-bar-tagline">· All New Yorkers</span>
-    </div>
-    <div class="lang-toggles" role="navigation" aria-label="Language selection">
-      <button class="lang-btn active" aria-label="English" aria-pressed="true">EN</button>
-      <button class="lang-btn" aria-label="Español" aria-pressed="false">ES</button>
-      <button class="lang-btn" aria-label="中文" aria-pressed="false">中文</button>
-      <button class="lang-btn" aria-label="বাংলা" aria-pressed="false">BN</button>
-      <button class="lang-btn" aria-label="Haitian Creole" aria-pressed="false">HT</button>
+  <div class="supernav">
+    <span class="brandmark">NYC</span>
+    <span class="brandtext">Health + Affordability Corps</span>
+  </div>
+
+  <div class="nav-chrome hidden" id="nav-chrome">
+    <button class="back-btn" onclick="goBack()"><i data-lucide="arrow-left"></i> Back</button>
+  </div>
+
+  <div class="appbar hidden" id="appbar">
+    <div class="appbar-label" id="appbar-label">0 of 3 applications complete</div>
+    <div class="appbar-track">
+      <div class="appbar-seg" id="ab-1"><span class="fill"></span></div>
+      <div class="appbar-seg" id="ab-2"><span class="fill"></span></div>
+      <div class="appbar-seg" id="ab-3"><span class="fill"></span></div>
     </div>
   </div>
 
-  <!-- ── Nav chrome (persistent) ───────────────────────────── -->
-  <div class="nav-chrome" role="navigation" aria-label="Main navigation">
-    <div class="nav-left">
-      <button class="back-btn hidden" id="back-btn" aria-label="Go back">←</button>
-      <a href="#" class="nyc-logo" aria-label="NYC Health + Affordability Corps home">
-        <span class="nyc-logo-block">NYC</span>
-        <span class="nyc-logo-label">Health + Affordability Corps</span>
-      </a>
-    </div>
-    <button class="hamburger-btn" aria-label="Open menu" aria-expanded="false">☰</button>
-  </div>
+  <div class="screens-wrapper">
 
-  <!-- ── Progress bar (persistent, hidden on 0 and 6) ─────── -->
-  <div class="progress-wrap" id="progress-wrap" aria-hidden="true" style="display:none;">
-    <div class="progress-label">
-      <span id="progress-label-text">Step 1 of 5</span>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progress-fill" style="width:20%;"></div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════════════════════
-       SCREENS
-  ═══════════════════════════════════════════════════════════ -->
-  <div class="screens-wrapper" id="screens-wrapper">
-
-    <!-- ── Screen 0: Landing ─────────────────────────────────── -->
-    <section class="screen active" id="screen-0" role="main" aria-label="Welcome">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A — Warm entry</span>
+    <!-- Results -->
+    <div class="screen active" id="screen-results">
+      <div class="screen-inner">
+        <span class="eyebrow"><i data-lucide="party-popper"></i> Good news</span>
+        <div class="heading-block">
+          <h1 id="results-title">You may be eligible for 3 programs, Jade.</h1>
+          <p class="subtext">Based on your screener, here's what we can help you apply for. We've already saved your answers to speed things up.</p>
         </div>
-        <div class="landing-wrap">
-          <div class="landing-icon" aria-hidden="true">🤝</div>
-          <h1 class="screen-headline">A neighbor helped you start — let's keep going.</h1>
-          <p class="landing-body">You're close to getting help with health, food, rent, and more. Takes less than 2 minutes.</p>
-          <button class="btn btn-primary" id="s0-cta" onclick="navigate(1)">Let's find out what I qualify for</button>
-          <p class="no-account-note">No account needed. 100% free.</p>
+        <div class="prog-list">
+          <div class="prog-line"><span class="prog-ic"><i data-lucide="receipt"></i></span><div><div class="prog-name">Hospital charity care</div><div class="prog-desc">Help reducing or forgiving a hospital bill.</div></div></div>
+          <div class="prog-line"><span class="prog-ic"><i data-lucide="apple"></i></span><div><div class="prog-name">Food assistance (SNAP)</div><div class="prog-desc">Monthly help paying for groceries.</div></div></div>
+          <div class="prog-line"><span class="prog-ic"><i data-lucide="stethoscope"></i></span><div><div class="prog-name">Medicaid</div><div class="prog-desc">Free or low-cost health coverage.</div></div></div>
         </div>
       </div>
-    </section>
-
-    <!-- ── Screen 1: Warm Entry ──────────────────────────────── -->
-    <section class="screen" id="screen-1" role="main" aria-label="What's going on">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A — Situation surface</span>
-        </div>
-        <h2 class="screen-header">What's going on?</h2>
-        <p class="screen-subtext">Pick everything that fits.</p>
-        <p class="tip-note">💡 Tip: No SSN needed here — just tell us what's happening.</p>
-
-        <div class="situation-cards" role="group" aria-label="Select your situations">
-          <button class="situation-card" id="card-0" onclick="toggleCard(0)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🏠</span>
-            <span class="card-text">
-              <span class="card-title">I might lose my home</span>
-              <span class="card-desc">Eviction notice, late rent, or unstable housing</span>
-            </span>
-            <span class="card-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="situation-card" id="card-1" onclick="toggleCard(1)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🩺</span>
-            <span class="card-text">
-              <span class="card-title">I need health coverage</span>
-              <span class="card-desc">No insurance, renewal due, or gap in coverage</span>
-            </span>
-            <span class="card-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="situation-card" id="card-2" onclick="toggleCard(2)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🛒</span>
-            <span class="card-text">
-              <span class="card-title">Struggling with food or bills</span>
-              <span class="card-desc">SNAP, cash help, or monthly expenses</span>
-            </span>
-            <span class="card-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="situation-card" id="card-3" onclick="toggleCard(3)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🏥</span>
-            <span class="card-text">
-              <span class="card-title">Can't pay medical bills</span>
-              <span class="card-desc">Old bills, hospital debt, or new charges</span>
-            </span>
-            <span class="card-check" aria-hidden="true">✓</span>
-          </button>
-        </div>
-
-        <p class="bg-working-note" id="bg-working-note" aria-live="polite">Working out your eligibility in the background…</p>
-
-        <button class="btn btn-primary" id="s1-cta" onclick="navigate(2)" disabled aria-disabled="true">These apply to me →</button>
+      <div class="screen-footer">
+        <button class="btn-primary" onclick="navigate('verify')">Start my applications</button>
+        <button class="btn-secondary" onclick="navigate('verify')">Or have a benefits worker help me</button>
       </div>
-    </section>
+    </div>
 
-    <!-- ── Screen 2: Quick Basics ────────────────────────────── -->
-    <section class="screen" id="screen-2" role="main" aria-label="Quick basics">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-b">Layer B — Logic running</span>
+    <!-- Verify (Resy-style OTP) -->
+    <div class="screen" id="screen-verify">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>First, let's verify it's you.</h1>
+          <p class="subtext">This keeps your information secure and lets you leave and come back to your applications anytime — no account needed.</p>
         </div>
-        <h2 class="screen-header">A few quick questions</h2>
-        <p class="screen-subtext">These help us narrow down what you qualify for.</p>
+        <div class="verify-target">
+          <i data-lucide="message-circle"></i>
+          <div><div class="vt-label">We sent a 6-digit code to</div><div class="vt-val" id="verify-phone">(243) 545-4324</div></div>
+        </div>
+        <div class="otp-row" id="otp-row">
+          <input class="otp-input" inputmode="numeric" maxlength="1" oninput="otpAdvance(this,0)" />
+          <input class="otp-input" inputmode="numeric" maxlength="1" oninput="otpAdvance(this,1)" />
+          <input class="otp-input" inputmode="numeric" maxlength="1" oninput="otpAdvance(this,2)" />
+          <input class="otp-input" inputmode="numeric" maxlength="1" oninput="otpAdvance(this,3)" />
+          <input class="otp-input" inputmode="numeric" maxlength="1" oninput="otpAdvance(this,4)" />
+          <input class="otp-input" inputmode="numeric" maxlength="1" oninput="otpAdvance(this,5)" />
+        </div>
+        <button class="link-inline">Send a new code</button>
+      </div>
+      <div class="screen-footer">
+        <button class="btn-primary" id="btn-verify" onclick="navigate('apps')" disabled>Verify &amp; continue</button>
+      </div>
+    </div>
 
-        <div class="reassurance-box" role="note">
-          <span class="reassurance-icon" aria-hidden="true">✅</span>
-          <span>No Social Security number needed at this step.</span>
+    <!-- Application deck -->
+    <div class="screen" id="screen-apps">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Your applications</h1>
+          <p class="subtext">We pre-filled what we can from your screener. Start with the one that needs the most — the rest will be quick.</p>
+        </div>
+        <div class="deck" id="deck"></div>
+        <div class="save-note">
+          <i data-lucide="link"></i>
+          <span>We texted you a secure link. Leave and come back anytime — even mid-application — and pick up where you left off.</span>
+        </div>
+      </div>
+      <div class="screen-footer">
+        <button class="btn-primary" id="btn-finish" onclick="navigate('done')">Done for now</button>
+      </div>
+    </div>
+
+    <!-- Easy Apply: Hospital charity care (the deep one) -->
+    <div class="screen" id="screen-apply-charity">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Hospital charity care</h1>
+          <p class="subtext">Most of this is already filled in. You only need to add your bill.</p>
         </div>
 
+        <div class="app-section-title">From your screener</div>
+        <div class="prefill-card">
+          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">Patient</div><div class="pv">Jade Puio &middot; 10/27/1991</div></div></div>
+          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">Household</div><div class="pv">3 people</div></div></div>
+          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">Monthly income</div><div class="pv">$1,501–$3,000</div></div></div>
+        </div>
+
+        <div class="app-section-title">Your hospital bill</div>
         <div class="field-group">
-          <div class="field-wrap">
-            <label class="field-label" for="zip-input">ZIP code</label>
-            <input class="field-input" type="text" id="zip-input" inputmode="numeric" placeholder="e.g. 10036" maxlength="5" autocomplete="postal-code" />
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="household-input">How many people live with you?</label>
-            <input class="field-input" type="number" id="household-input" min="1" max="20" placeholder="e.g. 3" />
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="income-select">About how much does your household make each month?</label>
-            <select class="field-input" id="income-select">
-              <option value="" disabled selected>Select a range…</option>
-              <option value="under-1500">Under $1,500</option>
-              <option value="1500-3000">$1,500–$3,000</option>
-              <option value="3000-5000">$3,000–$5,000</option>
-              <option value="over-5000">Over $5,000</option>
-              <option value="prefer-not">I'd rather not say</option>
-            </select>
-          </div>
+          <label class="field-label">Which hospital was the bill from?</label>
+          <select class="field-select"><option>NYC Health + Hospitals / Bellevue</option><option>NYC Health + Hospitals / Elmhurst</option><option>Other / not listed</option></select>
         </div>
-
-        <p class="small-note">Behind the scenes, we're pre-scoring your eligibility across all 4 benefit areas at once.</p>
-
-        <button class="btn btn-primary mt-3" onclick="navigate(3)">Keep going →</button>
-      </div>
-    </section>
-
-    <!-- ── Screen 3: System Confirms ─────────────────────────── -->
-    <section class="screen" id="screen-3" role="main" aria-label="Confirm benefit areas">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A</span>
-          <span class="layer-badge layer-b">Layer B</span>
-        </div>
-        <h2 class="screen-header">Here's what we'll check for you</h2>
-        <p class="screen-subtext">Based on your situation and basics, you may qualify for all of these. You can remove any you don't need.</p>
-
-        <div class="benefit-chips" role="group" aria-label="Benefit areas to check">
-          <button class="benefit-chip selected" id="chip-0" onclick="toggleChip(0)" aria-pressed="true">
-            <span>✓ Health coverage <span style="font-weight:400;font-size:13px;">(Medicaid, Child Health Plus)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="benefit-chip selected" id="chip-1" onclick="toggleChip(1)" aria-pressed="true">
-            <span>✓ Food &amp; cash help <span style="font-weight:400;font-size:13px;">(SNAP, cash assistance)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="benefit-chip selected" id="chip-2" onclick="toggleChip(2)" aria-pressed="true">
-            <span>✓ Eviction prevention <span style="font-weight:400;font-size:13px;">(legal help, rental assistance)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="benefit-chip selected" id="chip-3" onclick="toggleChip(3)" aria-pressed="true">
-            <span>✓ Medical debt relief <span style="font-weight:400;font-size:13px;">(NYC debt relief programs)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-        </div>
-
-        <p class="live-counter" id="live-counter" aria-live="polite">Checking for <span id="chip-count">4</span> areas</p>
-
-        <button class="btn btn-primary" onclick="navigate(4)">Check these for me →</button>
-      </div>
-    </section>
-
-    <!-- ── Screen 4: Deep-Dive ───────────────────────────────── -->
-    <section class="screen" id="screen-4" role="main" aria-label="More details">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-b">Layer B — Targeted intake</span>
-        </div>
-        <h2 class="screen-header">Just a few more details</h2>
-        <p class="screen-subtext">These are specific to the programs you selected.</p>
-        <p class="sensitive-note">We only ask for sensitive info if a program really needs it.</p>
-
         <div class="field-group">
-          <div class="field-wrap">
-            <label class="field-label" for="name-input">Full name</label>
-            <input class="field-input" type="text" id="name-input" placeholder="Your full name" autocomplete="name" />
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="dob-input">Date of birth</label>
-            <input class="field-input" type="date" id="dob-input" autocomplete="bday" />
-            <span class="field-sub-note">Required for Medicaid eligibility only</span>
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="phone-input">Phone number (optional)</label>
-            <input class="field-input" type="tel" id="phone-input" placeholder="e.g. (212) 555-0100" autocomplete="tel" oninput="checkPhone()" />
-            <span class="field-success" id="phone-success">✓ We'll text you a link if you need to come back.</span>
-          </div>
+          <label class="field-label">How much do you owe?</label>
+          <div class="input-affix"><span class="affix">$</span><input class="field-input has-affix" inputmode="numeric" placeholder="e.g. 6,000" /></div>
         </div>
 
-        <div class="privacy-note" role="note">🔒 Your info is kept private and secure. We never share it.</div>
-
-        <button class="btn btn-primary mt-3" onclick="navigate(5)">See my full results →</button>
+        <div class="app-section-title">Documents</div>
+        <button class="link-card" id="myfile-card" onclick="toggleMyFile()">
+          <span class="link-card-ic" id="myfile-ic">MY<br>FILE</span>
+          <span class="link-card-body"><span class="link-card-name" id="myfile-name">Link MyFile</span><span class="link-card-sub" id="myfile-sub">Attach your ID and pay stub from your secure MyFile vault.</span></span>
+          <span class="link-card-cta" id="myfile-cta">Link</span>
+        </button>
       </div>
-    </section>
+      <div class="screen-footer">
+        <button class="btn-primary" onclick="submitApp('charity')">Submit application</button>
+      </div>
+    </div>
 
-    <!-- ── Screen 5: Rich Results ────────────────────────────── -->
-    <section class="screen" id="screen-5" role="main" aria-label="Your results">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A — A+B output</span>
+    <!-- Easy Apply: SNAP (the 90%-prefilled moment) -->
+    <div class="screen" id="screen-apply-snap">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Food assistance (SNAP)</h1>
         </div>
-        <h2 class="screen-header">Here's what we found for you</h2>
-
-        <div class="result-cards" role="list">
-          <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Health coverage</span>
-              <span class="match-badge strong">Strong match</span>
-            </div>
-            <p class="result-value">Est. value: $2,400/yr</p>
-            <p class="result-desc">A Health Corps worker will call you within 24 hours.</p>
-          </div>
-          <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Eviction help</span>
-              <span class="match-badge possible">Possible match</span>
-            </div>
-            <p class="result-desc">Tenant Support Unit will reach out to you.</p>
-          </div>
-          <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Food &amp; cash help</span>
-              <span class="match-badge strong">Strong match</span>
-            </div>
-            <p class="result-desc">Our HRA partner will follow up with next steps.</p>
-          </div>
-          <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Medical debt</span>
-              <span class="match-badge possible">Possible match</span>
-            </div>
-            <p class="result-desc">A partner screener will contact you soon.</p>
+        <div class="reused-banner"><i data-lucide="sparkles"></i> We reused your info — just 2 things left.</div>
+        <div class="field-group">
+          <span class="field-label">Have you applied for SNAP in NYC before?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="pick(this)">Yes</button>
+            <button class="chip" onclick="pick(this)">No</button>
+            <button class="chip" onclick="pick(this)">Not sure</button>
           </div>
         </div>
-
-        <div class="claim-box">
-          <p class="claim-box-title">Ready to connect with a benefits worker?</p>
-          <div class="claim-fields">
-            <div class="field-wrap">
-              <label class="field-label" for="s5-name">Full name</label>
-              <input class="field-input" type="text" id="s5-name" autocomplete="name" placeholder="Your full name" />
-            </div>
-            <div class="field-wrap">
-              <label class="field-label" for="s5-phone">Phone number</label>
-              <input class="field-input" type="tel" id="s5-phone" autocomplete="tel" placeholder="e.g. (212) 555-0100" />
-            </div>
-            <div class="field-wrap">
-              <label class="field-label" for="s5-email">Email address (optional)</label>
-              <input class="field-input" type="email" id="s5-email" autocomplete="email" placeholder="you@example.com" />
-            </div>
+        <div class="field-group">
+          <span class="field-label">Is anyone in your household a student?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="pick(this)">Yes</button>
+            <button class="chip" onclick="pick(this)">No</button>
           </div>
-        </div>
-
-        <div class="btn-stack">
-          <button class="btn btn-primary" onclick="navigate(6)">Connect me with a benefits worker</button>
-          <button class="btn btn-ghost" onclick="navigate(6)">Text me instead</button>
         </div>
       </div>
-    </section>
+      <div class="screen-footer">
+        <button class="btn-primary" onclick="submitApp('snap')">Submit application</button>
+      </div>
+    </div>
 
-    <!-- ── Screen 6: Confirmation ────────────────────────────── -->
-    <section class="screen" id="screen-6" role="main" aria-label="You're confirmed">
-      <div class="screen-body">
-        <!-- No layer badge on confirmation screen -->
-        <div class="confirm-wrap">
-          <div class="confirm-check-wrap" aria-hidden="true">
-            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Success checkmark">
-              <circle cx="40" cy="40" r="38" fill="#008703" />
-              <path d="M22 41L34 53L58 27" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h2 class="confirm-headline">You're in the system!</h2>
-          <p class="confirm-body">A Health + Affordability Corps worker will follow up in 24 hours. Watch for a text from our team.</p>
-          <span class="confirm-ref" aria-label="Reference number NYC-2026-00847">Reference #: NYC-2026-00847</span>
-          <button class="btn btn-success confirm-done-btn" onclick="resetApp()">Done</button>
+    <!-- Easy Apply: Medicaid (one-tap) -->
+    <div class="screen" id="screen-apply-medicaid">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Medicaid</h1>
+        </div>
+        <div class="reused-banner"><i data-lucide="sparkles"></i> Everything we need is already filled in.</div>
+        <div class="app-section-title">From your screener</div>
+        <div class="prefill-card">
+          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">Applicant</div><div class="pv">Jade Puio &middot; 10/27/1991</div></div></div>
+          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">Household &amp; income</div><div class="pv">3 people &middot; $1,501–$3,000/mo</div></div></div>
+          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">Current coverage</div><div class="pv">None</div></div></div>
+        </div>
+        <p class="subtext">Review looks good? Submit and a benefits worker will finish the enrollment with you.</p>
+      </div>
+      <div class="screen-footer">
+        <button class="btn-primary" onclick="submitApp('medicaid')">Submit application</button>
+      </div>
+    </div>
+
+    <!-- Done / tracker -->
+    <div class="screen" id="screen-done">
+      <div class="screen-inner">
+        <div class="confirm-icon"><svg viewBox="0 0 40 40"><polyline points="8 21 16 29 32 11"/></svg></div>
+        <div class="heading-block" style="text-align:center;align-items:center;">
+          <h1 id="done-title">Nice work, Jade.</h1>
+          <p class="subtext" id="done-sub">Here's where your applications stand. A benefits worker will follow up within 24 hours.</p>
+        </div>
+        <div id="track-list"></div>
+        <div class="save-note">
+          <i data-lucide="link"></i>
+          <span>Not done? Your secure link stays active. Come back to finish any application when you have what you need.</span>
         </div>
       </div>
-    </section>
+      <div class="screen-footer">
+        <button class="btn-primary" onclick="resetAll()">Back to start</button>
+      </div>
+    </div>
 
   </div><!-- /screens-wrapper -->
 </div><!-- /app -->
 
 <script>
-  /* ── State ─────────────────────────────────────────────────── */
-  var currentScreen = 0;
-  var selectedCards = [false, false, false, false];
-  var selectedChips = [true, true, true, true];
+  // ── Program model ───────────────────────────
+  var PROGRAMS = [
+    { key:'charity',  name:'Hospital charity care',  icon:'receipt',     status:'start', meta:'Add your bill · ~2 min', first:true },
+    { key:'snap',     name:'Food assistance (SNAP)', icon:'apple',       status:'quick', meta:'2 quick questions' },
+    { key:'medicaid', name:'Medicaid',               icon:'stethoscope', status:'quick', meta:'Ready to submit' }
+  ];
+  var done = {}; // key -> true
 
-  /* ── Progress config ───────────────────────────────────────── */
-  var progressMap = {
-    1: { step: 1, pct: 20 },
-    2: { step: 2, pct: 40 },
-    3: { step: 3, pct: 60 },
-    4: { step: 4, pct: 80 },
-    5: { step: 5, pct: 100 },
-  };
+  // ── Navigation framework ────────────────────
+  var navHistory = [];
+  function screenEl(key){ return document.getElementById('screen-' + key); }
+  function currentKey(){ var a=document.querySelector('.screen.active'); return a ? a.id.replace('screen-','') : null; }
 
-  /* ── Navigation ────────────────────────────────────────────── */
-  function navigate(toScreen) {
-    if (toScreen === currentScreen) return;
-    var direction = toScreen > currentScreen ? 'forward' : 'back';
+  var NO_BACK = { results:1, done:1 };
+  var SHOW_APPBAR = { apps:1, 'apply-charity':1, 'apply-snap':1, 'apply-medicaid':1 };
 
-    var fromEl = document.getElementById('screen-' + currentScreen);
-    var toEl   = document.getElementById('screen-' + toScreen);
-
-    // Setup incoming screen off-screen
-    toEl.classList.remove('exit-left', 'exit-right', 'active', 'no-transition');
-    toEl.classList.add('no-transition');
-    if (direction === 'forward') {
-      toEl.style.transform = 'translateX(100%)';
-    } else {
-      toEl.style.transform = 'translateX(-100%)';
-    }
-    toEl.offsetHeight; // force reflow
-
-    toEl.classList.remove('no-transition');
-
-    // Animate
-    requestAnimationFrame(function() {
-      fromEl.classList.remove('active');
-      if (direction === 'forward') {
-        fromEl.classList.add('exit-left');
-        fromEl.style.transform = '';
-      } else {
-        fromEl.classList.add('exit-right');
-        fromEl.style.transform = '';
-      }
-      toEl.style.transform = '';
-      toEl.classList.add('active');
-    });
-
-    currentScreen = toScreen;
-    updateChrome();
-
-    // Pre-fill Screen 5 from Screen 4
-    if (toScreen === 5) {
-      prefillResults();
-    }
+  function navigate(key){
+    var cur = document.querySelector('.screen.active');
+    var tgt = screenEl(key);
+    if(!tgt || cur===tgt) return;
+    if(cur) navHistory.push(cur.id.replace('screen-',''));
+    if(cur) cur.classList.remove('active');
+    tgt.classList.add('active');
+    onEnter(key);
+    tgt.scrollTop = 0;
+  }
+  function goBack(){
+    if(!navHistory.length) return;
+    var prev = navHistory.pop();
+    var cur = document.querySelector('.screen.active');
+    var tgt = screenEl(prev);
+    if(!tgt) return;
+    if(cur) cur.classList.remove('active');
+    tgt.classList.add('active');
+    onEnter(prev, true);
+    tgt.scrollTop = 0;
+  }
+  function onEnter(key, isBack){
+    document.getElementById('nav-chrome').classList.toggle('hidden', !!NO_BACK[key]);
+    document.getElementById('appbar').classList.toggle('hidden', !SHOW_APPBAR[key]);
+    if(key==='apps') renderDeck();
+    if(key==='apply-charity') resetMyFile();
+    if(key==='done') renderTracker();
+    if(SHOW_APPBAR[key]) updateAppbar();
+    if(window.lucide) lucide.createIcons();
   }
 
-  function updateChrome() {
-    var backBtn      = document.getElementById('back-btn');
-    var progressWrap = document.getElementById('progress-wrap');
-    var progressFill = document.getElementById('progress-fill');
-    var progressLabel = document.getElementById('progress-label-text');
-
-    // Back button
-    if (currentScreen === 0 || currentScreen === 6) {
-      backBtn.classList.add('hidden');
-    } else {
-      backBtn.classList.remove('hidden');
-    }
-
-    // Progress bar
-    if (currentScreen === 0 || currentScreen === 6) {
-      progressWrap.style.display = 'none';
-    } else {
-      progressWrap.style.display = 'block';
-      var prog = progressMap[currentScreen];
-      if (prog) {
-        progressFill.style.width = prog.pct + '%';
-        progressLabel.textContent = 'Step ' + prog.step + ' of 5';
-      }
-    }
+  // ── Appbar progress ─────────────────────────
+  function doneCount(){ return PROGRAMS.filter(function(p){ return done[p.key]; }).length; }
+  function updateAppbar(){
+    var n = doneCount();
+    document.getElementById('appbar-label').textContent = n + ' of ' + PROGRAMS.length + ' applications complete';
+    for(var i=1;i<=3;i++){ document.getElementById('ab-'+i).classList.toggle('done', i<=n); }
   }
 
-  /* ── Back button ───────────────────────────────────────────── */
-  document.getElementById('back-btn').addEventListener('click', function() {
-    if (currentScreen > 0) {
-      navigate(currentScreen - 1);
-    }
-  });
-
-  /* ── Screen 1: Situation card toggles ─────────────────────── */
-  function toggleCard(idx) {
-    selectedCards[idx] = !selectedCards[idx];
-    var card = document.getElementById('card-' + idx);
-    if (selectedCards[idx]) {
-      card.classList.add('selected');
-      card.setAttribute('aria-pressed', 'true');
-    } else {
-      card.classList.remove('selected');
-      card.setAttribute('aria-pressed', 'false');
-    }
-
-    var anySelected = selectedCards.some(function(v) { return v; });
-    var cta = document.getElementById('s1-cta');
-    cta.disabled = !anySelected;
-    cta.setAttribute('aria-disabled', anySelected ? 'false' : 'true');
-
-    // Show background working note on first tap
-    if (anySelected) {
-      document.getElementById('bg-working-note').classList.add('visible');
-    }
+  // ── Application deck ────────────────────────
+  function renderDeck(){
+    var deck = document.getElementById('deck');
+    deck.innerHTML = PROGRAMS.map(function(p){
+      var isDone = !!done[p.key];
+      var statusCls = isDone ? 'status-done' : (p.status==='start' ? 'status-start' : 'status-quick');
+      var statusTxt = isDone ? 'Submitted' : (p.status==='start' ? 'Start here' : 'Quick');
+      var meta = isDone ? 'Submitted · we’ll follow up' : p.meta;
+      var firstTag = (p.first && !isDone) ? '<span class="tag-first">Do this first</span>' : '';
+      return '<button class="app-card' + (isDone?' done':'') + '" onclick="openApp(\'' + p.key + '\')">' +
+        '<span class="app-card-ic"><i data-lucide="' + (isDone?'check':p.icon) + '"></i></span>' +
+        '<span class="app-card-body"><span class="app-card-name">' + p.name + firstTag + '</span>' +
+        '<span class="app-card-meta">' + meta + '</span></span>' +
+        '<span class="app-card-status ' + statusCls + '">' + statusTxt + '</span>' +
+      '</button>';
+    }).join('');
+    var n = doneCount();
+    var btn = document.getElementById('btn-finish');
+    btn.textContent = n === PROGRAMS.length ? 'See my status' : (n>0 ? 'Done for now' : 'Done for now');
+    if(window.lucide) lucide.createIcons();
+  }
+  function openApp(key){
+    if(done[key]){ navigate('done'); return; }
+    navigate('apply-' + key);
+  }
+  function submitApp(key){
+    done[key] = true;
+    navigate('apps');
   }
 
-  /* ── Screen 3: Chip toggles ────────────────────────────────── */
-  function toggleChip(idx) {
-    selectedChips[idx] = !selectedChips[idx];
-    var chip = document.getElementById('chip-' + idx);
-    if (selectedChips[idx]) {
-      chip.classList.add('selected');
-      chip.setAttribute('aria-pressed', 'true');
-    } else {
-      chip.classList.remove('selected');
-      chip.setAttribute('aria-pressed', 'false');
-    }
-    updateChipCounter();
+  // ── MyFile link ─────────────────────────────
+  var myfileLinked = false;
+  function resetMyFile(){ myfileLinked = false; paintMyFile(); }
+  function toggleMyFile(){ myfileLinked = !myfileLinked; paintMyFile(); }
+  function paintMyFile(){
+    var card=document.getElementById('myfile-card');
+    card.classList.toggle('linked', myfileLinked);
+    document.getElementById('myfile-name').textContent = myfileLinked ? 'MyFile linked' : 'Link MyFile';
+    document.getElementById('myfile-sub').textContent = myfileLinked ? 'Your ID and pay stub are attached.' : 'Attach your ID and pay stub from your secure MyFile vault.';
+    document.getElementById('myfile-cta').textContent = myfileLinked ? 'Linked' : 'Link';
+    var ic=document.getElementById('myfile-ic'); ic.innerHTML = myfileLinked ? '<i data-lucide="check"></i>' : 'MY<br>FILE';
+    if(window.lucide) lucide.createIcons();
   }
 
-  function updateChipCounter() {
-    var count = selectedChips.filter(function(v) { return v; }).length;
-    document.getElementById('chip-count').textContent = count;
+  // ── Tracker ─────────────────────────────────
+  function renderTracker(){
+    var n = doneCount();
+    document.getElementById('done-title').textContent = n===PROGRAMS.length ? 'All set, Jade.' : 'Nice work, Jade.';
+    document.getElementById('done-sub').textContent = n===PROGRAMS.length
+      ? 'You’ve submitted all 3 applications. A benefits worker will follow up within 24 hours.'
+      : 'Here’s where your applications stand. A benefits worker will follow up within 24 hours.';
+    document.getElementById('track-list').innerHTML = PROGRAMS.map(function(p){
+      var isDone = !!done[p.key];
+      return '<div class="track-row">' +
+        '<span class="track-ic ' + (isDone?'ok':'wait') + '"><i data-lucide="' + (isDone?'check':'clock')+'"></i></span>' +
+        '<span class="track-name">' + p.name + '</span>' +
+        '<span class="track-state">' + (isDone?'Submitted':'Not finished') + '</span>' +
+      '</div>';
+    }).join('');
+    if(window.lucide) lucide.createIcons();
   }
 
-  /* ── Screen 4: Phone inline success ───────────────────────── */
-  function checkPhone() {
-    var phone = document.getElementById('phone-input');
-    var digits = phone.value.replace(/\D/g, '');
-    var successEl = document.getElementById('phone-success');
-    if (digits.length >= 10) {
-      successEl.classList.add('visible');
-    } else {
-      successEl.classList.remove('visible');
-    }
+  // ── OTP ─────────────────────────────────────
+  function otpAdvance(el, i){
+    el.value = el.value.replace(/\D/g,'');
+    var inputs = document.querySelectorAll('#otp-row .otp-input');
+    if(el.value && i<5) inputs[i+1].focus();
+    var full = Array.prototype.every.call(inputs, function(x){ return x.value.length===1; });
+    document.getElementById('btn-verify').disabled = !full;
   }
 
-  /* ── Screen 5: Pre-fill from Screen 4 ─────────────────────── */
-  function prefillResults() {
-    var name  = document.getElementById('name-input').value;
-    var phone = document.getElementById('phone-input').value;
-    if (name)  document.getElementById('s5-name').value  = name;
-    if (phone) document.getElementById('s5-phone').value = phone;
+  // ── Misc ────────────────────────────────────
+  function pick(el){ el.parentElement.querySelectorAll('.chip').forEach(function(c){c.classList.remove('selected');}); el.classList.add('selected'); }
+  function resetAll(){
+    done = {}; navHistory = [];
+    document.querySelectorAll('#otp-row .otp-input').forEach(function(x){ x.value=''; });
+    document.getElementById('btn-verify').disabled = true;
+    document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('selected');});
+    var cur=document.querySelector('.screen.active'); if(cur) cur.classList.remove('active');
+    screenEl('results').classList.add('active');
+    onEnter('results');
   }
 
-  /* ── Screen 6: Reset ───────────────────────────────────────── */
-  function resetApp() {
-    // Reset state
-    selectedCards = [false, false, false, false];
-    selectedChips = [true, true, true, true];
-
-    // Reset cards
-    for (var i = 0; i < 4; i++) {
-      var c = document.getElementById('card-' + i);
-      c.classList.remove('selected');
-      c.setAttribute('aria-pressed', 'false');
-    }
-    document.getElementById('bg-working-note').classList.remove('visible');
-    document.getElementById('s1-cta').disabled = true;
-    document.getElementById('s1-cta').setAttribute('aria-disabled', 'true');
-
-    // Reset chips
-    for (var j = 0; j < 4; j++) {
-      var ch = document.getElementById('chip-' + j);
-      ch.classList.add('selected');
-      ch.setAttribute('aria-pressed', 'true');
-    }
-    document.getElementById('chip-count').textContent = '4';
-
-    // Reset fields
-    document.getElementById('zip-input').value      = '';
-    document.getElementById('household-input').value = '';
-    document.getElementById('income-select').value   = '';
-    document.getElementById('name-input').value      = '';
-    document.getElementById('dob-input').value       = '';
-    document.getElementById('phone-input').value     = '';
-    document.getElementById('phone-success').classList.remove('visible');
-    document.getElementById('s5-name').value         = '';
-    document.getElementById('s5-phone').value        = '';
-    document.getElementById('s5-email').value        = '';
-
-    // Navigate back to screen 0 (backward direction)
-    var fromEl = document.getElementById('screen-6');
-    var toEl   = document.getElementById('screen-0');
-
-    toEl.classList.remove('exit-left', 'exit-right', 'active', 'no-transition');
-    toEl.classList.add('no-transition');
-    toEl.style.transform = 'translateX(-100%)';
-    toEl.offsetHeight;
-    toEl.classList.remove('no-transition');
-
-    requestAnimationFrame(function() {
-      fromEl.classList.remove('active');
-      fromEl.classList.add('exit-right');
-      toEl.style.transform = '';
-      toEl.classList.add('active');
-    });
-
-    currentScreen = 0;
-    updateChrome();
-  }
-
-  /* ── Language buttons (UI only) ────────────────────────────── */
-  document.querySelectorAll('.lang-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.lang-btn').forEach(function(b) {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
-    });
-  });
-
-  /* ── Init ──────────────────────────────────────────────────── */
-  updateChrome();
+  document.addEventListener('DOMContentLoaded', function(){ if(window.lucide) lucide.createIcons(); onEnter('results'); });
 </script>
 </body>
 </html>
