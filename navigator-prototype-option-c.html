@@ -141,8 +141,8 @@
     .app-card.done .app-card-ic { background: var(--success-bg); color: var(--success-fg); }
     .app-card-ic svg { width: 22px; height: 22px; }
     .app-card-body { flex: 1; min-width: 0; }
-    .app-card-name { font-size: 16px; font-weight: 600; color: var(--color-black); }
-    .app-card-meta { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+    .app-card-name { display: block; font-size: 16px; font-weight: 600; color: var(--color-black); }
+    .app-card-meta { display: block; font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
     .app-card-status { flex-shrink: 0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; padding: 4px 9px; border-radius: 999px; }
     .status-start { background: var(--chip-bg); color: var(--color-secondary-base); }
     .status-quick { background: #FDF3E2; color: #9A5B08; }
@@ -317,41 +317,121 @@
       </div>
     </div>
 
-    <!-- Easy Apply: Hospital charity care (the deep one) -->
+    <!-- Easy Apply: Hospital charity care — SECTION OVERVIEW -->
     <div class="screen" id="screen-apply-charity">
       <div class="screen-inner">
         <div class="heading-block">
           <h1>Hospital charity care</h1>
-          <p class="subtext">Most of this is already filled in. You only need to add your bill.</p>
+          <p class="subtext" id="charity-progress">We pre-filled 3 of 7 sections from your screener. Finish the rest, then review.</p>
         </div>
+        <div class="deck" id="charity-sections"></div>
+      </div>
+      <div class="screen-footer">
+        <button class="btn-primary" id="btn-charity-review" onclick="navigate('sec-review')">Review &amp; submit</button>
+      </div>
+    </div>
 
-        <div class="app-section-title">From your screener</div>
+    <!-- Section: Patient information -->
+    <div class="screen" id="screen-sec-patient">
+      <div class="screen-inner">
+        <div class="heading-block"><h1>Patient information</h1><p class="subtext">Tell us about you, the patient the bill applies to.</p></div>
+        <div class="reused-banner"><i data-lucide="sparkles"></i> Name and date of birth came from your screener.</div>
+        <div class="field-group"><label class="field-label">First name</label><input class="field-input" value="Jade" /></div>
+        <div class="field-group"><label class="field-label">Last name</label><input class="field-input" value="Puio" /></div>
+        <div class="field-group"><label class="field-label">Date of birth</label><input class="field-input" value="10/27/1991" /></div>
+        <div class="field-group"><label class="field-label">Gender identity</label><select class="field-select"><option value="">Select</option><option>Female</option><option>Male</option><option>Non-binary</option><option>Prefer not to say</option></select></div>
+        <div class="field-group"><label class="field-label">Legal marital status</label><select class="field-select"><option value="">Select</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select></div>
+        <div class="field-group">
+          <span class="field-label">Is the patient currently unhoused or in a shelter?</span>
+          <div class="chip-row"><button class="chip" onclick="pick(this)">Yes</button><button class="chip" onclick="pick(this)">No</button></div>
+        </div>
+      </div>
+      <div class="screen-footer"><button class="btn-primary" onclick="completeSection('patient')">Save &amp; continue</button></div>
+    </div>
+
+    <!-- Section: Household members -->
+    <div class="screen" id="screen-sec-household">
+      <div class="screen-inner">
+        <div class="heading-block"><h1>Household members</h1><p class="subtext">Everyone who lives with you and shares income or expenses.</p></div>
+        <div class="reused-banner"><i data-lucide="sparkles"></i> Brought over from your screener.</div>
         <div class="prefill-card">
-          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">Patient</div><div class="pv">Jade Puio &middot; 10/27/1991</div></div></div>
-          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">Household</div><div class="pv">3 people</div></div></div>
-          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">Monthly income</div><div class="pv">$1,501–$3,000</div></div></div>
+          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">You</div><div class="pv">Jade Puio &middot; 33</div></div></div>
+          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">Spouse</div><div class="pv">34</div></div></div>
+          <div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span><div><div class="pl">Child</div><div class="pv">6</div></div></div>
         </div>
+        <button class="link-inline"><i data-lucide="plus"></i> Add a household member</button>
+      </div>
+      <div class="screen-footer"><button class="btn-primary" onclick="completeSection('household')">Looks right — continue</button></div>
+    </div>
 
-        <div class="app-section-title">Your hospital bill</div>
-        <div class="field-group">
-          <label class="field-label">Which hospital was the bill from?</label>
-          <select class="field-select"><option>NYC Health + Hospitals / Bellevue</option><option>NYC Health + Hospitals / Elmhurst</option><option>Other / not listed</option></select>
-        </div>
-        <div class="field-group">
-          <label class="field-label">How much do you owe?</label>
-          <div class="input-affix"><span class="affix">$</span><input class="field-input has-affix" inputmode="numeric" placeholder="e.g. 6,000" /></div>
-        </div>
+    <!-- Section: Income -->
+    <div class="screen" id="screen-sec-income">
+      <div class="screen-inner">
+        <div class="heading-block"><h1>Income</h1><p class="subtext">Household income before taxes. Estimates are okay.</p></div>
+        <div class="reused-banner"><i data-lucide="sparkles"></i> Your income range came from your screener.</div>
+        <div class="field-group"><label class="field-label">Monthly household income</label><div class="input-affix"><span class="affix">$</span><input class="field-input has-affix" inputmode="numeric" value="2,200" /></div></div>
+        <div class="field-group"><label class="field-label">Main source of income</label><select class="field-select"><option value="">Select</option><option>Employment / wages</option><option>Self-employment</option><option>Cash assistance</option><option>Disability / SSI</option><option>No income</option></select></div>
+      </div>
+      <div class="screen-footer"><button class="btn-primary" onclick="completeSection('income')">Save &amp; continue</button></div>
+    </div>
 
-        <div class="app-section-title">Documents</div>
+    <!-- Section: Hospital bill -->
+    <div class="screen" id="screen-sec-bill">
+      <div class="screen-inner">
+        <div class="heading-block"><h1>Hospital bill</h1><p class="subtext">The bill you'd like help with.</p></div>
+        <div class="field-group"><label class="field-label">Which hospital was the bill from?</label><select class="field-select"><option value="">Select a hospital</option><option>NYC Health + Hospitals / Bellevue</option><option>NYC Health + Hospitals / Elmhurst</option><option>Other / not listed</option></select></div>
+        <div class="field-group"><label class="field-label">Original bill date</label><div style="display:grid;grid-template-columns:1.4fr 1fr;gap:8px;"><select class="field-select"><option value="">Month</option><option>January</option><option>February</option><option>March</option></select><select class="field-select"><option value="">Year</option><option>2026</option><option>2025</option></select></div></div>
+        <div class="field-group"><label class="field-label">How much do you owe?</label><div class="input-affix"><span class="affix">$</span><input class="field-input has-affix" inputmode="numeric" placeholder="e.g. 6,000" /></div></div>
+      </div>
+      <div class="screen-footer"><button class="btn-primary" onclick="completeSection('bill')">Save &amp; continue</button></div>
+    </div>
+
+    <!-- Section: Monthly expenses (Dollar For table) -->
+    <div class="screen" id="screen-sec-expenses">
+      <div class="screen-inner">
+        <div class="heading-block"><h1>Monthly expenses</h1><p class="subtext">Estimates to the nearest $10 are okay. Leave anything that doesn't apply as $0.</p></div>
+        <div class="field-group"><label class="field-label">Rent or mortgage</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><select class="field-select"><option>Monthly</option><option>Weekly</option><option>Never</option></select><div class="input-affix"><span class="affix">$</span><input class="field-input has-affix" inputmode="numeric" placeholder="0" /></div></div></div>
+        <div class="field-group"><label class="field-label">Utilities</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><select class="field-select"><option>Never</option><option>Monthly</option></select><div class="input-affix"><span class="affix">$</span><input class="field-input has-affix" inputmode="numeric" placeholder="0" /></div></div></div>
+        <div class="field-group"><label class="field-label">Medical insurance payments</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><select class="field-select"><option>Never</option><option>Monthly</option></select><div class="input-affix"><span class="affix">$</span><input class="field-input has-affix" inputmode="numeric" placeholder="0" /></div></div></div>
+        <div class="field-group"><label class="field-label">Other medical expenses</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><select class="field-select"><option>Never</option><option>Monthly</option></select><div class="input-affix"><span class="affix">$</span><input class="field-input has-affix" inputmode="numeric" placeholder="0" /></div></div></div>
+        <div class="field-group"><label class="field-label">Loan payments</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><select class="field-select"><option>Never</option><option>Monthly</option></select><div class="input-affix"><span class="affix">$</span><input class="field-input has-affix" inputmode="numeric" placeholder="0" /></div></div></div>
+        <div class="field-group"><label class="field-label">Child support or alimony</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><select class="field-select"><option>Never</option><option>Monthly</option></select><div class="input-affix"><span class="affix">$</span><input class="field-input has-affix" inputmode="numeric" placeholder="0" /></div></div></div>
+      </div>
+      <div class="screen-footer"><button class="btn-primary" onclick="completeSection('expenses')">Save &amp; continue</button></div>
+    </div>
+
+    <!-- Section: Assets -->
+    <div class="screen" id="screen-sec-assets">
+      <div class="screen-inner">
+        <div class="heading-block"><h1>Assets</h1><p class="subtext">A rough total is fine.</p></div>
+        <div class="field-group"><label class="field-label">Money in checking &amp; savings</label><div class="input-affix"><span class="affix">$</span><input class="field-input has-affix" inputmode="numeric" placeholder="0" /></div></div>
+        <div class="field-group"><span class="field-label">Do you own a home or vehicle?</span><div class="chip-row"><button class="chip" onclick="pick(this)">Yes</button><button class="chip" onclick="pick(this)">No</button></div></div>
+      </div>
+      <div class="screen-footer"><button class="btn-primary" onclick="completeSection('assets')">Save &amp; continue</button></div>
+    </div>
+
+    <!-- Section: Documents -->
+    <div class="screen" id="screen-sec-documents">
+      <div class="screen-inner">
+        <div class="heading-block"><h1>Documents</h1><p class="subtext">We'll need proof of income and an ID. Link MyFile to attach them instantly.</p></div>
         <button class="link-card" id="myfile-card" onclick="toggleMyFile()">
           <span class="link-card-ic" id="myfile-ic">MY<br>FILE</span>
           <span class="link-card-body"><span class="link-card-name" id="myfile-name">Link MyFile</span><span class="link-card-sub" id="myfile-sub">Attach your ID and pay stub from your secure MyFile vault.</span></span>
           <span class="link-card-cta" id="myfile-cta">Link</span>
         </button>
+        <button class="link-inline"><i data-lucide="upload"></i> Or upload a photo instead</button>
       </div>
-      <div class="screen-footer">
-        <button class="btn-primary" onclick="submitApp('charity')">Submit application</button>
+      <div class="screen-footer"><button class="btn-primary" onclick="completeSection('documents')">Save &amp; continue</button></div>
+    </div>
+
+    <!-- Section: Review & submit -->
+    <div class="screen" id="screen-sec-review">
+      <div class="screen-inner">
+        <div class="heading-block"><h1>Review &amp; submit</h1><p class="subtext">Check everything over. A benefits worker reviews it before it's sent to the hospital.</p></div>
+        <div class="prefill-card" id="review-list"></div>
+        <p class="subtext" style="font-size:13px;">By submitting, you confirm the information is accurate to the best of your knowledge.</p>
       </div>
+      <div class="screen-footer"><button class="btn-primary" onclick="submitApp('charity')">Submit application</button></div>
     </div>
 
     <!-- Easy Apply: SNAP (the 90%-prefilled moment) -->
@@ -439,7 +519,7 @@
   function currentKey(){ var a=document.querySelector('.screen.active'); return a ? a.id.replace('screen-','') : null; }
 
   var NO_BACK = { results:1, done:1 };
-  var SHOW_APPBAR = { apps:1, 'apply-charity':1, 'apply-snap':1, 'apply-medicaid':1 };
+  var SHOW_APPBAR = { apps:1, 'apply-snap':1, 'apply-medicaid':1 };
 
   function navigate(key){
     var cur = document.querySelector('.screen.active');
@@ -466,7 +546,8 @@
     document.getElementById('nav-chrome').classList.toggle('hidden', !!NO_BACK[key]);
     document.getElementById('appbar').classList.toggle('hidden', !SHOW_APPBAR[key]);
     if(key==='apps') renderDeck();
-    if(key==='apply-charity') resetMyFile();
+    if(key==='apply-charity') renderCharity();
+    if(key==='sec-review') renderReview();
     if(key==='done') renderTracker();
     if(SHOW_APPBAR[key]) updateAppbar();
     if(window.lucide) lucide.createIcons();
@@ -503,7 +584,50 @@
   }
   function openApp(key){
     if(done[key]){ navigate('done'); return; }
+    if(key==='charity'){ secDone = {patient:true, household:true, income:true}; resetMyFile(); }
     navigate('apply-' + key);
+  }
+
+  // ── Charity: section-based application ───────
+  var CHARITY_SECTIONS = [
+    { key:'patient',   name:'Patient information', prefill:true },
+    { key:'household', name:'Household members',   prefill:true },
+    { key:'income',    name:'Income',              prefill:true },
+    { key:'bill',      name:'Hospital bill',       prefill:false },
+    { key:'expenses',  name:'Monthly expenses',    prefill:false },
+    { key:'assets',    name:'Assets',              prefill:false },
+    { key:'documents', name:'Documents',           prefill:false }
+  ];
+  var secDone = { patient:true, household:true, income:true };
+  function charityDoneCount(){ return CHARITY_SECTIONS.filter(function(s){ return secDone[s.key]; }).length; }
+  function renderCharity(){
+    var n = charityDoneCount(), total = CHARITY_SECTIONS.length;
+    document.getElementById('charity-progress').textContent =
+      'We pre-filled 3 of ' + total + ' sections from your screener. ' + n + ' of ' + total + ' ready.';
+    document.getElementById('charity-sections').innerHTML = CHARITY_SECTIONS.map(function(s){
+      var isDone = !!secDone[s.key];
+      var statusCls = isDone ? 'status-done' : 'status-start';
+      var statusTxt = isDone ? (s.prefill ? 'Reviewed' : 'Done') : 'Needs input';
+      var meta = isDone ? (s.prefill ? 'Pre-filled from your screener' : 'Completed') : 'Tap to fill in';
+      return '<button class="app-card' + (isDone?' done':'') + '" onclick="navigate(\'sec-' + s.key + '\')">' +
+        '<span class="app-card-ic"><i data-lucide="' + (isDone?'check':'circle')+'"></i></span>' +
+        '<span class="app-card-body"><span class="app-card-name">' + s.name + '</span>' +
+        '<span class="app-card-meta">' + meta + '</span></span>' +
+        '<span class="app-card-status ' + statusCls + '">' + statusTxt + '</span>' +
+      '</button>';
+    }).join('');
+    var btn = document.getElementById('btn-charity-review');
+    btn.disabled = n < total;
+    btn.textContent = n < total ? ('Finish ' + (total-n) + ' more to review') : 'Review & submit';
+    if(window.lucide) lucide.createIcons();
+  }
+  function completeSection(key){ secDone[key] = true; navigate('apply-charity'); }
+  function renderReview(){
+    document.getElementById('review-list').innerHTML = CHARITY_SECTIONS.map(function(s){
+      return '<div class="prefill-row"><span class="prefill-check"><i data-lucide="check"></i></span>' +
+        '<div><div class="pl">' + s.name + '</div><div class="pv">' + (s.prefill?'From your screener':'Completed') + '</div></div></div>';
+    }).join('');
+    if(window.lucide) lucide.createIcons();
   }
   function submitApp(key){
     done[key] = true;
