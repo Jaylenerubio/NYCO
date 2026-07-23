@@ -390,6 +390,40 @@
       background: #f0f4ff;
     }
 
+    .chip-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .chip-btn {
+      padding: 12px 16px;
+      background: var(--color-white);
+      border: 1.5px solid var(--color-gray-300);
+      border-radius: 6px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-gray-900);
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+
+    .chip-btn:hover {
+      border-color: var(--color-secondary-base);
+    }
+
+    .chip-btn.selected {
+      background: var(--color-secondary-base);
+      color: var(--color-white);
+      border-color: var(--color-secondary-base);
+    }
+
+    .chip-btn:focus-visible {
+      outline: 2px solid var(--focus-ring-color);
+      outline-offset: 2px;
+    }
+
     /* ── Buttons ──────────────────────────────────── */
     .btn {
       display: block;
@@ -888,12 +922,12 @@
     </section>
 
     <!-- ════════════════════════════════════════════
-         SCREEN 1B-2: Step 2 of 3 — Program areas
+         SCREEN 1B-2: Step 3 of 4 — Program areas
     ═════════════════════════════════════════════ -->
-    <section class="screen" id="screen-1b2" aria-label="Step 2: Program areas">
-      <div class="step-pill" aria-label="Step 2 of 3">Step 2 of 3</div>
-      <div class="progress-bar-wrap" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100" aria-label="66% complete">
-        <div class="progress-bar-fill" style="width: 66%;"></div>
+    <section class="screen" id="screen-1b2" aria-label="Step 3: Program areas">
+      <div class="step-pill" aria-label="Step 3 of 4">Step 3 of 4</div>
+      <div class="progress-bar-wrap" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" aria-label="75% complete">
+        <div class="progress-bar-fill" style="width: 75%;"></div>
       </div>
 
       <h1 class="screen-header">Here's what we'll check for you</h1>
@@ -954,6 +988,101 @@
       </div>
 
       <button class="btn btn-primary" type="button" id="btn-s1b2-next">Check these for me →</button>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 1C: Step 2 of 4 — Food & Expenses Screening
+    ═════════════════════════════════════════════ -->
+    <section class="screen" id="screen-1c" aria-label="Food and expenses screening">
+      <div class="step-pill" aria-label="Step 2 of 4">Step 2 of 4</div>
+      <div class="progress-bar-wrap" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="50% complete">
+        <div class="progress-bar-fill" style="width: 50%;"></div>
+      </div>
+
+      <h1 class="screen-header">Answer the food and expenses questions</h1>
+      <p class="screen-subtext">Give your best guess if you're not sure.</p>
+
+      <div class="field-group">
+        <fieldset class="field" style="border:none;padding:0;">
+          <legend style="font-size:14px;font-weight:600;color:var(--color-gray-900);margin-bottom:12px;">What was your total household income over the last 30 days?</legend>
+          <div class="chip-grid">
+            <button type="button" class="chip-btn" data-value="0-1500">$0–$1,500</button>
+            <button type="button" class="chip-btn" data-value="1501-3000">$1,501–$3,000</button>
+            <button type="button" class="chip-btn" data-value="3001-5000">$3,001–$5,000</button>
+            <button type="button" class="chip-btn" data-value="5000+">$5,000+</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="field" style="border:none;padding:0;">
+          <legend style="font-size:14px;font-weight:600;color:var(--color-gray-900);margin-bottom:12px;">Has anyone in your household ever applied for SNAP before in NYC?</legend>
+          <div class="radio-group" role="radiogroup">
+            <label class="radio-option">
+              <input type="radio" name="snap-before" value="yes" />
+              <span>Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="snap-before" value="no" />
+              <span>No</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="snap-before" value="not-sure" />
+              <span>Not sure</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field" style="border:none;padding:0;">
+          <legend style="font-size:14px;font-weight:600;color:var(--color-gray-900);margin-bottom:12px;">Does anyone in your household have Medicaid or Medicare?</legend>
+          <div class="radio-group" role="radiogroup">
+            <label class="radio-option">
+              <input type="radio" name="insurance-type" value="medicaid" />
+              <span>Medicaid only</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="insurance-type" value="medicare" />
+              <span>Medicare only</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="insurance-type" value="both" />
+              <span>Both Medicaid and Medicare</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="insurance-type" value="neither" />
+              <span>Neither</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field" style="border:none;padding:0;">
+          <legend style="font-size:14px;font-weight:600;color:var(--color-gray-900);margin-bottom:12px;">Are you or anyone in your household pregnant?</legend>
+          <div class="radio-group" role="radiogroup">
+            <label class="radio-option">
+              <input type="radio" name="pregnant" value="yes" />
+              <span>Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="pregnant" value="no" />
+              <span>No</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field" style="border:none;padding:0;">
+          <legend style="font-size:14px;font-weight:600;color:var(--color-gray-900);margin-bottom:12px;">Do you or anyone in your household have a disability?</legend>
+          <div class="radio-group" role="radiogroup">
+            <label class="radio-option">
+              <input type="radio" name="disability" value="yes" />
+              <span>Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="disability" value="no" />
+              <span>No</span>
+            </label>
+          </div>
+        </fieldset>
+      </div>
+
+      <button class="btn btn-primary" type="button" id="btn-s1c-next">Next →</button>
     </section>
 
     <!-- ════════════════════════════════════════════
@@ -1117,7 +1246,7 @@
     };
 
     // Screen order
-    const SCREEN_ORDER = ['screen-0', 'screen-1b', 'screen-1b2', 'screen-2', 'screen-3', 'screen-4', 'screen-5'];
+    const SCREEN_ORDER = ['screen-0', 'screen-1b', 'screen-1c', 'screen-1b2', 'screen-2', 'screen-3', 'screen-4', 'screen-5'];
 
     // Screens where back button is hidden
     const NO_BACK = new Set(['screen-0', 'screen-5']);
@@ -1273,10 +1402,24 @@
 
     document.getElementById('btn-s2-skip').addEventListener('click', goForward);
 
+    // ── Chip button toggle (for food screening questions) ──
+    document.querySelectorAll('.chip-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var group = btn.parentElement.closest('fieldset');
+        group.querySelectorAll('.chip-btn').forEach(function (b) {
+          b.classList.remove('selected');
+        });
+        btn.classList.add('selected');
+      });
+    });
+
     // ── Navigation buttons ────────────────────────
     document.getElementById('btn-s0-primary').addEventListener('click', goForward);
     document.getElementById('btn-s0-secondary').addEventListener('click', goForward);
     document.getElementById('btn-s1b-next').addEventListener('click', goForward);
+    if (document.getElementById('btn-s1c-next')) {
+      document.getElementById('btn-s1c-next').addEventListener('click', goForward);
+    }
     document.getElementById('btn-s1b2-next').addEventListener('click', goForward);
     document.getElementById('btn-s3-next').addEventListener('click', goForward);
     document.getElementById('btn-s4-connect').addEventListener('click', goForward);
