@@ -3,1300 +3,487 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NYC Health + Affordability Corps — Navigator Tool</title>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:wght@400&display=swap" rel="stylesheet" />
+  <title>NYC Health + Affordability Corps — Navigator (Universal Screening)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
     :root {
-      --color-primary-base:   #050560;
-      --color-primary-dark:   #030339;
-      --color-secondary-base: #284CCA;
-      --color-secondary-dark: #182D79;
-      --color-success-base:   #008703;
-      --color-error-base:     #EC131E;
-      --color-white:          #FFFFFF;
-      --color-gray-100:       #F5F5F5;
-      --color-gray-300:       #DDDDDD;
-      --color-gray-700:       #767676;
-      --color-gray-900:       #333333;
-      --color-black:          #191919;
-      --font-body:    'Public Sans', system-ui, sans-serif;
-      --font-display: 'Source Serif 4', Georgia, serif;
-      --space-1: 8px;
-      --space-2: 16px;
-      --space-3: 24px;
-      --space-4: 32px;
-      --space-5: 40px;
-      --space-6: 48px;
-      --focus-ring-color: var(--color-secondary-base);
-      --focus-ring-width: 3px;
+      --color-primary-base:    #050560;
+      --color-primary-dark:    #030339;
+      --color-secondary-base:  #284CCA;
+      --color-white:           #FFFFFF;
+      --color-neutral-100:     #F5F5F5;
+      --color-neutral-200:     #EEEEEE;
+      --color-neutral-300:     #DDDDDD;
+      --color-gray-500:        #AAAAAA;
+      --color-black:           #191919;
+      --text-secondary:        #6B6B7A;
+      --color-success-text:    #006333;
+      --bg-primary:            var(--color-white);
+      --bg-secondary:          var(--color-neutral-100);
+      --border-default:        var(--color-neutral-300);
+      --ease-out:              cubic-bezier(0.16, 1, 0.3, 1);
+      --font-display:          'Source Serif 4', Georgia, serif;
+      --font-body:             'Public Sans', system-ui, -apple-system, sans-serif;
+      --space-1: 8px; --space-2: 16px; --space-3: 24px; --space-4: 32px;
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+    body {
+      height: 100%; background: var(--bg-secondary); font-family: var(--font-body);
+      color: var(--color-black); font-size: 16px; line-height: 1.5;
+      display: flex; justify-content: center; -webkit-font-smoothing: antialiased;
     }
-
-    html, body {
-      height: 100%;
-      background: var(--color-gray-100);
-      font-family: var(--font-body);
-      color: var(--color-gray-900);
-      font-size: 16px;
-      line-height: 1.5;
-    }
-
-    /* ── Layout shell ─────────────────────────────── */
     #app {
-      max-width: 430px;
-      margin: 0 auto;
-      min-height: 100vh;
-      background: var(--color-white);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
+      width: 100%; max-width: 390px; height: 100%; background: var(--bg-primary);
+      box-shadow: 0 0 60px rgba(0,0,0,0.18); display: flex; flex-direction: column; overflow: hidden;
     }
-
-    /* ── NYC.gov top bar ──────────────────────────── */
-    .nyc-topbar {
-      background: var(--color-primary-dark);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-size: 12px;
-      padding: 6px var(--space-2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-1);
-      flex-shrink: 0;
-    }
-
-    .nyc-topbar__badge {
-      background: var(--color-success-base);
-      color: var(--color-white);
-      font-weight: 600;
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-
-    .nyc-topbar__langs {
-      display: flex;
-      gap: 10px;
-    }
-
-    .nyc-topbar__langs button {
-      background: none;
-      border: none;
-      color: var(--color-gray-300);
-      font-family: var(--font-body);
-      font-size: 11px;
-      cursor: pointer;
-      padding: 0;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
-    .nyc-topbar__langs button:hover {
-      color: var(--color-white);
-    }
-
-    .nyc-topbar__langs button:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 2px;
-    }
-
-    /* ── Nav chrome ───────────────────────────────── */
-    .nav-chrome {
-      background: var(--color-white);
-      border-bottom: 1px solid var(--color-gray-300);
-      padding: var(--space-2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-
-    .nav-chrome__brand {
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-    }
-
-    .nav-chrome__nyc-block {
-      background: var(--color-secondary-base);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-weight: 600;
-      font-size: 16px;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      letter-spacing: -0.5px;
-      flex-shrink: 0;
-    }
-
-    .nav-chrome__label {
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--color-primary-base);
-      line-height: 1.2;
-    }
-
-    .nav-chrome__label span {
-      display: block;
-      font-weight: 400;
-      color: var(--color-gray-700);
-      font-size: 11px;
-    }
-
-    .nav-chrome__hamburger {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .nav-chrome__hamburger span {
-      display: block;
-      width: 22px;
-      height: 2px;
-      background: var(--color-primary-base);
-      border-radius: 1px;
-    }
-
-    .nav-chrome__hamburger:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 2px;
-    }
-
-    /* ── Screen slider ────────────────────────────── */
-    .screens-wrapper {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
+    @media (max-width: 430px) { #app { box-shadow: none; } }
 
     .screen {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      padding: var(--space-3) var(--space-3) var(--space-5);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      transform: translateX(100%);
-      transition: transform 280ms ease-out;
-      will-change: transform;
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 280ms ease-out;
+      overflow: hidden; background: var(--bg-primary);
     }
+    .screen.active { transform: translateX(0); z-index: 2; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .screen.exit-left { transform: translateX(-100%); z-index: 1; }
 
-    .screen.active {
-      transform: translateX(0);
+    .supernav {
+      background: var(--bg-secondary); border-bottom: 1px solid var(--border-default);
+      padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
     }
+    .nyc-logo { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; gap: 8px; }
+    .nyc-logo:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; border-radius: 3px; }
+    .nyc-logo-icon { width: 32px; height: 32px; background: var(--color-primary-base); border-radius: 3px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 700; }
+    .nyc-logo-text { font-size: 12px; font-weight: 600; color: var(--color-primary-base); line-height: 1.2; }
 
-    .screen.exit-left {
-      transform: translateX(-100%);
+    .nav-chrome {
+      background: var(--bg-primary); border-bottom: 1px solid var(--border-default);
+      padding: 16px; display: flex; align-items: center; flex-shrink: 0;
     }
+    .nav-chrome.hidden { display: none; }
+    .back-btn {
+      background: none; border: none; cursor: pointer; color: var(--color-black);
+      font-family: var(--font-body); font-size: 16px; font-weight: 400;
+      display: flex; align-items: center; gap: 8px; padding: 0;
+    }
+    .back-btn:hover { color: var(--color-primary-base); }
+    .back-btn:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; border-radius: 3px; }
+    .back-btn svg { width: 24px; height: 24px; }
+    .home-link-btn {
+      background: none; border: none; cursor: pointer; color: var(--color-secondary-base);
+      font-family: var(--font-body); font-size: 14px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; margin-left: 8px;
+    }
+    .home-link-btn:hover { text-decoration: underline; }
+    .home-link-btn:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
 
-    /* ── Bottom nav bar (back button) ─────────────── */
-    .bottom-nav {
-      padding: var(--space-2) var(--space-3);
-      border-top: 1px solid var(--color-gray-300);
-      background: var(--color-white);
-      flex-shrink: 0;
-      min-height: 56px;
-      display: flex;
-      align-items: center;
-    }
+    .progress-wrap { padding: 24px 16px 16px; flex-shrink: 0; }
+    .progress-wrap.enter { animation: progEnter .45s ease both; }
+    @keyframes progEnter { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: translateY(0); } }
+    .progress-label { font-size: 12px; line-height: 1.6; text-transform: uppercase; color: var(--color-black); margin-bottom: 13px; }
+    .progress-track { display: flex; gap: 2px; }
+    .progress-seg { flex: 1; height: 8px; border-radius: 20px; background: var(--color-neutral-200); overflow: hidden; }
+    .progress-seg .seg-fill { display: block; height: 100%; width: 0; background: var(--color-secondary-base); border-radius: 20px; transition: width .45s cubic-bezier(.4,0,.2,1); }
+    .progress-seg.filled .seg-fill { width: 100%; }
 
-    .btn-back {
-      background: none;
-      border: none;
-      color: var(--color-secondary-base);
-      font-family: var(--font-body);
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 6px 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
+    .screens-wrapper { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+    .screen-inner { width: 100%; padding: 24px 16px; flex: 1; display: flex; flex-direction: column; gap: var(--space-3); overflow-y: auto; }
+    #screen-0 .screen-inner { padding-top: 32px; }
 
-    .btn-back:hover {
-      color: var(--color-secondary-dark);
-    }
-
-    .btn-back:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 2px;
-    }
-
-    /* ── Typography ───────────────────────────────── */
-    .screen-header {
-      font-family: var(--font-display);
-      font-size: 24px;
-      font-weight: 400;
-      color: var(--color-primary-base);
-      line-height: 1.2;
-      margin-bottom: var(--space-1);
-    }
-
-    .screen-subtext {
-      font-size: 15px;
-      color: var(--color-gray-700);
-      margin-bottom: var(--space-3);
-      line-height: 1.5;
-    }
-
-    /* ── Step indicator ───────────────────────────── */
-    .step-pill {
-      display: inline-block;
-      background: var(--color-gray-100);
-      color: var(--color-gray-700);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 999px;
-      margin-bottom: var(--space-1);
-      letter-spacing: 0.02em;
-    }
-
-    .progress-bar-wrap {
-      height: 4px;
-      background: var(--color-gray-300);
-      border-radius: 2px;
-      margin-bottom: var(--space-3);
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: var(--color-primary-base);
-      border-radius: 2px;
-      transition: width 300ms ease-out;
-    }
-
-    /* ── Form elements ────────────────────────────── */
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      margin-bottom: var(--space-4);
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .field label {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--color-gray-900);
-    }
-
-    .field input,
-    .field select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid var(--color-gray-300);
-      border-radius: 6px;
-      font-family: var(--font-body);
-      font-size: 15px;
-      color: var(--color-gray-900);
-      background: var(--color-white);
-      transition: border-color 150ms;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    .field select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23767676' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 36px;
-    }
-
-    .field input:focus,
-    .field select:focus {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 0;
-      border-color: var(--focus-ring-color);
-    }
-
-    .field input::placeholder {
-      color: var(--color-gray-700);
-    }
-
-    /* ── Radio group ──────────────────────────────── */
-    .radio-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .radio-option {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border: 1.5px solid var(--color-gray-300);
-      border-radius: 6px;
-      cursor: pointer;
-      transition: border-color 150ms, background 150ms;
-    }
-
-    .radio-option:hover {
-      border-color: var(--color-secondary-base);
-      background: #f0f4ff;
-    }
-
-    .radio-option input[type="radio"] {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--color-primary-base);
-      flex-shrink: 0;
-      cursor: pointer;
-    }
-
-    .radio-option input[type="radio"]:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-    }
-
-    .radio-option span {
-      font-size: 15px;
-      color: var(--color-gray-900);
-    }
-
-    .radio-option.selected {
-      border-color: var(--color-primary-base);
-      background: #f0f4ff;
-    }
-
-    /* ── Buttons ──────────────────────────────────── */
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 14px var(--space-3);
-      border-radius: 6px;
-      font-family: var(--font-body);
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: background 150ms, color 150ms, border-color 150ms;
-      text-align: center;
-    }
-
-    .btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-    }
+    h1 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 1.14; letter-spacing: -.5px; color: var(--color-black); }
+    .step-screen h1 { font-size: 28px; line-height: 1.3; letter-spacing: normal; }
+    h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.3; color: var(--color-black); }
+    .heading-block { display: flex; flex-direction: column; gap: var(--space-1); }
+    .screen-subtext { font-size: 16px; color: var(--text-secondary); line-height: 1.5; }
 
     .btn-primary {
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      border-color: var(--color-primary-base);
+      display: block; width: 100%; padding: 16px 24px;
+      background: var(--color-primary-base); color: var(--color-white);
+      border: 2px solid transparent; border-radius: 4px;
+      font-family: var(--font-body); font-size: 18px; font-weight: 600; line-height: 22px;
+      text-align: center; cursor: pointer; transition: background 150ms ease;
     }
+    .btn-primary:hover:not(:disabled) { background: var(--color-primary-dark); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
 
-    .btn-primary:hover {
-      background: var(--color-primary-dark);
-      border-color: var(--color-primary-dark);
+    .cards-grid { display: flex; flex-direction: column; gap: 8px; }
+    .situation-card {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 12px 16px; background: var(--color-white);
+      border: 2px solid var(--color-neutral-200); border-radius: 8px;
+      cursor: pointer; text-align: left; width: 100%;
+      transition: border-color 150ms ease, background 150ms ease;
     }
+    .situation-card:hover { border-color: var(--color-secondary-base); }
+    .situation-card.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+    .situation-card:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
+    .card-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--color-black); display: flex; align-items: center; justify-content: center; margin-top: 14px; }
+    .situation-card.selected .card-icon { color: var(--color-secondary-base); }
+    .card-icon svg { width: 24px; height: 24px; }
+    .card-body { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 12px 0; min-width: 0; }
+    .card-title { font-size: 16px; font-weight: 400; color: var(--color-black); line-height: 1.5; }
+    .card-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 
-    .btn-secondary {
-      background: var(--color-white);
-      color: var(--color-primary-base);
-      border-color: var(--color-primary-base);
+    .field-group { display: flex; flex-direction: column; gap: 8px; }
+    .field-label { font-size: 16px; font-weight: 400; color: var(--color-black); }
+    .field-input, .field-select {
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid var(--border-default); border-radius: 4px;
+      font-family: var(--font-body); font-size: 16px; color: var(--color-black);
+      background: var(--color-white); transition: border-color 150ms ease;
     }
+    .field-select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23191919' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px; cursor: pointer; }
+    .field-input:focus, .field-select:focus { outline: none; border-color: var(--color-secondary-base); box-shadow: 0 0 0 3px rgba(40,76,202,0.15); }
+    .field-input::placeholder { color: var(--color-gray-500); }
 
-    .btn-secondary:hover {
-      background: var(--color-gray-100);
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      flex: 1; min-width: 100px; padding: 12px 8px;
+      background: var(--color-white); border: 1px solid var(--color-neutral-300); border-radius: 8px;
+      font-family: var(--font-body); font-size: 16px; font-weight: 400; color: var(--color-black);
+      cursor: pointer; text-align: center;
+      transition: border-color 150ms ease, background 150ms ease;
     }
+    .chip:hover { border-color: var(--color-secondary-base); }
+    .chip.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
 
-    .btn-stack {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
+    .confirm-icon {
+      width: 80px; height: 80px; background: #DCEFD2;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto var(--space-3);
     }
+    .confirm-icon svg { width: 36px; height: 36px; stroke: #2F7D32; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 
-    .btn-note {
-      text-align: center;
-      font-size: 13px;
-      color: var(--color-gray-700);
-      margin-top: var(--space-1);
+    .screen-footer {
+      position: sticky; bottom: 0; background: var(--bg-primary);
+      padding: 16px 16px 24px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 8px;
+      opacity: 1; pointer-events: auto; transition: opacity 200ms var(--ease-out);
     }
+    .screen-footer.footer-hidden { opacity: 0; pointer-events: none; }
+    #screen-results .screen-inner, #screen-confirm .screen-inner { flex: 0 0 auto; }
+    #screen-confirm .screen-inner { justify-content: center; align-items: center; text-align: center; padding-top: 72px; }
+    .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
 
-    .link-btn {
-      background: none;
-      border: none;
-      color: var(--color-secondary-base);
-      font-family: var(--font-body);
-      font-size: 14px;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-      cursor: pointer;
-      padding: 0;
-      display: block;
-      text-align: center;
-      margin-top: var(--space-2);
-    }
-
-    .link-btn:hover {
-      color: var(--color-secondary-dark);
-    }
-
-    .link-btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 2px;
-    }
-
-    /* ── Chip cards (screen 1B-2) ─────────────────── */
-    .chip-counter {
-      font-size: 14px;
-      color: var(--color-gray-700);
-      margin-bottom: var(--space-2);
-      font-weight: 500;
-    }
-
-    .chip-counter strong {
-      color: var(--color-primary-base);
-    }
-
-    .chip-list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-4);
-    }
-
-    .chip-card {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px var(--space-2);
-      border: 2px solid var(--color-primary-base);
-      border-radius: 8px;
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      cursor: pointer;
-      transition: background 150ms, color 150ms, border-color 150ms;
-      width: 100%;
-      text-align: left;
-      font-family: var(--font-body);
-    }
-
-    .chip-card:hover {
-      opacity: 0.9;
-    }
-
-    .chip-card:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-    }
-
-    .chip-card.unselected {
-      background: var(--color-white);
-      color: var(--color-primary-base);
-      border-color: var(--color-primary-base);
-    }
-
-    .chip-card__check {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 2px solid var(--color-white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: background 150ms, border-color 150ms;
-    }
-
-    .chip-card.unselected .chip-card__check {
-      border-color: var(--color-primary-base);
-      background: var(--color-white);
-    }
-
-    .chip-card__check svg {
-      display: block;
-    }
-
-    .chip-card.unselected .chip-card__check svg {
-      opacity: 0;
-    }
-
-    .chip-card__text {
-      font-size: 15px;
-      font-weight: 600;
-      flex: 1;
-    }
-
-    .chip-card__sub {
-      font-size: 12px;
-      font-weight: 400;
-      opacity: 0.85;
-      display: block;
-      margin-top: 2px;
-    }
-
-    .chip-card.unselected .chip-card__sub {
-      opacity: 0.7;
-    }
-
-    /* ── Inline success ───────────────────────────── */
-    .inline-success {
-      display: none;
-      align-items: center;
-      gap: 8px;
-      background: #e8f5e9;
-      border: 1.5px solid var(--color-success-base);
-      border-radius: 6px;
-      padding: 10px 12px;
-      color: var(--color-success-base);
-      font-size: 14px;
-      font-weight: 500;
-      margin-top: var(--space-2);
-    }
-
-    .inline-success.visible {
-      display: flex;
-    }
-
-    /* ── Privacy note ─────────────────────────────── */
-    .privacy-note {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      margin-top: var(--space-2);
-      margin-bottom: var(--space-3);
-    }
-
-    /* ── Saved ZIP note ───────────────────────────── */
-    .saved-note {
-      font-size: 13px;
-      color: var(--color-success-base);
-      font-weight: 500;
-      margin-top: -var(--space-2);
-      margin-bottom: var(--space-3);
-    }
-
-    /* ── Result cards ─────────────────────────────── */
-    .results-subtitle {
-      font-size: 14px;
-      color: var(--color-gray-700);
-      margin-bottom: var(--space-3);
-    }
-
-    .result-cards {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-4);
-    }
-
+    .flex-spacer { flex: 1; }
+    .results-list { display: flex; flex-direction: column; gap: 16px; }
     .result-card {
-      border: 1.5px solid var(--color-gray-300);
-      border-radius: 8px;
-      padding: var(--space-2) var(--space-2);
+      display: flex; gap: 12px; padding: 16px;
+      border: 1px solid var(--color-neutral-300); border-radius: 8px;
+      background: var(--color-white);
     }
-
-    .result-card__header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-      gap: 8px;
-    }
-
-    .result-card__name {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--color-primary-base);
-    }
-
-    .badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 999px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .badge--strong {
-      background: var(--color-success-base);
-      color: var(--color-white);
-    }
-
-    .badge--possible {
-      background: #b45309;
-      color: var(--color-white);
-    }
-
-    .result-card__value {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      margin-bottom: 4px;
-    }
-
-    .result-card__next {
-      font-size: 14px;
-      color: var(--color-gray-900);
-    }
-
-    /* ── Claim section ────────────────────────────── */
-    .claim-section {
-      border-top: 1px solid var(--color-gray-300);
-      padding-top: var(--space-3);
-      margin-top: var(--space-1);
-    }
-
-    .claim-section h3 {
-      font-family: var(--font-display);
-      font-size: 18px;
-      color: var(--color-primary-base);
-      margin-bottom: var(--space-2);
-    }
-
-    /* ── Success screen ───────────────────────────── */
-    .success-screen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding-top: var(--space-5);
-      flex: 1;
-    }
-
-    .success-checkmark {
-      margin-bottom: var(--space-3);
-    }
-
-    .success-headline {
-      font-family: var(--font-display);
-      font-size: 28px;
-      color: var(--color-primary-base);
-      margin-bottom: var(--space-2);
-    }
-
-    .success-body {
-      font-size: 16px;
-      color: var(--color-gray-900);
-      margin-bottom: var(--space-2);
-      max-width: 320px;
-    }
-
-    .success-ref {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      margin-bottom: var(--space-5);
-    }
-
-    /* ── Landing screen ───────────────────────────── */
-    .landing-logo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-1);
-      margin-bottom: var(--space-4);
-      padding-top: var(--space-3);
-      text-align: center;
-    }
-
-    .landing-logo__nyc {
-      background: var(--color-secondary-base);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-weight: 600;
-      font-size: 24px;
-      width: 52px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 6px;
-      margin-bottom: 4px;
-    }
-
-    .landing-logo__wordmark {
-      font-family: var(--font-display);
-      font-size: 16px;
-      color: var(--color-primary-base);
-      line-height: 1.3;
-    }
-
-    .landing-headline {
-      font-family: var(--font-display);
-      font-size: 26px;
-      color: var(--color-primary-base);
-      line-height: 1.25;
-      margin-bottom: var(--space-2);
-      text-align: center;
-    }
-
-    .landing-body {
-      font-size: 16px;
-      color: var(--color-gray-900);
-      text-align: center;
-      margin-bottom: var(--space-4);
-      line-height: 1.55;
-    }
-
-    /* Scrollable content push */
-    .spacer {
-      flex: 1;
-    }
-
-    /* ── Responsive ───────────────────────────────── */
-    @media (min-width: 430px) {
-      #app {
-        box-shadow: 0 4px 32px rgba(0,0,0,0.12);
-        margin-top: 24px;
-        margin-bottom: 24px;
-        min-height: calc(100vh - 48px);
-        border-radius: 12px;
-      }
-    }
+    .result-icon { width: 40px; height: 40px; flex-shrink: 0; color: var(--color-secondary-base); display: flex; align-items: center; justify-content: center; }
+    .result-icon svg { width: 40px; height: 40px; }
+    .result-body { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .result-title { font-size: 16px; font-weight: 600; color: var(--color-black); }
+    .result-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
   </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ── NYC.gov top bar ─────────────────────────── -->
-  <div class="nyc-topbar" role="banner">
-    <span class="nyc-topbar__badge">100% Free · All New Yorkers</span>
-    <nav class="nyc-topbar__langs" aria-label="Language toggle">
-      <button type="button" aria-label="English" aria-pressed="true">EN</button>
-      <button type="button" aria-label="Español">ES</button>
-      <button type="button" aria-label="中文">中文</button>
-      <button type="button" aria-label="বাংলা">BN</button>
-      <button type="button" aria-label="Kreyòl ayisyen">HT</button>
-    </nav>
+  <div class="supernav" role="banner">
+    <a href="#" class="nyc-logo" aria-label="NYC Health and Affordability Corps home" onclick="resetAll();return false;">
+      <div class="nyc-logo-icon">NYC</div>
+      <span class="nyc-logo-text">Health +<br>Affordability</span>
+    </a>
   </div>
 
-  <!-- ── Nav chrome ─────────────────────────────── -->
-  <header class="nav-chrome">
-    <div class="nav-chrome__brand">
-      <div class="nav-chrome__nyc-block" aria-hidden="true">NYC</div>
-      <div class="nav-chrome__label">
-        NYC Health
-        <span>Health + Affordability Corps</span>
+  <div class="nav-chrome hidden" id="nav-chrome" role="navigation">
+    <button class="back-btn" id="back-btn" aria-label="Go back" onclick="goBack()">
+      <i data-lucide="arrow-left"></i> Back
+    </button>
+    <button class="home-link-btn" onclick="resetAll()" aria-label="Return to home">
+      <i data-lucide="home" style="width:14px;height:14px;"></i> Home
+    </button>
+  </div>
+
+  <div class="progress-wrap" id="progress-wrap" style="display:none">
+    <div class="progress-label" id="progress-label-text">Step 1/4</div>
+    <div class="progress-track">
+      <div class="progress-seg" id="seg-1"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-2"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-3"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-4"><span class="seg-fill"></span></div>
+    </div>
+  </div>
+
+  <div class="screens-wrapper">
+
+    <!-- Screen 0: Landing -->
+    <div class="screen active" id="screen-0">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Get your bills covered</h1>
+          <p class="screen-subtext">You're close to getting help with health coverage, food, rent, and more. Takes less than 2&nbsp;minutes.</p>
+        </div>
+        <div class="flex-spacer"></div>
+      </div>
+      <div class="screen-footer" id="footer-0">
+        <button class="btn-primary" onclick="navigate(1)">Let's see what you qualify for</button>
       </div>
     </div>
-    <button class="nav-chrome__hamburger" type="button" aria-label="Menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </header>
 
-  <!-- ── Screens wrapper ────────────────────────── -->
-  <main class="screens-wrapper" id="screens-wrapper">
-
-    <!-- ════════════════════════════════════════════
-         SCREEN 0: Landing
-    ═════════════════════════════════════════════ -->
-    <section class="screen active" id="screen-0" aria-label="Welcome">
-      <div class="landing-logo">
-        <div class="landing-logo__nyc" aria-hidden="true">NYC</div>
-        <div class="landing-logo__wordmark">Health + Affordability Corps</div>
-      </div>
-
-      <h1 class="landing-headline">A neighbor helped you start — let's keep going.</h1>
-      <p class="landing-body">You're close to getting help with health coverage, food, rent, and more. Takes less than 2 minutes.</p>
-
-      <div class="btn-stack">
-        <button class="btn btn-primary" type="button" id="btn-s0-primary">Find out what I qualify for</button>
-        <button class="btn btn-secondary" type="button" id="btn-s0-secondary">I know what I need</button>
-      </div>
-      <p class="btn-note">No account needed. 100% free.</p>
-    </section>
-
-    <!-- ════════════════════════════════════════════
-         SCREEN 1B: Step 1 of 3 — The basics
-    ═════════════════════════════════════════════ -->
-    <section class="screen" id="screen-1b" aria-label="Step 1: The basics">
-      <div class="step-pill" aria-label="Step 1 of 3">Step 1 of 3</div>
-      <div class="progress-bar-wrap" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" aria-label="33% complete">
-        <div class="progress-bar-fill" style="width: 33%;"></div>
-      </div>
-
-      <h1 class="screen-header">Let's start with a few basics</h1>
-      <p class="screen-subtext">Your answers help us find programs you qualify for.</p>
-
-      <div class="field-group">
-        <div class="field">
-          <label for="zip">NYC zip code</label>
-          <input type="text" id="zip" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="e.g. 10036" autocomplete="postal-code" />
+    <!-- Screen 1: Select situations -->
+    <div class="screen step-screen" id="screen-1">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>What's going on?</h1>
+          <p class="screen-subtext">Select all that apply.</p>
         </div>
-
-        <div class="field">
-          <label for="household-size">How many people live with you?</label>
-          <input type="number" id="household-size" min="1" max="20" placeholder="e.g. 3" />
+        <div class="cards-grid">
+          <button class="situation-card" id="card-health" onclick="toggleSituation('health')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="stethoscope"></i></span>
+            <span class="card-body">
+              <span class="card-title">I need health coverage</span>
+              <span class="card-sub">No insurance or need to renew</span>
+            </span>
+          </button>
+          <button class="situation-card" id="card-housing" onclick="toggleSituation('housing')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="home"></i></span>
+            <span class="card-body">
+              <span class="card-title">I might lose my home</span>
+              <span class="card-sub">Behind on rent or facing eviction</span>
+            </span>
+          </button>
+          <button class="situation-card" id="card-food" onclick="toggleSituation('food')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="apple"></i></span>
+            <span class="card-body">
+              <span class="card-title">I need help with food</span>
+              <span class="card-sub">SNAP or cash assistance</span>
+            </span>
+          </button>
+          <button class="situation-card" id="card-medical" onclick="toggleSituation('medical')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="cross"></i></span>
+            <span class="card-body">
+              <span class="card-title">I have medical bills I can't pay</span>
+              <span class="card-sub">Hospital debt or old bills</span>
+            </span>
+          </button>
         </div>
+        <div class="scroll-sentinel" id="sentinel-1"></div>
+      </div>
+      <div class="screen-footer" id="footer-1">
+        <button class="btn-primary" id="btn-s1" onclick="navigate(2)" disabled>Continue →</button>
+      </div>
+    </div>
 
-        <div class="field">
-          <label for="income">About how much does your household make each month?</label>
-          <select id="income">
-            <option value="" disabled selected>Select an option</option>
-            <option value="under-1500">Under $1,500</option>
-            <option value="1500-3000">$1,500–$3,000</option>
-            <option value="3000-5000">$3,000–$5,000</option>
-            <option value="over-5000">Over $5,000</option>
-            <option value="prefer-not">I'd rather not say</option>
-          </select>
+    <!-- Screen 2: Personal info -->
+    <div class="screen step-screen" id="screen-2">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Tell us about yourself</h1>
+          <p class="screen-subtext">This helps us match you to the right programs.</p>
         </div>
-
-        <fieldset class="field" style="border:none;padding:0;">
-          <legend style="font-size:14px;font-weight:600;color:var(--color-gray-900);margin-bottom:6px;">Do you have health insurance right now?</legend>
-          <div class="radio-group" role="radiogroup">
-            <label class="radio-option">
-              <input type="radio" name="insurance" value="yes" />
-              <span>Yes</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="insurance" value="no" />
-              <span>No</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="insurance" value="not-sure" />
-              <span>Not sure</span>
-            </label>
-          </div>
-        </fieldset>
-      </div>
-
-      <button class="btn btn-primary" type="button" id="btn-s1b-next">Next →</button>
-    </section>
-
-    <!-- ════════════════════════════════════════════
-         SCREEN 1B-2: Step 2 of 3 — Program areas
-    ═════════════════════════════════════════════ -->
-    <section class="screen" id="screen-1b2" aria-label="Step 2: Program areas">
-      <div class="step-pill" aria-label="Step 2 of 3">Step 2 of 3</div>
-      <div class="progress-bar-wrap" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100" aria-label="66% complete">
-        <div class="progress-bar-fill" style="width: 66%;"></div>
-      </div>
-
-      <h1 class="screen-header">Here's what we'll check for you</h1>
-      <p class="screen-subtext">Based on your answers, you may qualify for all of these.</p>
-
-      <p class="chip-counter">Checking for <strong id="chip-count">4</strong> areas</p>
-
-      <div class="chip-list" role="group" aria-label="Program areas to check">
-
-        <button class="chip-card" type="button" data-chip="health" aria-pressed="true">
-          <div class="chip-card__check" aria-hidden="true">
-            <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-              <path d="M1 5l3.5 3.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <span class="chip-card__text">
-            Health coverage
-            <span class="chip-card__sub">Medicaid, Child Health Plus</span>
-          </span>
-        </button>
-
-        <button class="chip-card" type="button" data-chip="food" aria-pressed="true">
-          <div class="chip-card__check" aria-hidden="true">
-            <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-              <path d="M1 5l3.5 3.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <span class="chip-card__text">
-            Food &amp; cash help
-            <span class="chip-card__sub">SNAP, cash assistance</span>
-          </span>
-        </button>
-
-        <button class="chip-card" type="button" data-chip="eviction" aria-pressed="true">
-          <div class="chip-card__check" aria-hidden="true">
-            <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-              <path d="M1 5l3.5 3.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <span class="chip-card__text">
-            Eviction prevention
-            <span class="chip-card__sub">Legal help, rental assistance</span>
-          </span>
-        </button>
-
-        <button class="chip-card" type="button" data-chip="debt" aria-pressed="true">
-          <div class="chip-card__check" aria-hidden="true">
-            <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-              <path d="M1 5l3.5 3.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <span class="chip-card__text">
-            Medical debt relief
-            <span class="chip-card__sub">NYC debt relief programs</span>
-          </span>
-        </button>
-
-      </div>
-
-      <button class="btn btn-primary" type="button" id="btn-s1b2-next">Check these for me →</button>
-    </section>
-
-    <!-- ════════════════════════════════════════════
-         SCREEN 2: Save your progress
-    ═════════════════════════════════════════════ -->
-    <section class="screen" id="screen-2" aria-label="Save your progress">
-      <h1 class="screen-header">Save your spot</h1>
-      <p class="screen-subtext">We'll text you if you need to come back. No spam.</p>
-
-      <div class="field" style="margin-bottom: var(--space-3);">
-        <label for="phone">Your phone number</label>
-        <input type="tel" id="phone" placeholder="e.g. (212) 555-0100" autocomplete="tel" />
-      </div>
-
-      <div class="inline-success" id="phone-success" role="status" aria-live="polite">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-          <circle cx="9" cy="9" r="8" fill="#008703"/>
-          <path d="M5 9l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Got it! You can pick up right where you left off.
-      </div>
-
-      <div style="margin-top: var(--space-3);">
-        <button class="btn btn-primary" type="button" id="btn-s2-save">Save and keep going</button>
-        <button class="link-btn" type="button" id="btn-s2-skip">Skip for now</button>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════
-         SCREEN 3: About you
-    ═════════════════════════════════════════════ -->
-    <section class="screen" id="screen-3" aria-label="About you">
-      <h1 class="screen-header">A little about you</h1>
-      <p class="screen-subtext">This helps us match you to real programs. We never share your info.</p>
-
-      <div class="field-group">
-        <div class="field">
-          <label for="fullname">Full name</label>
-          <input type="text" id="fullname" placeholder="Your full name" autocomplete="name" />
-        </div>
-
-        <div class="field">
-          <label for="dob">Date of birth</label>
-          <input type="date" id="dob" autocomplete="bday" />
-        </div>
-
-        <p class="saved-note" id="zip-saved-note" style="color: var(--color-success-base); font-size:13px; font-weight:500;">
-          ✓ ZIP code already saved — thank you!
-        </p>
-      </div>
-
-      <p class="privacy-note">🔒 Your info is kept private and secure.</p>
-
-      <button class="btn btn-primary" type="button" id="btn-s3-next">See my results →</button>
-    </section>
-
-    <!-- ════════════════════════════════════════════
-         SCREEN 4: What we found
-    ═════════════════════════════════════════════ -->
-    <section class="screen" id="screen-4" aria-label="Your results">
-      <h1 class="screen-header">Here's what we found for you</h1>
-      <p class="results-subtitle" id="results-zip-label">Results for your area (ZIP: 10036)</p>
-
-      <div class="result-cards" role="list">
-
-        <div class="result-card" role="listitem">
-          <div class="result-card__header">
-            <span class="result-card__name">Health coverage</span>
-            <span class="badge badge--strong">Strong match</span>
-          </div>
-          <p class="result-card__value">Est. value: $2,400/yr</p>
-          <p class="result-card__next">A Health Corps worker will call you within 24 hours.</p>
-        </div>
-
-        <div class="result-card" role="listitem">
-          <div class="result-card__header">
-            <span class="result-card__name">Eviction help</span>
-            <span class="badge badge--possible">Possible match</span>
-          </div>
-          <p class="result-card__next">Tenant Support Unit will reach out to you.</p>
-        </div>
-
-        <div class="result-card" role="listitem">
-          <div class="result-card__header">
-            <span class="result-card__name">Food &amp; cash help</span>
-            <span class="badge badge--strong">Strong match</span>
-          </div>
-          <p class="result-card__next">Our HRA partner will follow up with next steps.</p>
-        </div>
-
-        <div class="result-card" role="listitem">
-          <div class="result-card__header">
-            <span class="result-card__name">Medical debt</span>
-            <span class="badge badge--possible">Possible match</span>
-          </div>
-          <p class="result-card__next">A partner screener will contact you soon.</p>
-        </div>
-
-      </div>
-
-      <div class="claim-section">
-        <h3>Ready to claim these benefits?</h3>
-
         <div class="field-group">
-          <div class="field">
-            <label for="claim-name">Your name</label>
-            <input type="text" id="claim-name" placeholder="Your full name" autocomplete="name" />
-          </div>
-          <div class="field">
-            <label for="claim-phone">Your phone</label>
-            <input type="tel" id="claim-phone" placeholder="e.g. (212) 555-0100" autocomplete="tel" />
-          </div>
-          <div class="field">
-            <label for="claim-email">Email <span style="font-weight:400;color:var(--color-gray-700);">(optional)</span></label>
-            <input type="email" id="claim-email" placeholder="Email (optional)" autocomplete="email" />
+          <label class="field-label" for="fname">First name</label>
+          <input class="field-input" type="text" id="fname" placeholder="First name" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="lname">Last name</label>
+          <input class="field-input" type="text" id="lname" placeholder="Last name" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="phone">Phone number</label>
+          <input class="field-input" type="tel" id="phone" placeholder="(555) 555-5555" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="email">Email</label>
+          <input class="field-input" type="email" id="email" placeholder="your@email.com" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="zip">ZIP code</label>
+          <input class="field-input" type="text" id="zip" placeholder="10001" maxlength="5" />
+        </div>
+        <div class="scroll-sentinel" id="sentinel-2"></div>
+      </div>
+      <div class="screen-footer" id="footer-2">
+        <button class="btn-primary" onclick="navigate(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Screen 3: Contact preference -->
+    <div class="screen step-screen" id="screen-3">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>How should we reach you?</h1>
+          <p class="screen-subtext">We'll contact you within 24 hours with program information.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Preferred contact method</label>
+          <div class="chip-row">
+            <button class="chip" id="contact-phone" onclick="selectContact('phone')">Phone</button>
+            <button class="chip" id="contact-email" onclick="selectContact('email')">Email</button>
+            <button class="chip" id="contact-text" onclick="selectContact('text')">Text</button>
           </div>
         </div>
-
-        <button class="btn btn-primary" type="button" id="btn-s4-connect">Connect me with a benefits worker</button>
+        <div class="scroll-sentinel" id="sentinel-3"></div>
       </div>
-    </section>
+      <div class="screen-footer" id="footer-3">
+        <button class="btn-primary" onclick="showResults()">See what you qualify for →</button>
+      </div>
+    </div>
 
-    <!-- ════════════════════════════════════════════
-         SCREEN 5: You're in!
-    ═════════════════════════════════════════════ -->
-    <section class="screen" id="screen-5" aria-label="Confirmation">
-      <div class="success-screen">
-        <div class="success-checkmark" aria-hidden="true">
-          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="40" cy="40" r="38" fill="#008703" stroke="#008703" stroke-width="2"/>
-            <path d="M22 40l12 12 24-24" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+    <!-- Screen 4: Results -->
+    <div class="screen step-screen" id="screen-4">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Here's what we found for you</h1>
+          <p class="screen-subtext">Based on your situation, you may qualify for these programs.</p>
         </div>
-        <h1 class="success-headline">You're in the system!</h1>
-        <p class="success-body">A Health + Affordability Corps worker will follow up in 24 hours. Watch for a text from our team.</p>
-        <p class="success-ref">Reference #: NYC-2026-00847</p>
-        <button class="btn btn-primary" type="button" id="btn-s5-done" style="width:100%;">Done</button>
+        <div class="results-list" id="results-list"></div>
+        <div class="scroll-sentinel" id="sentinel-4"></div>
       </div>
-    </section>
+      <div class="screen-footer" id="footer-4">
+        <button class="btn-primary" onclick="submitApplication()">Apply to these programs →</button>
+      </div>
+    </div>
 
-  </main><!-- /screens-wrapper -->
+    <!-- Final confirmation -->
+    <div class="screen" id="screen-confirm">
+      <div class="screen-inner" style="justify-content: center; align-items: center; text-align: center; padding-top: 72px;">
+        <div>
+          <div class="confirm-icon">
+            <svg viewBox="0 0 40 40"><polyline points="8 21 16 29 32 11"/></svg>
+          </div>
+          <h2>We've got you</h2>
+          <p style="margin-top:24px;color:var(--text-secondary);font-size:16px;line-height:1.6;">
+            Your information has been sent to our partners. They'll review your answers and reach out within 24 hours to connect you with the programs you qualify for.
+          </p>
+        </div>
+      </div>
+      <div class="screen-footer" id="footer-confirm">
+        <button class="btn-primary" onclick="resetAll()">Start over</button>
+      </div>
+    </div>
 
-  <!-- ── Bottom nav (back button) ──────────────── -->
-  <div class="bottom-nav" id="bottom-nav" aria-hidden="true">
-    <button class="btn-back" type="button" id="btn-back">← Back</button>
   </div>
 
-</div><!-- /#app -->
+</div>
 
 <script>
-  (function () {
-    'use strict';
+  var currentScreen = 0;
+  var selectedSituations = new Set();
+  var selectedContact = '';
+  var screenStack = [];
 
-    // ── State ────────────────────────────────────
-    const state = {
-      currentScreen: 0,
-      phone: '',
-      name: '',
-      zip: '',
-      phoneSaved: false,
-    };
+  var PROGRAMS = {
+    health: { name: 'Healthcare', icon: 'stethoscope', desc: 'Get health coverage even without insurance' },
+    housing: { name: 'Eviction Prevention', icon: 'home', desc: 'Get help with rent and eviction support' },
+    food: { name: 'Food Assistance', icon: 'apple', desc: 'Apply for SNAP and food support' },
+    medical: { name: 'Medical Debt Relief', icon: 'cross', desc: 'Get support with hospital bills' }
+  };
 
-    // Screen order
-    const SCREEN_ORDER = ['screen-0', 'screen-1b', 'screen-1b2', 'screen-2', 'screen-3', 'screen-4', 'screen-5'];
+  function navigate(screen) {
+    var current = document.querySelector('.screen.active');
+    var target = document.getElementById('screen-' + screen);
+    if (!target || current === target) return;
 
-    // Screens where back button is hidden
-    const NO_BACK = new Set(['screen-0', 'screen-5']);
-
-    // ── Helpers ──────────────────────────────────
-    function getScreen(id) {
-      return document.getElementById(id);
-    }
-
-    function updateBottomNav() {
-      const nav = document.getElementById('bottom-nav');
-      const current = SCREEN_ORDER[state.currentScreen];
-      if (NO_BACK.has(current)) {
-        nav.setAttribute('aria-hidden', 'true');
-        nav.style.display = 'none';
-      } else {
-        nav.removeAttribute('aria-hidden');
-        nav.style.display = 'flex';
-      }
-    }
-
-    function navigateTo(toIndex, direction) {
-      // direction: 'forward' | 'back'
-      const fromIndex = state.currentScreen;
-      const fromId = SCREEN_ORDER[fromIndex];
-      const toId = SCREEN_ORDER[toIndex];
-
-      const fromEl = getScreen(fromId);
-      const toEl = getScreen(toId);
-
-      if (!fromEl || !toEl) return;
-
-      // Prepare destination off-screen
-      if (direction === 'forward') {
-        toEl.style.transform = 'translateX(100%)';
-      } else {
-        toEl.style.transform = 'translateX(-100%)';
-      }
-      toEl.classList.add('active');
-
-      // Force reflow
-      toEl.getBoundingClientRect(); // eslint-disable-line
-
-      // Animate both
-      fromEl.style.transition = 'transform 280ms ease-out';
-      toEl.style.transition = 'transform 280ms ease-out';
-
-      if (direction === 'forward') {
-        fromEl.style.transform = 'translateX(-100%)';
-      } else {
-        fromEl.style.transform = 'translateX(100%)';
-      }
-      toEl.style.transform = 'translateX(0)';
-
-      // After transition, clean up
-      setTimeout(function () {
-        fromEl.classList.remove('active');
-        fromEl.style.transform = '';
-        fromEl.style.transition = '';
-        toEl.style.transition = '';
-      }, 290);
-
-      state.currentScreen = toIndex;
-      updateBottomNav();
-      onScreenEnter(toId);
-
-      // Focus management
-      toEl.focus ? toEl.setAttribute('tabindex', '-1') : null;
-      setTimeout(function () {
-        const focusTarget = toEl.querySelector('h1, button, input, select');
-        if (focusTarget) focusTarget.focus({ preventScroll: true });
-      }, 300);
-    }
-
-    function goForward() {
-      if (state.currentScreen < SCREEN_ORDER.length - 1) {
-        navigateTo(state.currentScreen + 1, 'forward');
-      }
-    }
-
-    function goBack() {
-      if (state.currentScreen > 0) {
-        navigateTo(state.currentScreen - 1, 'back');
-      }
-    }
-
-    function onScreenEnter(screenId) {
-      // Pre-fill data from earlier screens
-      if (screenId === 'screen-4') {
-        const zipVal = document.getElementById('zip').value.trim() || '10036';
-        document.getElementById('results-zip-label').textContent =
-          'Results for your area (ZIP: ' + zipVal + ')';
-
-        const nameVal = document.getElementById('fullname').value.trim();
-        const phoneVal = document.getElementById('phone').value.trim();
-        if (nameVal) document.getElementById('claim-name').value = nameVal;
-        if (phoneVal) document.getElementById('claim-phone').value = phoneVal;
-      }
-    }
-
-    // ── Chip toggle logic ─────────────────────────
-    var chipSelected = { health: true, food: true, eviction: true, debt: true };
-
-    function updateChipCounter() {
-      var count = Object.values(chipSelected).filter(Boolean).length;
-      document.getElementById('chip-count').textContent = count;
-    }
-
-    document.querySelectorAll('.chip-card').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var key = btn.dataset.chip;
-        chipSelected[key] = !chipSelected[key];
-        var selected = chipSelected[key];
-
-        btn.setAttribute('aria-pressed', String(selected));
-        if (selected) {
-          btn.classList.remove('unselected');
-        } else {
-          btn.classList.add('unselected');
-        }
-
-        // Toggle check SVG opacity via parent class (handled in CSS)
-        updateChipCounter();
+    if (current) {
+      screenStack.push(currentScreen);
+      current.classList.remove('active');
+      current.classList.add('exit-left');
+      current.addEventListener('transitionend', function handler() {
+        current.classList.remove('exit-left');
+        current.removeEventListener('transitionend', handler);
       });
+    }
+
+    target.classList.add('active');
+    currentScreen = screen;
+    updateChrome(screen);
+    updateProgress(screen);
+    target.scrollTop = 0;
+  }
+
+  function goBack() {
+    if (screenStack.length === 0) return;
+    var prevScreen = screenStack.pop();
+    navigate(prevScreen);
+  }
+
+  function updateChrome(screen) {
+    var chrome = document.getElementById('nav-chrome');
+    var progWrap = document.getElementById('progress-wrap');
+    var hideBack = (screen === 0 || screen === 'confirm');
+    chrome.classList.toggle('hidden', hideBack);
+    progWrap.style.display = (screen > 0 && screen < 4) ? '' : 'none';
+  }
+
+  function updateProgress(screen) {
+    if (screen <= 0 || screen >= 4) return;
+    for (var i = 1; i <= 4; i++) {
+      var seg = document.getElementById('seg-' + i);
+      if (seg) seg.classList.toggle('filled', i <= screen);
+    }
+    document.getElementById('progress-label-text').textContent = 'Step ' + screen + '/4';
+  }
+
+  function toggleSituation(id) {
+    var card = document.getElementById('card-' + id);
+    if (selectedSituations.has(id)) {
+      selectedSituations.delete(id);
+      card.classList.remove('selected');
+      card.setAttribute('aria-pressed', 'false');
+    } else {
+      selectedSituations.add(id);
+      card.classList.add('selected');
+      card.setAttribute('aria-pressed', 'true');
+    }
+    document.getElementById('btn-s1').disabled = (selectedSituations.size === 0);
+  }
+
+  function selectContact(type) {
+    ['phone', 'email', 'text'].forEach(t => document.getElementById('contact-' + t).classList.remove('selected'));
+    document.getElementById('contact-' + type).classList.add('selected');
+    selectedContact = type;
+  }
+
+  function showResults() {
+    var list = document.getElementById('results-list');
+    list.innerHTML = '';
+    selectedSituations.forEach(function(prog) {
+      var progInfo = PROGRAMS[prog];
+      var html = '<div class="result-card">' +
+        '<div class="result-icon"><i data-lucide="' + progInfo.icon + '"></i></div>' +
+        '<div class="result-body">' +
+        '<div class="result-title">' + progInfo.name + '</div>' +
+        '<div class="result-desc">' + progInfo.desc + '</div>' +
+        '</div>' +
+        '</div>';
+      list.innerHTML += html;
+    });
+    if (window.lucide) lucide.createIcons();
+    navigate(4);
+  }
+
+  function submitApplication() {
+    navigate('confirm');
+  }
+
+  function resetAll() {
+    selectedSituations.clear();
+    currentScreen = 0;
+    selectedContact = '';
+    screenStack = [];
+
+    document.querySelectorAll('.situation-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('btn-s1').disabled = true;
+    ['fname', 'lname', 'phone', 'email', 'zip'].forEach(id => {
+      var el = document.getElementById(id);
+      if (el) el.value = '';
     });
 
-    // ── Radio styling ─────────────────────────────
-    document.querySelectorAll('.radio-option input[type="radio"]').forEach(function (radio) {
-      radio.addEventListener('change', function () {
-        document.querySelectorAll('.radio-option').forEach(function (opt) {
-          opt.classList.remove('selected');
-        });
-        radio.closest('.radio-option').classList.add('selected');
-      });
-    });
+    navigate(0);
+  }
 
-    // ── Screen 2: Save phone ──────────────────────
-    var phoneSaved = false;
-
-    document.getElementById('btn-s2-save').addEventListener('click', function () {
-      if (!phoneSaved) {
-        var phoneInput = document.getElementById('phone');
-        var successEl = document.getElementById('phone-success');
-        successEl.classList.add('visible');
-        phoneSaved = true;
-        var btn = document.getElementById('btn-s2-save');
-        btn.textContent = 'Keep going →';
-        btn.addEventListener('click', goForward, { once: true });
-      } else {
-        goForward();
-      }
-    });
-
-    document.getElementById('btn-s2-skip').addEventListener('click', goForward);
-
-    // ── Navigation buttons ────────────────────────
-    document.getElementById('btn-s0-primary').addEventListener('click', goForward);
-    document.getElementById('btn-s0-secondary').addEventListener('click', goForward);
-    document.getElementById('btn-s1b-next').addEventListener('click', goForward);
-    document.getElementById('btn-s1b2-next').addEventListener('click', goForward);
-    document.getElementById('btn-s3-next').addEventListener('click', goForward);
-    document.getElementById('btn-s4-connect').addEventListener('click', goForward);
-
-    // Screen 5: Done → reset to 0
-    document.getElementById('btn-s5-done').addEventListener('click', function () {
-      navigateTo(0, 'back');
-      // Reset phone saved state
-      phoneSaved = false;
-      document.getElementById('phone-success').classList.remove('visible');
-      document.getElementById('btn-s2-save').textContent = 'Save and keep going';
-    });
-
-    // Back button
-    document.getElementById('btn-back').addEventListener('click', goBack);
-
-    // ── Init ──────────────────────────────────────
-    updateBottomNav();
-
-  }());
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.lucide) lucide.createIcons();
+    updateChrome(0);
+  });
 </script>
 </body>
 </html>
