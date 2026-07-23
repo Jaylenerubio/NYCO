@@ -3,61 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NYC Health + Affordability Corps Navigator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:wght@400&display=swap" rel="stylesheet">
+  <title>NYC Health + Affordability Corps — Navigator Tool</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
     :root {
-      --color-primary-base:   #050560;
-      --color-primary-dark:   #030339;
-      --color-secondary-base: #284CCA;
-      --color-secondary-dark: #182D79;
-      --color-success-base:   #008703;
-      --color-error-base:     #EC131E;
-      --color-white:          #FFFFFF;
-      --color-gray-100:       #F5F5F5;
-      --color-gray-300:       #DDDDDD;
-      --color-gray-700:       #767676;
-      --color-gray-900:       #333333;
-      --color-black:          #191919;
-      --font-body:    'Public Sans', system-ui, sans-serif;
-      --font-display: 'Source Serif 4', Georgia, serif;
-      --space-1: 8px;
-      --space-2: 16px;
-      --space-3: 24px;
-      --space-4: 32px;
-      --space-5: 40px;
-      --space-6: 48px;
-      --focus-ring-color: var(--color-secondary-base);
-      --focus-ring-width: 3px;
+      --color-primary-base:    #050560;
+      --color-primary-dark:    #030339;
+      --color-secondary-base:  #284CCA;
+      --color-secondary-dark:  #182D79;
+      --color-white:           #FFFFFF;
+      --color-neutral-100:     #F5F5F5;
+      --color-neutral-200:     #EEEEEE;
+      --color-neutral-300:     #DDDDDD;
+      --color-gray-400:        #C2C2C2;
+      --color-gray-500:        #AAAAAA;
+      --color-black:           #191919;
+      --text-secondary:        #6B6B7A;
+      --color-success-text:    #006333;
+      --color-error-base:      #EC131E;
+      --bg-primary:            var(--color-white);
+      --bg-secondary:          var(--color-neutral-100);
+      --border-default:        var(--color-neutral-300);
+      --ease-out:              cubic-bezier(0.16, 1, 0.3, 1);
+      --font-display:          'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+      --font-body:             'Public Sans', system-ui, -apple-system, sans-serif;
+      --space-1: 8px; --space-2: 16px; --space-3: 24px; --space-4: 32px;
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+    body {
+      height: 100%; background: var(--bg-secondary); font-family: var(--font-body);
+      color: var(--color-black); font-size: 16px; line-height: 1.5;
+      display: flex; justify-content: center; -webkit-font-smoothing: antialiased;
     }
-
-    html, body {
-      height: 100%;
-      font-family: var(--font-body);
-      background: var(--color-gray-100);
-      color: var(--color-gray-900);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── Viewport shell ── */
     #app {
-      max-width: 430px;
-      width: 100%;
-      margin: 0 auto;
-      min-height: 100vh;
-      position: relative;
-      overflow: hidden;
-      background: var(--color-white);
-      box-shadow: 0 0 40px rgba(0,0,0,0.12);
+      width: 100%; max-width: 390px; height: 100%; background: var(--bg-primary);
+      box-shadow: 0 0 60px rgba(0,0,0,0.18); display: flex; flex-direction: column; overflow: hidden;
     }
+    @media (max-width: 430px) { #app { box-shadow: none; } }
 
-    /* ── Screen layer ── */
+    /* Screen transitions */
     .screen {
       position: absolute;
       inset: 0;
@@ -67,7 +54,7 @@
       transition: transform 280ms ease-out;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      background: var(--color-white);
+      background: var(--bg-primary);
     }
 
     .screen.active {
@@ -80,515 +67,155 @@
       z-index: 1;
     }
 
-    /* ── Top bar (nyc.gov strip) ── */
-    .top-bar {
-      background: var(--color-primary-base);
-      padding: 8px var(--space-2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
+    /* Supernav */
+    .supernav {
+      background: var(--bg-secondary); border-bottom: 1px solid var(--border-default);
+      padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
     }
+    .nyc-logo { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; gap: 8px; }
+    .nyc-logo:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; border-radius: 3px; }
+    .nyc-logo-icon { width: 32px; height: 32px; background: var(--color-primary-base); border-radius: 3px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 700; }
+    .nyc-logo-text { font-size: 12px; font-weight: 600; color: var(--color-primary-base); line-height: 1.2; }
 
-    .top-bar-badge {
-      color: var(--color-white);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      background: rgba(255,255,255,0.15);
-      padding: 3px 8px;
-      border-radius: 3px;
-    }
-
-    .lang-toggles {
-      display: flex;
-      gap: 4px;
-    }
-
-    .lang-btn {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.4);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-size: 10px;
-      font-weight: 500;
-      padding: 3px 7px;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: background 150ms;
-    }
-
-    .lang-btn:hover {
-      background: rgba(255,255,255,0.2);
-    }
-
-    .lang-btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-    }
-
-    /* ── Nav chrome ── */
+    /* Back nav */
     .nav-chrome {
-      background: var(--color-white);
-      border-bottom: 1px solid var(--color-gray-300);
-      padding: 10px var(--space-2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      min-height: 52px;
+      background: var(--bg-primary); border-bottom: 1px solid var(--border-default);
+      padding: 16px; display: flex; align-items: center; flex-shrink: 0;
     }
-
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-      flex: 1;
+    .nav-chrome.hidden { display: none; }
+    .back-btn {
+      background: none; border: none; cursor: pointer; color: var(--color-black);
+      font-family: var(--font-body); font-size: 16px; font-weight: 400;
+      display: flex; align-items: center; gap: 8px; padding: 0;
     }
-
-    .nav-logo-block {
-      width: 36px;
-      height: 36px;
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      border-radius: 3px;
-      flex-shrink: 0;
+    .back-btn:hover { color: var(--color-primary-base); }
+    .back-btn:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; border-radius: 3px; }
+    .back-btn svg { width: 24px; height: 24px; }
+    .home-link-btn {
+      background: none; border: none; cursor: pointer; color: var(--color-secondary-base);
+      font-family: var(--font-body); font-size: 14px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; margin-left: 8px;
     }
+    .home-link-btn:hover { text-decoration: underline; }
+    .home-link-btn:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
 
-    .nav-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--color-primary-base);
-      line-height: 1.3;
-    }
+    /* Progress */
+    .progress-wrap { padding: 24px 16px 16px; flex-shrink: 0; }
+    .progress-wrap.enter { animation: progEnter .45s ease both; }
+    @keyframes progEnter { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: translateY(0); } }
+    .progress-label { font-size: 12px; line-height: 1.6; text-transform: uppercase; color: var(--color-black); margin-bottom: 13px; }
+    .progress-track { display: flex; gap: 2px; }
+    .progress-seg { flex: 1; height: 8px; border-radius: 20px; background: var(--color-neutral-200); overflow: hidden; }
+    .progress-seg .seg-fill { display: block; height: 100%; width: 0; background: var(--color-secondary-base); border-radius: 20px; transition: width .45s cubic-bezier(.4,0,.2,1); }
+    .progress-seg.filled .seg-fill { width: 100%; }
 
-    .nav-hamburger {
-      background: transparent;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      color: var(--color-primary-base);
-      padding: 4px;
-      line-height: 1;
-    }
+    /* Screens wrapper */
+    .screens-wrapper { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+    .screen-inner { width: 100%; padding: 24px 16px; flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+    #screen-landing .screen-inner { padding-top: 32px; }
 
-    .nav-hamburger:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 3px;
-    }
+    /* Typography */
+    h1 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 1.14; letter-spacing: -.5px; color: var(--color-black); }
+    .step-screen h1 { font-size: 28px; line-height: 1.3; letter-spacing: normal; }
+    h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.3; color: var(--color-black); }
+    .heading-block { display: flex; flex-direction: column; gap: var(--space-1); }
+    .screen-subtext { font-size: 16px; color: var(--text-secondary); line-height: 1.5; }
 
-    .back-link {
-      background: transparent;
-      border: none;
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--color-secondary-base);
-      cursor: pointer;
-      padding: 4px 0;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-    }
-
-    .back-link:hover {
-      color: var(--color-secondary-dark);
-    }
-
-    .back-link:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 3px;
-    }
-
-    /* ── Screen body ── */
-    .screen-body {
-      flex: 1;
-      padding: var(--space-3) var(--space-2);
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ── Typography ── */
-    .heading-display {
-      font-family: var(--font-display);
-      font-size: 26px;
-      font-weight: 400;
-      color: var(--color-primary-base);
-      line-height: 1.3;
-      margin-bottom: var(--space-2);
-    }
-
-    .heading-screen {
-      font-family: var(--font-body);
-      font-size: 22px;
-      font-weight: 600;
-      color: var(--color-primary-base);
-      line-height: 1.3;
-      margin-bottom: var(--space-1);
-    }
-
-    .subtext {
-      font-size: 15px;
-      color: var(--color-gray-700);
-      line-height: 1.5;
-      margin-bottom: var(--space-3);
-    }
-
-    .body-text {
-      font-size: 15px;
-      color: var(--color-gray-900);
-      line-height: 1.6;
-      margin-bottom: var(--space-4);
-    }
-
-    /* ── Buttons ── */
+    /* Buttons */
     .btn-primary {
-      display: block;
-      width: 100%;
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-size: 16px;
-      font-weight: 600;
-      padding: 15px var(--space-3);
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      text-align: center;
-      transition: background 150ms;
-      line-height: 1.3;
+      display: block; width: 100%; padding: 16px 24px;
+      background: var(--color-primary-base); color: var(--color-white);
+      border: 2px solid transparent; border-radius: 4px;
+      font-family: var(--font-body); font-size: 18px; font-weight: 600; line-height: 22px;
+      text-align: center; cursor: pointer; transition: background 150ms ease;
     }
-
-    .btn-primary:hover:not(:disabled) {
-      background: var(--color-primary-dark);
-    }
-
-    .btn-primary:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-    }
-
-    .btn-primary:disabled {
-      background: var(--color-gray-300);
-      color: var(--color-gray-700);
-      cursor: not-allowed;
-    }
+    .btn-primary:hover:not(:disabled) { background: var(--color-primary-dark); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
 
     .btn-text {
-      background: transparent;
-      border: none;
-      font-family: var(--font-body);
-      font-size: 14px;
-      color: var(--color-secondary-base);
-      cursor: pointer;
-      padding: var(--space-1) 0;
-      text-align: center;
-      width: 100%;
-      display: block;
-      margin-top: var(--space-1);
-      font-weight: 500;
+      background: transparent; border: none; cursor: pointer; color: var(--color-secondary-base);
+      font-family: var(--font-body); font-size: 14px; font-weight: 500;
+      display: block; text-align: center; width: 100%; padding: 12px 0; text-decoration: underline;
     }
+    .btn-text:hover { color: var(--color-secondary-dark); }
+    .btn-text:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
 
-    .btn-text:hover {
-      color: var(--color-secondary-dark);
-      text-decoration: underline;
-    }
+    .btn-disabled-link { display: block; text-align: center; font-size: 14px; color: var(--color-gray-500); margin-top: 12px; cursor: not-allowed; pointer-events: none; }
 
-    .btn-text:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 3px;
-    }
-
-    .btn-disabled-link {
-      display: block;
-      text-align: center;
-      font-size: 14px;
-      color: var(--color-gray-700);
-      margin-top: var(--space-2);
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-
-    /* ── Progress ── */
-    .progress-bar-wrap {
-      padding: var(--space-2);
-      flex-shrink: 0;
-      border-top: 1px solid var(--color-gray-100);
-    }
-
-    .progress-label {
-      text-align: center;
-      font-size: 12px;
-      color: var(--color-gray-700);
-      margin-bottom: 8px;
-    }
-
-    .progress-track {
-      height: 4px;
-      background: var(--color-gray-300);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--color-secondary-base);
-      border-radius: 2px;
-      transition: width 280ms ease-out;
-    }
-
-    /* ── Situation cards ── */
-    .situation-cards {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-1);
-      margin-bottom: var(--space-3);
-    }
-
+    /* Situation cards */
+    .cards-grid { display: flex; flex-direction: column; gap: 8px; }
     .situation-card {
-      position: relative;
-      border: 2px solid var(--color-gray-300);
-      border-radius: 8px;
-      padding: var(--space-2);
-      min-height: 80px;
-      cursor: pointer;
-      display: flex;
-      align-items: flex-start;
-      gap: var(--space-2);
-      background: var(--color-white);
-      transition: border-color 150ms, background 150ms;
-      text-align: left;
-      width: 100%;
-      font-family: var(--font-body);
-      -webkit-tap-highlight-color: transparent;
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 12px 16px; background: var(--color-white);
+      border: 2px solid var(--color-neutral-200); border-radius: 8px;
+      cursor: pointer; text-align: left; width: 100%;
+      transition: border-color 150ms ease, background 150ms ease;
     }
+    .situation-card:hover { border-color: var(--color-secondary-base); }
+    .situation-card.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+    .situation-card:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
+    .card-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--color-black); display: flex; align-items: center; justify-content: center; margin-top: 14px; }
+    .situation-card.selected .card-icon { color: var(--color-secondary-base); }
+    .card-icon svg { width: 24px; height: 24px; }
+    .card-body { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 12px 0; min-width: 0; }
+    .card-title { font-size: 16px; font-weight: 400; color: var(--color-black); line-height: 1.5; }
+    .card-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 
-    .situation-card:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-    }
-
-    .situation-card.selected {
-      border-color: var(--color-primary-base);
-      border-left-width: 4px;
-      background: #EEF2FF;
-    }
-
-    .card-emoji {
-      font-size: 28px;
-      line-height: 1;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .card-text {
-      flex: 1;
-    }
-
-    .card-label {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--color-black);
-      display: block;
-      margin-bottom: 3px;
-    }
-
-    .card-sublabel {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      line-height: 1.4;
-    }
-
-    .card-check {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      color: var(--color-primary-base);
-      font-size: 18px;
-      font-weight: 700;
-      opacity: 0;
-      transition: opacity 150ms;
-    }
-
-    .situation-card.selected .card-check {
-      opacity: 1;
-    }
-
-    /* ── Form fields ── */
-    .field-group {
-      margin-bottom: var(--space-3);
-    }
-
-    .field-label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--color-gray-900);
-      margin-bottom: 6px;
-    }
-
+    /* Form fields */
+    .field-group { display: flex; flex-direction: column; gap: 8px; }
+    .field-label { font-size: 16px; font-weight: 400; color: var(--color-black); }
     .field-input {
-      display: block;
-      width: 100%;
-      padding: 12px var(--space-2);
-      border: 2px solid var(--color-gray-300);
-      border-radius: 6px;
-      font-family: var(--font-body);
-      font-size: 16px;
-      color: var(--color-black);
-      background: var(--color-white);
-      transition: border-color 150ms;
-      -webkit-appearance: none;
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid var(--border-default); border-radius: 4px;
+      font-family: var(--font-body); font-size: 16px; color: var(--color-black);
+      background: var(--color-white); transition: border-color 150ms ease;
     }
+    .field-input:focus { outline: none; border-color: var(--color-secondary-base); box-shadow: 0 0 0 3px rgba(40,76,202,0.15); }
+    .field-input::placeholder { color: var(--color-gray-500); }
+    .field-input:disabled { background: var(--color-neutral-100); color: var(--color-gray-500); cursor: default; }
 
-    .field-input:focus {
-      outline: none;
-      border-color: var(--color-secondary-base);
-      box-shadow: 0 0 0 var(--focus-ring-width) rgba(40, 76, 202, 0.2);
+    /* Saved note */
+    .saved-note { display: none; font-size: 14px; line-height: 1.5; color: var(--color-success-text); align-items: flex-start; gap: 6px; }
+    .saved-note.visible { display: flex; }
+    .saved-note svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    /* Info chip */
+    .info-chip { background: var(--color-neutral-100); border-radius: 8px; padding: 16px; display: flex; gap: 12px; align-items: flex-start; }
+    .info-chip-icon { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-black); margin-top: 2px; }
+    .info-chip-text { font-size: 14px; line-height: 1.5; color: var(--color-black); }
+
+    /* Results */
+    .results-list { display: flex; flex-direction: column; }
+    .result-card { display: flex; flex-direction: column; gap: 8px; padding: 20px 0; }
+    .result-card-header { display: flex; align-items: center; gap: 12px; }
+    .result-card-icon { flex-shrink: 0; color: var(--color-black); display: flex; }
+    .result-card-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+    .result-card-name { font-size: 20px; font-weight: 600; color: var(--color-black); line-height: 1.2; }
+    .result-card-desc { font-size: 16px; color: var(--text-secondary); line-height: 1.55; padding-left: 34px; }
+    .result-divider { height: 1px; background: var(--color-neutral-200); width: 100%; }
+
+    /* Confirmation */
+    .confirm-icon {
+      width: 80px; height: 80px; background: #DCEFD2;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto var(--space-3);
     }
+    .confirm-icon svg { width: 36px; height: 36px; stroke: #2F7D32; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 
-    .field-input::placeholder {
-      color: var(--color-gray-700);
+    /* Scroll-gate footer */
+    .screen-footer {
+      position: sticky; bottom: 0; background: var(--bg-primary);
+      padding: 16px 16px 24px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 8px;
+      opacity: 0; pointer-events: none; transition: opacity 200ms var(--ease-out);
     }
+    .screen-footer.footer-visible { opacity: 1; pointer-events: auto; }
+    #screen-results .screen-inner, #screen-confirm .screen-inner { flex: 0 0 auto; }
+    #screen-confirm .screen-inner { justify-content: center; align-items: center; text-align: center; padding-top: 72px; }
+    .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
 
-    .privacy-note {
-      font-size: 12px;
-      color: var(--color-gray-700);
-      margin-top: var(--space-2);
-      margin-bottom: var(--space-3);
-    }
-
-    /* ── Inline success ── */
-    .inline-success {
-      display: none;
-      align-items: center;
-      gap: 6px;
-      color: var(--color-success-base);
-      font-size: 14px;
-      font-weight: 500;
-      margin-top: 10px;
-      margin-bottom: 4px;
-      padding: 10px 12px;
-      background: #F0FBF0;
-      border-radius: 6px;
-      border: 1px solid #C3E6C3;
-    }
-
-    .inline-success.visible {
-      display: flex;
-    }
-
-    /* ── Program result cards ── */
-    .result-cards {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-4);
-    }
-
-    .result-card {
-      border: 1px solid var(--color-gray-300);
-      border-radius: 8px;
-      padding: var(--space-2);
-    }
-
-    .result-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-
-    .result-card-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--color-black);
-    }
-
-    .badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
-
-    .badge-green {
-      color: #065F46;
-      background: #D1FAE5;
-    }
-
-    .badge-amber {
-      color: #B45309;
-      background: #FEF3C7;
-    }
-
-    .result-card-value {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      margin-bottom: 4px;
-      font-weight: 500;
-    }
-
-    .result-card-note {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      line-height: 1.4;
-    }
-
-    /* ── Claim section ── */
-    .claim-section {
-      background: var(--color-gray-100);
-      border-radius: 8px;
-      padding: var(--space-3);
-      margin-bottom: var(--space-3);
-    }
-
-    .claim-section-header {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--color-primary-base);
-      margin-bottom: var(--space-2);
-    }
-
-    /* ── Screen 5 success ── */
-    .success-screen-body {
-      flex: 1;
-      padding: var(--space-4) var(--space-2) var(--space-3);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .success-icon {
-      margin-bottom: var(--space-3);
-    }
-
-    .reference-text {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      margin-top: var(--space-2);
-      margin-bottom: var(--space-5);
-    }
-
-    /* ── Bottom action area ── */
-    .screen-actions {
-      padding: var(--space-2) var(--space-2) var(--space-1);
-      flex-shrink: 0;
-    }
-
-    /* ── Spacer ── */
+    /* Spacer */
     .flex-spacer { flex: 1; }
 
   </style>
@@ -596,510 +223,290 @@
 <body>
 <div id="app">
 
-  <!-- ═══════════════════════════════════════════
-       SCREEN 0: Landing
-  ════════════════════════════════════════════ -->
-  <div class="screen active" id="screen-0" role="main" aria-label="Welcome">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles" role="group" aria-label="Language selector">
-        <button class="lang-btn" aria-pressed="true" aria-label="English">EN</button>
-        <button class="lang-btn" aria-label="Español">ES</button>
-        <button class="lang-btn" aria-label="Chinese">中文</button>
-        <button class="lang-btn" aria-label="Bengali">BN</button>
-        <button class="lang-btn" aria-label="Haitian Creole">HT</button>
-      </div>
-    </div>
-
-    <!-- Nav chrome -->
-    <div class="nav-chrome">
-      <div class="nav-left">
-        <div class="nav-logo-block" aria-hidden="true">NYC</div>
-        <span class="nav-label">Health +<br>Affordability Corps</span>
-      </div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="screen-body">
-      <h1 class="heading-display">A neighbor helped you start — let's keep going.</h1>
-      <p class="body-text">You're close to getting help with health coverage, food, rent, and more. Takes less than 2&nbsp;minutes.</p>
-      <div class="flex-spacer"></div>
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" onclick="goTo(1)" aria-label="Get started">Let's see what you qualify for</button>
-      <span class="btn-disabled-link" aria-disabled="true">I already know what I need →</span>
-    </div>
-
-    <div style="height: var(--space-4);"></div>
-
+  <div class="supernav" role="banner">
+    <a href="#" class="nyc-logo" aria-label="NYC Health and Affordability Corps home" onclick="resetAll();return false;">
+      <div class="nyc-logo-icon">NYC</div>
+      <span class="nyc-logo-text">Health +<br>Affordability</span>
+    </a>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════
-       SCREEN 1: What's going on?
-  ════════════════════════════════════════════ -->
-  <div class="screen" id="screen-1" role="main" aria-label="Step 1: What's going on">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles">
-        <button class="lang-btn">EN</button>
-        <button class="lang-btn">ES</button>
-        <button class="lang-btn">中文</button>
-        <button class="lang-btn">BN</button>
-        <button class="lang-btn">HT</button>
-      </div>
-    </div>
-
-    <!-- Nav chrome -->
-    <div class="nav-chrome">
-      <button class="back-link" onclick="goBack()" aria-label="Go back to welcome screen">← Back</button>
-      <div class="nav-logo-block" aria-hidden="true">NYC</div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="screen-body">
-      <h1 class="heading-screen">What's going on?</h1>
-      <p class="subtext">Pick everything that fits. We'll check what help is available.</p>
-
-      <div class="situation-cards" role="group" aria-label="Select all situations that apply">
-
-        <button class="situation-card" id="card-housing" onclick="toggleCard('housing')" aria-pressed="false">
-          <span class="card-emoji" aria-hidden="true">🏠</span>
-          <div class="card-text">
-            <span class="card-label">I might lose my home</span>
-            <span class="card-sublabel">Eviction notice, late rent, or unstable housing</span>
-          </div>
-          <span class="card-check" aria-hidden="true">✓</span>
-        </button>
-
-        <button class="situation-card" id="card-health" onclick="toggleCard('health')" aria-pressed="false">
-          <span class="card-emoji" aria-hidden="true">🩺</span>
-          <div class="card-text">
-            <span class="card-label">I need health coverage</span>
-            <span class="card-sublabel">No insurance, renewal due, or gap in coverage</span>
-          </div>
-          <span class="card-check" aria-hidden="true">✓</span>
-        </button>
-
-        <button class="situation-card" id="card-food" onclick="toggleCard('food')" aria-pressed="false">
-          <span class="card-emoji" aria-hidden="true">🛒</span>
-          <div class="card-text">
-            <span class="card-label">Struggling with food or bills</span>
-            <span class="card-sublabel">SNAP, cash help, or monthly expenses</span>
-          </div>
-          <span class="card-check" aria-hidden="true">✓</span>
-        </button>
-
-        <button class="situation-card" id="card-medical" onclick="toggleCard('medical')" aria-pressed="false">
-          <span class="card-emoji" aria-hidden="true">🏥</span>
-          <div class="card-text">
-            <span class="card-label">Can't pay medical bills</span>
-            <span class="card-sublabel">Old bills, hospital debt, or new charges</span>
-          </div>
-          <span class="card-check" aria-hidden="true">✓</span>
-        </button>
-
-      </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" id="btn-situations" onclick="goTo(2)" disabled aria-disabled="true">These apply to me →</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-bar-wrap">
-      <p class="progress-label">Step 1 of 5</p>
-      <div class="progress-track" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" aria-label="20% complete">
-        <div class="progress-fill" style="width: 20%;"></div>
-      </div>
-    </div>
-
+  <div class="nav-chrome hidden" id="nav-chrome" role="navigation">
+    <button class="back-btn" id="back-btn" aria-label="Go back" onclick="goBack()">
+      <i data-lucide="arrow-left"></i> Back
+    </button>
+    <button class="home-link-btn" onclick="resetAll()" aria-label="Return to home">
+      <i data-lucide="home" style="width:14px;height:14px;"></i> Home
+    </button>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════
-       SCREEN 2: Save your progress
-  ════════════════════════════════════════════ -->
-  <div class="screen" id="screen-2" role="main" aria-label="Step 2: Save your progress">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles">
-        <button class="lang-btn">EN</button>
-        <button class="lang-btn">ES</button>
-        <button class="lang-btn">中文</button>
-        <button class="lang-btn">BN</button>
-        <button class="lang-btn">HT</button>
-      </div>
+  <div class="progress-wrap" id="progress-wrap" style="display:none">
+    <div class="progress-label" id="progress-label-text">Step 1/5</div>
+    <div class="progress-track">
+      <div class="progress-seg" id="seg-1"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-2"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-3"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-4"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-5"><span class="seg-fill"></span></div>
     </div>
-
-    <!-- Nav chrome -->
-    <div class="nav-chrome">
-      <button class="back-link" onclick="goBack()" aria-label="Go back to previous step">← Back</button>
-      <div class="nav-logo-block" aria-hidden="true">NYC</div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="screen-body">
-      <h1 class="heading-screen">Save your spot</h1>
-      <p class="subtext">We'll text you if you need to come back. No spam.</p>
-
-      <div class="field-group">
-        <label class="field-label" for="phone-input">Your phone number</label>
-        <input
-          class="field-input"
-          type="tel"
-          id="phone-input"
-          placeholder="e.g. (212) 555-0100"
-          autocomplete="tel"
-          inputmode="tel"
-        />
-        <div class="inline-success" id="phone-success" role="status" aria-live="polite">
-          <span aria-hidden="true">✓</span>
-          <span>Got it! You can pick up right where you left off.</span>
-        </div>
-      </div>
-
-      <div class="flex-spacer"></div>
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" id="btn-save-phone" onclick="savePhone()">Save and keep going</button>
-      <button class="btn-text" onclick="goTo(3)" aria-label="Skip phone number and continue">Skip for now</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-bar-wrap">
-      <p class="progress-label">Step 2 of 5</p>
-      <div class="progress-track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="40% complete">
-        <div class="progress-fill" style="width: 40%;"></div>
-      </div>
-    </div>
-
   </div>
 
+  <div class="screens-wrapper">
 
-  <!-- ═══════════════════════════════════════════
-       SCREEN 3: About you
-  ════════════════════════════════════════════ -->
-  <div class="screen" id="screen-3" role="main" aria-label="Step 3: About you">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles">
-        <button class="lang-btn">EN</button>
-        <button class="lang-btn">ES</button>
-        <button class="lang-btn">中文</button>
-        <button class="lang-btn">BN</button>
-        <button class="lang-btn">HT</button>
-      </div>
-    </div>
-
-    <!-- Nav chrome -->
-    <div class="nav-chrome">
-      <button class="back-link" onclick="goBack()" aria-label="Go back to previous step">← Back</button>
-      <div class="nav-logo-block" aria-hidden="true">NYC</div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="screen-body">
-      <h1 class="heading-screen">A little about you</h1>
-      <p class="subtext">This helps us match you to real programs. We never share your info.</p>
-
-      <div class="field-group">
-        <label class="field-label" for="name-input">Full name</label>
-        <input
-          class="field-input"
-          type="text"
-          id="name-input"
-          placeholder="Your full name"
-          autocomplete="name"
-        />
-      </div>
-
-      <div class="field-group">
-        <label class="field-label" for="dob-input">Date of birth</label>
-        <input
-          class="field-input"
-          type="date"
-          id="dob-input"
-          autocomplete="bday"
-        />
-      </div>
-
-      <div class="field-group">
-        <label class="field-label" for="zip-input">NYC zip code</label>
-        <input
-          class="field-input"
-          type="text"
-          id="zip-input"
-          placeholder="e.g. 10036"
-          maxlength="5"
-          inputmode="numeric"
-          pattern="[0-9]{5}"
-          autocomplete="postal-code"
-        />
-      </div>
-
-      <p class="privacy-note">🔒 Your info is kept private and secure.</p>
-      <div class="flex-spacer"></div>
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" onclick="goTo(4)">See my results →</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-bar-wrap">
-      <p class="progress-label">Step 3 of 5</p>
-      <div class="progress-track" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="60% complete">
-        <div class="progress-fill" style="width: 60%;"></div>
-      </div>
-    </div>
-
-  </div>
-
-
-  <!-- ═══════════════════════════════════════════
-       SCREEN 4: What we found
-  ════════════════════════════════════════════ -->
-  <div class="screen" id="screen-4" role="main" aria-label="Step 4: Your results">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles">
-        <button class="lang-btn">EN</button>
-        <button class="lang-btn">ES</button>
-        <button class="lang-btn">中文</button>
-        <button class="lang-btn">BN</button>
-        <button class="lang-btn">HT</button>
-      </div>
-    </div>
-
-    <!-- Nav chrome -->
-    <div class="nav-chrome">
-      <button class="back-link" onclick="goBack()" aria-label="Go back to previous step">← Back</button>
-      <div class="nav-logo-block" aria-hidden="true">NYC</div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="screen-body">
-      <h1 class="heading-screen">Here's what we found for you</h1>
-
-      <div class="result-cards" role="list" aria-label="Matched programs">
-
-        <div class="result-card" role="listitem">
-          <div class="result-card-header">
-            <span class="result-card-title">Health coverage</span>
-            <span class="badge badge-green">Strong match</span>
-          </div>
-          <p class="result-card-value">Est. value: $2,400/yr</p>
-          <p class="result-card-note">A Health Corps worker will call you within 24 hours.</p>
+    <!-- Landing -->
+    <div class="screen active" id="screen-0">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Get your bills covered</h1>
+          <p class="screen-subtext">You're close to getting help with health coverage, food, rent, and more. Takes less than 2&nbsp;minutes.</p>
         </div>
-
-        <div class="result-card" role="listitem">
-          <div class="result-card-header">
-            <span class="result-card-title">Eviction help</span>
-            <span class="badge badge-amber">Possible match</span>
-          </div>
-          <p class="result-card-note">Tenant Support Unit will reach out to you.</p>
-        </div>
-
-        <div class="result-card" role="listitem">
-          <div class="result-card-header">
-            <span class="result-card-title">Food &amp; cash help</span>
-            <span class="badge badge-green">Strong match</span>
-          </div>
-          <p class="result-card-note">Our HRA partner will follow up with next steps.</p>
-        </div>
-
-        <div class="result-card" role="listitem">
-          <div class="result-card-header">
-            <span class="result-card-title">Medical debt</span>
-            <span class="badge badge-amber">Possible match</span>
-          </div>
-          <p class="result-card-note">A partner screener will contact you soon.</p>
-        </div>
-
+        <div class="flex-spacer"></div>
       </div>
+      <div class="screen-footer" id="footer-0">
+        <button class="btn-primary" onclick="navigate(1)">Let's see what you qualify for</button>
+        <button class="btn-text" aria-disabled="true" style="opacity: 0.5; pointer-events: none;">I already know what I need →</button>
+      </div>
+    </div>
 
-      <!-- Claim section -->
-      <div class="claim-section">
-        <p class="claim-section-header">Ready to claim these benefits?</p>
 
+    <!-- S1: What can we help with -->
+    <div class="screen step-screen" id="screen-1">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>What's going on?</h1>
+          <p class="screen-subtext">Pick everything that fits.</p>
+        </div>
+        <div class="cards-grid">
+          <button class="situation-card" id="card-housing" onclick="toggleCard('housing')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="home"></i></span>
+            <span class="card-body">
+              <span class="card-title">I might lose my home</span>
+              <span class="card-sub">Eviction notice, late rent, or unstable housing</span>
+            </span>
+          </button>
+          <button class="situation-card" id="card-health" onclick="toggleCard('health')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="stethoscope"></i></span>
+            <span class="card-body">
+              <span class="card-title">I need health coverage</span>
+              <span class="card-sub">No insurance, renewal due, or gap in coverage</span>
+            </span>
+          </button>
+          <button class="situation-card" id="card-food" onclick="toggleCard('food')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="apple"></i></span>
+            <span class="card-body">
+              <span class="card-title">Struggling with food or bills</span>
+              <span class="card-sub">SNAP, cash help, or monthly expenses</span>
+            </span>
+          </button>
+          <button class="situation-card" id="card-medical" onclick="toggleCard('medical')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="cross"></i></span>
+            <span class="card-body">
+              <span class="card-title">Can't pay medical bills</span>
+              <span class="card-sub">Old bills, hospital debt, or new charges</span>
+            </span>
+          </button>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-1"></div>
+      </div>
+      <div class="screen-footer" id="footer-1">
+        <button class="btn-primary" id="btn-situations" onclick="navigate(2)" disabled>These apply to me →</button>
+      </div>
+    </div>
+
+
+    <!-- S2: Save your progress -->
+    <div class="screen step-screen" id="screen-2">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Save your spot</h1>
+          <p class="screen-subtext">We'll text you if you need to come back. No spam.</p>
+        </div>
         <div class="field-group">
-          <label class="field-label" for="confirm-name">Full name</label>
-          <input class="field-input" type="text" id="confirm-name" placeholder="Your full name" autocomplete="name" />
+          <label class="field-label" for="phone-input">Phone number</label>
+          <input class="field-input" type="tel" id="phone-input" placeholder="(555) 555-5555" inputmode="tel" oninput="checkPhone()" />
+          <div class="saved-note" id="phone-success" role="status" aria-live="polite">
+            <i data-lucide="check"></i>
+            <span>Got it! You can pick up right where you left off.</span>
+          </div>
         </div>
+        <div class="scroll-sentinel" id="sentinel-2"></div>
+      </div>
+      <div class="screen-footer" id="footer-2">
+        <button class="btn-primary" id="btn-save-phone" onclick="navigate(3)" disabled>Keep going →</button>
+        <button class="btn-text" onclick="navigate(3)">Skip for now</button>
+      </div>
+    </div>
 
+
+    <!-- S3: About you -->
+    <div class="screen step-screen" id="screen-3">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>A little about you</h1>
+          <p class="screen-subtext">This helps us match you to real programs. We never share your info.</p>
+        </div>
         <div class="field-group">
-          <label class="field-label" for="confirm-phone">Phone number</label>
-          <input class="field-input" type="tel" id="confirm-phone" placeholder="(212) 555-0100" autocomplete="tel" />
+          <label class="field-label" for="name-input">Full name</label>
+          <input class="field-input" type="text" id="name-input" placeholder="Your full name" autocomplete="name" />
         </div>
-
-        <div class="field-group" style="margin-bottom: 0;">
-          <label class="field-label" for="email-input">Email <span style="font-weight:400;color:var(--color-gray-700);">(optional)</span></label>
-          <input class="field-input" type="email" id="email-input" placeholder="Email (optional)" autocomplete="email" />
+        <div class="field-group">
+          <label class="field-label" for="dob-input">Date of birth</label>
+          <input class="field-input" type="date" id="dob-input" autocomplete="bday" />
         </div>
+        <div class="field-group">
+          <label class="field-label" for="zip-input">NYC zip code</label>
+          <input class="field-input" type="text" id="zip-input" placeholder="e.g. 10036" maxlength="5" inputmode="numeric" pattern="[0-9]{5}" autocomplete="postal-code" />
+        </div>
+        <div class="scroll-sentinel" id="sentinel-3"></div>
       </div>
-
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" onclick="goTo(5)">Connect me with a benefits worker</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-bar-wrap">
-      <p class="progress-label">Step 4 of 5</p>
-      <div class="progress-track" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" aria-label="80% complete">
-        <div class="progress-fill" style="width: 80%;"></div>
+      <div class="screen-footer" id="footer-3">
+        <button class="btn-primary" onclick="navigate(4)">See my results →</button>
       </div>
     </div>
 
-  </div>
 
-
-  <!-- ═══════════════════════════════════════════
-       SCREEN 5: You're in!
-  ════════════════════════════════════════════ -->
-  <div class="screen" id="screen-5" role="main" aria-label="Step 5: Confirmation">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles">
-        <button class="lang-btn">EN</button>
-        <button class="lang-btn">ES</button>
-        <button class="lang-btn">中文</button>
-        <button class="lang-btn">BN</button>
-        <button class="lang-btn">HT</button>
+    <!-- S4: Results -->
+    <div class="screen" id="screen-4">
+      <div class="screen-inner">
+        <h2 id="results-title">Here's what we found for you.</h2>
+        <div class="results-list">
+          <div class="result-card">
+            <div class="result-card-header">
+              <span class="result-card-icon"><i data-lucide="stethoscope"></i></span>
+              <span class="result-card-name">Health coverage</span>
+            </div>
+            <p class="result-card-desc">Free coverage for doctor visits, hospital stays, mental health care, vision and dental, prescriptions, and more.</p>
+          </div>
+          <div class="result-divider"></div>
+          <div class="result-card">
+            <div class="result-card-header">
+              <span class="result-card-icon"><i data-lucide="home"></i></span>
+              <span class="result-card-name">Eviction help</span>
+            </div>
+            <p class="result-card-desc">Get support if you're facing eviction. We can help with rent assistance, legal representation, and negotiation with landlords.</p>
+          </div>
+          <div class="result-divider"></div>
+          <div class="result-card">
+            <div class="result-card-header">
+              <span class="result-card-icon"><i data-lucide="apple"></i></span>
+              <span class="result-card-name">Food &amp; cash help</span>
+            </div>
+            <p class="result-card-desc">Get help paying for groceries with SNAP (food stamps), and explore cash assistance programs for monthly expenses.</p>
+          </div>
+          <div class="result-divider"></div>
+          <div class="result-card">
+            <div class="result-card-header">
+              <span class="result-card-icon"><i data-lucide="cross"></i></span>
+              <span class="result-card-name">Medical debt relief</span>
+            </div>
+            <p class="result-card-desc">Get help with past-due hospital bills. Many bills can be forgiven if you qualify for financial hardship programs.</p>
+          </div>
+        </div>
+        <div class="info-chip" style="margin-top: 24px;">
+          <div class="info-chip-icon"><i data-lucide="shield-check"></i></div>
+          <div class="info-chip-text">Your info stays private. We only share it to help connect you with these programs.</div>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-4"></div>
+      </div>
+      <div class="screen-footer" id="footer-4">
+        <button class="btn-primary" onclick="navigate(5)">Connect me with a benefits worker</button>
       </div>
     </div>
 
-    <!-- Nav chrome (no back) -->
-    <div class="nav-chrome">
-      <div class="nav-left">
-        <div class="nav-logo-block" aria-hidden="true">NYC</div>
-        <span class="nav-label">Health +<br>Affordability Corps</span>
+
+    <!-- S5: Confirmation -->
+    <div class="screen" id="screen-5">
+      <div class="screen-inner centered">
+        <div>
+          <div class="confirm-icon">
+            <svg viewBox="0 0 40 40"><polyline points="8 21 16 29 32 11"/></svg>
+          </div>
+          <h2 id="confirm-title">You're in the system!</h2>
+          <p style="margin-top:24px;color:var(--text-secondary);font-size:16px;line-height:1.6;">
+            A Health + Affordability Corps worker will follow up in 24 hours. Watch for a text from our team.
+          </p>
+          <p style="font-size:13px;color:var(--text-secondary);margin-top:24px;">Reference #: NYC-2026-00847</p>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-5"></div>
       </div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="success-screen-body">
-      <div class="success-icon" aria-hidden="true">
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Success checkmark">
-          <circle cx="40" cy="40" r="36" stroke="#008703" stroke-width="4" fill="#F0FBF0"/>
-          <path d="M24 41L35 52L56 29" stroke="#008703" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-
-      <h1 class="heading-display" style="font-size: 28px; margin-bottom: var(--space-2);">You're in the system!</h1>
-      <p class="body-text" style="margin-bottom: var(--space-1);">A Health + Affordability Corps worker will follow up in 24 hours. Watch for a text from our team.</p>
-      <p class="reference-text">Reference #: NYC-2026-00847</p>
-
-      <div class="flex-spacer"></div>
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" onclick="resetAll()" style="background: var(--color-success-base);">Done</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-bar-wrap">
-      <p class="progress-label">Step 5 of 5</p>
-      <div class="progress-track" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Complete">
-        <div class="progress-fill" style="width: 100%;"></div>
+      <div class="screen-footer" id="footer-5">
+        <button class="btn-primary" onclick="resetAll()" style="background: #008703;">Done</button>
       </div>
     </div>
 
-  </div>
-
-</div><!-- /#app -->
+  </div><!-- /screens-wrapper -->
+</div><!-- /app -->
 
 <script>
   // ── State ──────────────────────────────────────────────
   var currentScreen = 0;
   var selectedSituations = new Set();
-  var phoneSaved = false;
+  var navHistory = [];
 
   // ── Screen navigation ──────────────────────────────────
   function getScreen(n) {
     return document.getElementById('screen-' + n);
   }
 
-  function goTo(n) {
-    var current = getScreen(currentScreen);
-    var next    = getScreen(n);
+  function navigate(toScreen) {
+    var current = document.querySelector('.screen.active');
+    var target  = getScreen(toScreen);
+    if (!target || current === target) return;
 
-    if (n === 4) prefillScreen4();
+    if (current) {
+      navHistory.push(current.id);
+      current.classList.remove('active');
+      current.classList.add('exit-left');
+      current.addEventListener('transitionend', function handler() {
+        current.classList.remove('exit-left');
+        current.removeEventListener('transitionend', handler);
+      });
+    }
 
-    // Clear any leftover inline styles so CSS default (translateX(100%)) applies
-    next.style.transform = '';
-    next.style.transition = '';
-    currentScreen = n;
-
-    // Adding .active triggers CSS transition: translateX(100%) → translateX(0)
-    next.classList.add('active');
-
-    current.classList.remove('active');
-    current.classList.add('exit-left');
-
-    current.addEventListener('transitionend', function handler() {
-      current.classList.remove('exit-left');
-      current.removeEventListener('transitionend', handler);
-    });
+    target.classList.add('active');
+    currentScreen = toScreen;
+    updateChrome(toScreen);
+    updateProgress(toScreen);
+    onScreenEnter(toScreen);
+    target.scrollTop = 0;
+    setTimeout(function() { setupFooterGate(target, toScreen); }, 50);
   }
 
   function goBack() {
     if (currentScreen <= 0) return;
+    navigate(currentScreen - 1);
+  }
 
-    var current = getScreen(currentScreen);
-    var prev    = getScreen(currentScreen - 1);
+  // ── Screen enter hooks ──────────────────────────────────
+  function onScreenEnter(n) {
+    if (n === 4) {
+      var nameVal = document.getElementById('name-input').value.trim();
+      document.getElementById('results-title').textContent = nameVal
+        ? ("Here's what we found for you, " + nameVal + ".")
+        : "Here's what we found for you.";
+    }
+    if (n === 5) {
+      var cname = document.getElementById('name-input').value.trim();
+      document.getElementById('confirm-title').textContent = cname ? ('You got this, ' + cname + '!') : 'You got this!';
+    }
+  }
 
-    // Position prev off-screen left instantly, then animate it in
-    prev.style.transition = 'none';
-    prev.style.transform  = 'translateX(-100%)';
-    prev.offsetHeight; // reflow — lock in -100% position
+  // ── Chrome & progress ───────────────────────────────────
+  function updateChrome(n) {
+    var chrome = document.getElementById('nav-chrome');
+    var progWrap = document.getElementById('progress-wrap');
+    var hideBack = (n === 0 || n === 5);
+    chrome.classList.toggle('hidden', hideBack);
+    progWrap.style.display = (n > 0 && n < 5) ? '' : 'none';
+  }
 
-    prev.style.transition = 'transform 280ms ease-out';
-    prev.style.transform  = 'translateX(0)';
-    prev.classList.add('active');
-
-    // Slide current out to the right
-    current.classList.remove('active');
-    current.style.transition = 'transform 280ms ease-out';
-    current.style.transform  = 'translateX(100%)';
-
-    current.addEventListener('transitionend', function handler() {
-      current.style.transform  = '';
-      current.style.transition = '';
-      prev.style.transform     = '';
-      prev.style.transition    = '';
-      current.removeEventListener('transitionend', handler);
-    });
-
-    currentScreen = currentScreen - 1;
+  function updateProgress(n) {
+    if (n <= 0 || n >= 5) return;
+    for (var i = 1; i <= 5; i++) {
+      var seg = document.getElementById('seg-' + i);
+      if (seg) seg.classList.toggle('filled', i <= n);
+    }
+    var label = 'Step ' + n + '/5';
+    document.getElementById('progress-label-text').textContent = label;
   }
 
   // ── Situation cards ────────────────────────────────────
@@ -1121,42 +528,48 @@
     var btn = document.getElementById('btn-situations');
     if (selectedSituations.size > 0) {
       btn.disabled = false;
-      btn.removeAttribute('aria-disabled');
     } else {
       btn.disabled = true;
-      btn.setAttribute('aria-disabled', 'true');
     }
   }
 
-  // ── Phone save ─────────────────────────────────────────
-  function savePhone() {
-    var phoneInput  = document.getElementById('phone-input');
-    var successEl   = document.getElementById('phone-success');
-    var btn         = document.getElementById('btn-save-phone');
-
-    successEl.classList.add('visible');
-    btn.textContent = 'Keep going →';
-    phoneSaved = true;
-
-    // Navigate after short delay so user sees success message
-    setTimeout(function() { goTo(3); }, 900);
+  // ── Phone validation ────────────────────────────────────
+  function checkPhone() {
+    var phoneInput = document.getElementById('phone-input');
+    var successEl = document.getElementById('phone-success');
+    var btn = document.getElementById('btn-save-phone');
+    var isPhone = phoneInput.value.replace(/\D/g, '').length >= 10;
+    successEl.classList.toggle('visible', isPhone);
+    btn.disabled = !isPhone;
   }
 
-  // ── Prefill Screen 4 ───────────────────────────────────
-  function prefillScreen4() {
-    var nameVal  = document.getElementById('name-input').value.trim();
-    var phoneVal = document.getElementById('phone-input').value.trim();
+  // ── Scroll-gate footer ──────────────────────────────────
+  function setupFooterGate(screenEl, screenNum) {
+    var sentinelId = 'sentinel-' + screenNum;
+    var footerId = 'footer-' + screenNum;
+    var sentinel = document.getElementById(sentinelId);
+    var footer = document.getElementById(footerId);
+    if (!sentinel || !footer) return;
 
-    var confirmName  = document.getElementById('confirm-name');
-    var confirmPhone = document.getElementById('confirm-phone');
-
-    if (nameVal)  confirmName.value  = nameVal;
-    if (phoneVal) confirmPhone.value = phoneVal;
+    var sr = sentinel.getBoundingClientRect();
+    var pr = screenEl.getBoundingClientRect();
+    if (sr.top <= pr.bottom + 10) {
+      footer.classList.add('footer-visible');
+      return;
+    }
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          footer.classList.add('footer-visible');
+          obs.disconnect();
+        }
+      });
+    }, { root: screenEl, threshold: 0.1 });
+    obs.observe(sentinel);
   }
 
   // ── Reset all ──────────────────────────────────────────
   function resetAll() {
-    // Clear selections
     selectedSituations.forEach(function(id) {
       var card = document.getElementById('card-' + id);
       if (card) {
@@ -1167,46 +580,34 @@
     selectedSituations.clear();
     updateSituationsButton();
 
-    // Clear inputs
-    ['phone-input','name-input','dob-input','zip-input','confirm-name','confirm-phone','email-input'].forEach(function(id) {
+    ['phone-input', 'name-input', 'dob-input', 'zip-input'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el) el.value = '';
     });
 
-    // Reset phone success UI
     var successEl = document.getElementById('phone-success');
     if (successEl) successEl.classList.remove('visible');
-    var saveBtn = document.getElementById('btn-save-phone');
-    if (saveBtn) saveBtn.textContent = 'Save and keep going';
 
-    phoneSaved = false;
+    document.querySelectorAll('.screen-footer').forEach(function(f) { f.classList.remove('footer-visible'); });
 
-    // Slide back to screen 0
-    var current = getScreen(currentScreen);
-    var home    = getScreen(0);
-
-    home.style.transition = 'none';
-    home.style.transform  = 'translateX(-100%)';
-    home.offsetHeight; // reflow
-
-    home.style.transition = 'transform 280ms ease-out';
-    home.style.transform  = 'translateX(0)';
+    var current = document.querySelector('.screen.active');
+    var home = getScreen(0);
+    if (current && current !== home) current.classList.remove('active');
     home.classList.add('active');
-
-    current.classList.remove('active');
-    current.style.transition = 'transform 280ms ease-out';
-    current.style.transform  = 'translateX(100%)';
-
-    current.addEventListener('transitionend', function handler() {
-      current.style.transform  = '';
-      current.style.transition = '';
-      home.style.transform     = '';
-      home.style.transition    = '';
-      current.removeEventListener('transitionend', handler);
-    });
-
     currentScreen = 0;
+    navHistory = [];
+    updateChrome(0);
+    updateProgress(0);
+    home.scrollTop = 0;
   }
+
+  // ── Init ─────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.lucide) lucide.createIcons();
+    updateChrome(0);
+    updateProgress(0);
+    setTimeout(function() { setupFooterGate(getScreen(0), 0); }, 100);
+  });
 </script>
 </body>
 </html>
