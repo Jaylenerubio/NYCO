@@ -52,14 +52,15 @@
       flex-direction: column;
       transform: translateX(100%);
       transition: transform 280ms ease-out;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      overflow: hidden;
       background: var(--bg-primary);
     }
 
     .screen.active {
       transform: translateX(0);
       z-index: 2;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .screen.exit-left {
@@ -111,8 +112,8 @@
 
     /* Screens wrapper */
     .screens-wrapper { flex: 1; min-height: 0; position: relative; overflow: hidden; }
-    .screen-inner { width: 100%; padding: 24px 16px; flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
-    #screen-landing .screen-inner { padding-top: 32px; }
+    .screen-inner { width: 100%; padding: 24px 16px; flex: 1; display: flex; flex-direction: column; gap: var(--space-3); overflow-y: auto; }
+    #screen-0 .screen-inner { padding-top: 32px; }
 
     /* Typography */
     h1 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 1.14; letter-spacing: -.5px; color: var(--color-black); }
