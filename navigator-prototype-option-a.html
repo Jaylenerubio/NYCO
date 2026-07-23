@@ -191,7 +191,7 @@
 <div id="app">
 
   <div class="supernav" role="banner">
-    <a href="#" class="nyc-logo" aria-label="NYC Health and Affordability Corps home" onclick="resetAll();return false;">
+    <a href="#" class="nyc-logo" aria-label="NYC Health and Affordability Corps home" onclick="goToLanding();return false;">
       <div class="nyc-logo-icon">NYC</div>
       <span class="nyc-logo-text">Health +<br>Affordability</span>
     </a>
@@ -201,7 +201,7 @@
     <button class="back-btn" id="back-btn" aria-label="Go back" onclick="goBack()">
       <i data-lucide="arrow-left"></i> Back
     </button>
-    <button class="home-link-btn" onclick="resetAll()" aria-label="Return to home">
+    <button class="home-link-btn" onclick="goToHome()" aria-label="Go to programs">
       <i data-lucide="home" style="width:14px;height:14px;"></i> Home
     </button>
   </div>
@@ -414,6 +414,15 @@
     if (screenStack.length === 0) return;
     var prevScreen = screenStack.pop();
     navigate(prevScreen);
+  }
+
+  function goToLanding() {
+    resetAll();
+  }
+
+  function goToHome() {
+    screenStack = [];
+    navigate(1);
   }
 
   function updateChrome(screen) {
