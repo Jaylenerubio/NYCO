@@ -520,7 +520,84 @@
     navigate(4);
   }
 
+  function getProgramQuestions(prog) {
+    if (prog === 'health') {
+      return [
+        { label: 'Do you currently have health insurance?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'Which best describes your situation?', type: 'select', placeholder: 'Select...', options: ['No insurance', 'Need to renew', 'Gap in coverage', 'Looking for better coverage'] }
+      ];
+    } else if (prog === 'housing') {
+      return [
+        { label: 'Do you have a pending eviction case?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'How much are you behind on rent?', type: 'text', placeholder: '$0' },
+        { label: 'Monthly rent amount', type: 'text', placeholder: '$0' }
+      ];
+    } else if (prog === 'food') {
+      return [
+        { label: 'Number of people in your household', type: 'text', placeholder: '1' },
+        { label: 'Have you applied for SNAP before?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'Total household income (monthly)', type: 'text', placeholder: '$0' }
+      ];
+    } else if (prog === 'medical') {
+      return [
+        { label: 'Do you have hospital bills?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'Total amount owed', type: 'text', placeholder: '$0' },
+        { label: 'Which hospital?', type: 'text', placeholder: 'Hospital name' }
+      ];
+    }
+    return [];
+  }
+
   function addNudgeProgram(prog) {
+    currentProgram = prog;
+    var questions = getProgramQuestions(prog);
+    var wrapper = document.querySelector('.screens-wrapper');
+    var screenId = 'screen-nudge-' + prog;
+
+    if (document.getElementById(screenId)) {
+      navigate(screenId);
+      return;
+    }
+
+    var html = '<div class="screen step-screen" id="' + screenId + '">' +
+      '<div class="screen-inner">' +
+      '<div class="heading-block"><h1>' + PROGRAMS[prog].name + '</h1><p class="screen-subtext">Tell us more about your situation.</p></div>';
+
+    questions.forEach(function(q, i) {
+      html += '<div class="field-group">' +
+        '<label class="field-label" for="' + prog + '-q' + i + '">' + q.label + '</label>';
+      if (q.type === 'text') {
+        html += '<input class="field-input" type="text" id="' + prog + '-q' + i + '" placeholder="' + q.placeholder + '" />';
+      } else if (q.type === 'select') {
+        html += '<select class="field-select" id="' + prog + '-q' + i + '">';
+        q.options.forEach(opt => html += '<option>' + opt + '</option>');
+        html += '</select>';
+      } else if (q.type === 'radio') {
+        html += '<div class="chip-row">';
+        q.options.forEach(opt => html += '<button class="chip" onclick="selectRadio(this, \'' + prog + '-q' + i + '\')">' + opt + '</button>');
+        html += '</div>';
+      }
+      html += '</div>';
+    });
+
+    html += '<div class="scroll-sentinel"></div></div>' +
+      '<div class="screen-footer">' +
+      '<button class="btn-primary" onclick="completeNudgeProgram(\'' + prog + '\')">Add to my programs →</button>' +
+      '</div></div>';
+
+    var div = document.createElement('div');
+    div.innerHTML = html;
+    wrapper.appendChild(div.firstChild);
+
+    navigate(screenId);
+  }
+
+  function selectRadio(el, id) {
+    el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function completeNudgeProgram(prog) {
     selectedSituations.add(prog);
     showResults();
   }
@@ -534,6 +611,7 @@
     currentScreen = 0;
     selectedContact = '';
     screenStack = [];
+    currentProgram = null;
 
     document.querySelectorAll('.situation-card').forEach(c => c.classList.remove('selected'));
     document.getElementById('btn-s1').disabled = true;
@@ -544,6 +622,8 @@
 
     navigate(0);
   }
+
+  var currentProgram = null;
 
   document.addEventListener('DOMContentLoaded', function() {
     if (window.lucide) lucide.createIcons();
