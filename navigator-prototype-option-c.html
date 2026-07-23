@@ -208,9 +208,9 @@
       position: sticky; bottom: 0; background: var(--bg-primary);
       padding: 16px 16px 24px; flex-shrink: 0;
       display: flex; flex-direction: column; gap: 8px;
-      opacity: 0; pointer-events: none; transition: opacity 200ms var(--ease-out);
+      opacity: 1; pointer-events: auto; transition: opacity 200ms var(--ease-out);
     }
-    .screen-footer.footer-visible { opacity: 1; pointer-events: auto; }
+    .screen-footer.footer-hidden { opacity: 0; pointer-events: none; }
     #screen-results .screen-inner, #screen-confirm .screen-inner { flex: 0 0 auto; }
     #screen-confirm .screen-inner { justify-content: center; align-items: center; text-align: center; padding-top: 72px; }
     .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
@@ -545,27 +545,10 @@
 
   // ── Scroll-gate footer ──────────────────────────────────
   function setupFooterGate(screenEl, screenNum) {
-    var sentinelId = 'sentinel-' + screenNum;
     var footerId = 'footer-' + screenNum;
-    var sentinel = document.getElementById(sentinelId);
     var footer = document.getElementById(footerId);
-    if (!sentinel || !footer) return;
-
-    var sr = sentinel.getBoundingClientRect();
-    var pr = screenEl.getBoundingClientRect();
-    if (sr.top <= pr.bottom + 10) {
-      footer.classList.add('footer-visible');
-      return;
-    }
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) {
-          footer.classList.add('footer-visible');
-          obs.disconnect();
-        }
-      });
-    }, { root: screenEl, threshold: 0.1 });
-    obs.observe(sentinel);
+    if (!footer) return;
+    footer.classList.remove('footer-hidden');
   }
 
   // ── Reset all ──────────────────────────────────────────
@@ -588,7 +571,7 @@
     var successEl = document.getElementById('phone-success');
     if (successEl) successEl.classList.remove('visible');
 
-    document.querySelectorAll('.screen-footer').forEach(function(f) { f.classList.remove('footer-visible'); });
+    document.querySelectorAll('.screen-footer').forEach(function(f) { f.classList.add('footer-hidden'); });
 
     var current = document.querySelector('.screen.active');
     var home = getScreen(0);
