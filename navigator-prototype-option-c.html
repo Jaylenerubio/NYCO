@@ -161,6 +161,20 @@
     .chip:hover { border-color: var(--color-secondary-base); }
     .chip.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
 
+    .contact-cards { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+    .contact-card {
+      display: flex; align-items: center; gap: 16px; padding: 16px;
+      background: var(--color-white); border: 1.5px solid var(--color-neutral-300); border-radius: 8px;
+      cursor: pointer; text-align: left; font-family: var(--font-body); transition: all 150ms ease;
+    }
+    .contact-card:hover { border-color: var(--color-secondary-base); background: #F1F4FD; }
+    .contact-card.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+    .contact-card__icon { font-size: 28px; width: 44px; text-align: center; flex-shrink: 0; }
+    .contact-card__text { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .contact-card__label { font-size: 16px; font-weight: 600; color: var(--color-black); }
+    .contact-card__value { font-size: 14px; color: var(--text-secondary); }
+    .contact-card__check { width: 20px; color: var(--color-secondary-base); font-size: 18px; font-weight: bold; flex-shrink: 0; }
+
     .confirm-icon {
       width: 80px; height: 80px; background: #DCEFD2;
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -329,15 +343,26 @@
       <div class="screen-inner">
         <div class="heading-block">
           <h1>How should we reach you?</h1>
-          <p class="screen-subtext">We'll contact you within 24 hours with program information.</p>
+          <p class="screen-subtext">Pick whichever is easiest — it's how a benefits worker will follow up.</p>
         </div>
-        <div class="field-group">
-          <label class="field-label">Preferred contact method</label>
-          <div class="chip-row">
-            <button class="chip" id="contact-phone" onclick="selectContact('phone')">Phone</button>
-            <button class="chip" id="contact-email" onclick="selectContact('email')">Email</button>
-            <button class="chip" id="contact-text" onclick="selectContact('text')">Text</button>
-          </div>
+        <div class="contact-cards">
+          <button type="button" class="contact-card" id="card-email" onclick="selectContact('email')">
+            <div class="contact-card__icon">✉️</div>
+            <div class="contact-card__text">
+              <div class="contact-card__label">Email me</div>
+              <div class="contact-card__value" id="email-display">you@gmail.com</div>
+            </div>
+            <div class="contact-card__check" id="check-email" style="display:none;">✓</div>
+          </button>
+
+          <button type="button" class="contact-card" id="card-text" onclick="selectContact('text')">
+            <div class="contact-card__icon">💬</div>
+            <div class="contact-card__text">
+              <div class="contact-card__label">Text me</div>
+              <div class="contact-card__value" id="phone-display">(555) 555-5555</div>
+            </div>
+            <div class="contact-card__check" id="check-text" style="display:none;">✓</div>
+          </button>
         </div>
         <div class="scroll-sentinel" id="sentinel-3"></div>
       </div>
@@ -416,6 +441,7 @@
     currentScreen = screen;
     updateChrome(screen);
     updateProgress(screen);
+    if (screen === 3) populateContactDisplay();
     target.scrollTop = 0;
   }
 
@@ -466,9 +492,27 @@
   }
 
   function selectContact(type) {
-    ['phone', 'email', 'text'].forEach(t => document.getElementById('contact-' + t).classList.remove('selected'));
-    document.getElementById('contact-' + type).classList.add('selected');
+    document.querySelectorAll('.contact-card').forEach(card => {
+      card.classList.remove('selected');
+      var check = card.querySelector('.contact-card__check');
+      if (check) check.style.display = 'none';
+    });
+    var selectedCard = document.getElementById('card-' + type);
+    if (selectedCard) {
+      selectedCard.classList.add('selected');
+      var check = selectedCard.querySelector('.contact-card__check');
+      if (check) check.style.display = 'inline';
+    }
     selectedContact = type;
+  }
+
+  function populateContactDisplay() {
+    var emailDisplay = document.getElementById('email-display');
+    var phoneDisplay = document.getElementById('phone-display');
+    if (emailDisplay && phoneDisplay) {
+      emailDisplay.textContent = 'you@gmail.com';
+      phoneDisplay.textContent = '(555) 555-5555';
+    }
   }
 
   function getNudgePrograms() {
