@@ -424,6 +424,77 @@
       outline-offset: 2px;
     }
 
+    .contact-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .contact-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: var(--color-white);
+      border: 1.5px solid var(--color-gray-300);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 150ms ease;
+      text-align: left;
+      font-family: var(--font-body);
+    }
+
+    .contact-card:hover {
+      border-color: var(--color-secondary-base);
+      background: #f0f4ff;
+    }
+
+    .contact-card.selected {
+      border-color: var(--color-secondary-base);
+      background: #f0f4ff;
+      box-shadow: inset 0 0 0 1px var(--color-secondary-base);
+    }
+
+    .contact-card:focus-visible {
+      outline: 2px solid var(--focus-ring-color);
+      outline-offset: 2px;
+    }
+
+    .contact-card__icon {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-secondary-base);
+      flex-shrink: 0;
+    }
+
+    .contact-card__text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .contact-card__label {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+    }
+
+    .contact-card__value {
+      font-size: 14px;
+      color: var(--color-gray-700);
+    }
+
+    .contact-card__check {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
     /* ── Buttons ──────────────────────────────────── */
     .btn {
       display: block;
@@ -1136,7 +1207,57 @@
 
       <p class="privacy-note">🔒 Your info is kept private and secure.</p>
 
-      <button class="btn btn-primary" type="button" id="btn-s3-next">See my results →</button>
+      <button class="btn btn-primary" type="button" id="btn-s3-next">Next →</button>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 3.5: How should we reach you?
+    ═════════════════════════════════════════════ -->
+    <section class="screen" id="screen-contact" aria-label="How should we reach you?">
+      <h1 class="screen-header">How should we reach you?</h1>
+      <p class="screen-subtext">Pick whichever is easiest — it's how a benefits worker will follow up.</p>
+
+      <div class="contact-cards">
+        <button type="button" class="contact-card" id="card-email" data-method="email" onclick="selectContactMethod('email')">
+          <div class="contact-card__icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M24 7H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4 9l10 7 10-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="contact-card__text">
+            <div class="contact-card__label">Email me</div>
+            <div class="contact-card__value" id="email-display">you@gmail.com</div>
+          </div>
+          <div class="contact-card__check" id="check-email" style="display:none;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" fill="#284CCA"/>
+              <path d="M8 12l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </button>
+
+        <button type="button" class="contact-card" id="card-text" data-method="text" onclick="selectContactMethod('text')">
+          <div class="contact-card__icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M24 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16l4 4v-4h0V6c0-1.1-.9-2-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="contact-card__text">
+            <div class="contact-card__label">Text me</div>
+            <div class="contact-card__value" id="phone-display">(555) 555-5555</div>
+          </div>
+          <div class="contact-card__check" id="check-text" style="display:none;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" fill="#284CCA"/>
+              <path d="M8 12l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <button class="btn btn-primary" type="button" id="btn-contact-next">See my results →</button>
     </section>
 
     <!-- ════════════════════════════════════════════
@@ -1246,7 +1367,7 @@
     };
 
     // Screen order
-    const SCREEN_ORDER = ['screen-0', 'screen-1b', 'screen-1c', 'screen-1b2', 'screen-2', 'screen-3', 'screen-4', 'screen-5'];
+    const SCREEN_ORDER = ['screen-0', 'screen-1b', 'screen-1c', 'screen-1b2', 'screen-2', 'screen-3', 'screen-contact', 'screen-4', 'screen-5'];
 
     // Screens where back button is hidden
     const NO_BACK = new Set(['screen-0', 'screen-5']);
@@ -1416,13 +1537,59 @@
     // ── Navigation buttons ────────────────────────
     document.getElementById('btn-s0-primary').addEventListener('click', goForward);
     document.getElementById('btn-s0-secondary').addEventListener('click', goForward);
-    document.getElementById('btn-s1b-next').addEventListener('click', goForward);
-    if (document.getElementById('btn-s1c-next')) {
-      document.getElementById('btn-s1c-next').addEventListener('click', goForward);
+    // ── Contact method selection ──────────────────
+    var selectedContactMethod = null;
+
+    function selectContactMethod(method) {
+      selectedContactMethod = method;
+      document.querySelectorAll('.contact-card').forEach(function (card) {
+        card.classList.remove('selected');
+        var check = card.querySelector('.contact-card__check');
+        if (check) check.style.display = 'none';
+      });
+      var selectedCard = document.getElementById('card-' + method);
+      if (selectedCard) {
+        selectedCard.classList.add('selected');
+        var check = selectedCard.querySelector('.contact-card__check');
+        if (check) check.style.display = 'flex';
+      }
     }
-    document.getElementById('btn-s1b2-next').addEventListener('click', goForward);
-    document.getElementById('btn-s3-next').addEventListener('click', goForward);
-    document.getElementById('btn-s4-connect').addEventListener('click', goForward);
+
+    function onScreenEnterContact() {
+      // Populate email display
+      var emailInput = document.getElementById('claim-email');
+      var emailDisplay = document.getElementById('email-display');
+      var emailValue = emailInput && emailInput.value.trim();
+      if (emailValue) {
+        emailDisplay.textContent = emailValue;
+      } else {
+        emailDisplay.textContent = 'you@gmail.com';
+      }
+
+      // Populate phone display
+      var phoneInput = document.getElementById('claim-phone');
+      var phoneDisplay = document.getElementById('phone-display');
+      var phoneValue = phoneInput && phoneInput.value.trim();
+      if (phoneValue) {
+        phoneDisplay.textContent = phoneValue;
+      } else {
+        phoneDisplay.textContent = '(555) 555-5555';
+      }
+    }
+
+    // Monkey-patch onScreenEnter to handle contact screen
+    var origOnScreenEnter = onScreenEnter;
+    onScreenEnter = function(screenId) {
+      if (screenId === 'screen-contact') {
+        onScreenEnterContact();
+      }
+      return origOnScreenEnter(screenId);
+    };
+
+    // ── Navigation buttons ────────────────────────
+    if (document.getElementById('btn-contact-next')) {
+      document.getElementById('btn-contact-next').addEventListener('click', goForward);
+    }
 
     // Screen 5: Done → reset to 0
     document.getElementById('btn-s5-done').addEventListener('click', function () {
