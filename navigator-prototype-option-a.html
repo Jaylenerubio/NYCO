@@ -438,7 +438,8 @@
 
   function navigate(screen) {
     var current = document.querySelector('.screen.active');
-    var target = typeof screen === 'number' ? document.getElementById('screen-' + screen) : document.getElementById('screen-' + screen);
+    var screenId = typeof screen === 'number' ? 'screen-' + screen : screen;
+    var target = document.getElementById(screenId);
     if (!target || current === target) return;
 
     if (current) {
