@@ -474,7 +474,7 @@
   </div>
 
   <!-- Support Modal -->
-  <div class="modal" id="support-modal">
+  <div class="modal" id="support-modal" onclick="if(event.target===this) closeSupportModal()">
     <div class="modal-content">
       <button class="modal-close" onclick="closeSupportModal()">×</button>
       <h3 class="modal-title">I need support</h3>
