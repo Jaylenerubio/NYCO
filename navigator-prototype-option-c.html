@@ -149,12 +149,12 @@
     .field-input:focus, .field-select:focus { outline: none; border-color: var(--color-secondary-base); box-shadow: 0 0 0 3px rgba(40,76,202,0.15); }
     .field-input::placeholder { color: var(--color-gray-500); }
 
-    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; width: 100%; }
     .chip {
-      flex: 1; min-width: 100px; padding: 12px 8px;
+      flex: 0 1 auto; min-width: 120px; padding: 12px 16px;
       background: var(--color-white); border: 1px solid var(--color-neutral-300); border-radius: 8px;
       font-family: var(--font-body); font-size: 16px; font-weight: 400; color: var(--color-black);
-      cursor: pointer; text-align: center;
+      cursor: pointer; text-align: center; white-space: nowrap;
       transition: border-color 150ms ease, background 150ms ease;
     }
     .chip:hover { border-color: var(--color-secondary-base); }
@@ -401,7 +401,6 @@
         <div class="scroll-sentinel" id="sentinel-4"></div>
       </div>
       <div class="screen-footer" id="footer-4">
-        <button class="btn-primary" onclick="submitApplications()">Submit →</button>
         <button class="btn-text" onclick="saveAndExit()">Save and continue later</button>
       </div>
     </div>
@@ -595,6 +594,12 @@
       if (pillars) pillars.forEach(p => relevantPillars.add(p));
     });
 
+    if (relevantPillars.size === 1) {
+      var singlePillar = Array.from(relevantPillars)[0];
+      startPillarC(singlePillar);
+      return;
+    }
+
     var wrapper = document.querySelector('.screens-wrapper');
     var screenId = 'screen-pillars';
     var existing = document.getElementById(screenId);
@@ -607,16 +612,23 @@
 
     relevantPillars.forEach(function(pillar) {
       var icon = getIconForPillar(pillar);
-      html += '<div class="pillar-card">' +
+      var isCompleted = completedPillars.has(pillar);
+      html += '<div class="pillar-card" style="' + (isCompleted ? 'background:#F0FDF4;border-color:#86EFAC;' : '') + '">' +
         '<div class="pillar-card__icon">' + icon + '</div>' +
-        '<div class="pillar-card__title">' + PILLARS[pillar].name + '</div>' +
-        '<button class="pillar-card__btn" onclick="startPillarC(\'' + pillar + '\')">Start</button>' +
-        '</div>';
+        '<div style="flex:1;">' +
+        '<div class="pillar-card__title">' + PILLARS[pillar].name + '</div>';
+      if (isCompleted) {
+        html += '<div style="font-size:14px;color:#22863A;margin-top:6px;">A case worker will contact you in 24 hours</div>';
+      }
+      html += '</div>';
+      if (!isCompleted) {
+        html += '<button class="pillar-card__btn" onclick="startPillarC(\'' + pillar + '\')">Start</button>';
+      }
+      html += '</div>';
     });
 
     html += '</div><div class="scroll-sentinel"></div></div>' +
       '<div class="screen-footer">' +
-      '<button class="btn-primary" id="btn-submit-c" onclick="showResults()" style="display:none;">Submit applications →</button>' +
       '<button class="btn-text" onclick="saveAndExit()">Save and continue later</button>' +
       '</div></div>';
 
@@ -658,8 +670,7 @@
 
     html += '<div class="scroll-sentinel"></div></div>' +
       '<div class="screen-footer">' +
-      '<button class="btn-primary" onclick="savePillarAndContinueC(\'' + pillar + '\')">Next →</button>' +
-      '<button class="btn-secondary" style="width:auto;" onclick="goBack()">Back to pillars</button>' +
+      '<button class="btn-primary" onclick="savePillarAndContinueC(\'' + pillar + '\')">Complete</button>' +
       '<button class="btn-text" onclick="saveAndExit()">Save and continue later</button>' +
       '</div></div>';
 
