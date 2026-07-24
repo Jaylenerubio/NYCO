@@ -242,6 +242,12 @@
       display: flex; align-items: center; justify-content: center; color: #059669;
     }
     .result-checkmark svg { width: 24px; height: 24px; }
+    .try-again-btn {
+      background: transparent; border: none; color: var(--color-secondary-base);
+      text-decoration: underline; cursor: pointer; font-weight: 600; font-size: 14px;
+      font-family: var(--font-body); padding: 0; margin-top: 8px;
+    }
+    .try-again-btn:hover { color: var(--color-primary-dark); }
 
     .ineligible-message {
       background: var(--color-warning-bg); border: 1px solid #F59E0B; border-radius: 8px;
@@ -489,6 +495,8 @@
   var selectedSituations = new Set();
   var selectedContact = '';
   var completedPillars = new Set();
+  var ineligiblePillars = {}; // {pillar: reason}
+  var inProgressPillars = new Set();
   var currentPillar = null;
   var pillarData = {};
   var screenStack = [];
@@ -541,9 +549,15 @@
   function updateChrome(screen) {
     var chrome = document.getElementById('nav-chrome');
     var progWrap = document.getElementById('progress-wrap');
-    var hideBack = (screen === 0 || screen === 'confirm');
+    var backBtn = document.querySelector('.back-btn');
+    var isPillarScreen = (typeof screen === 'string' && screen.includes('screen-pillar'));
+    var hideBack = (screen === 0 || screen === 'confirm' || isPillarScreen);
     chrome.classList.toggle('hidden', hideBack);
     progWrap.style.display = (screen > 0 && screen < 4) ? '' : 'none';
+    if (backBtn) {
+      backBtn.style.pointerEvents = isPillarScreen ? 'none' : 'auto';
+      backBtn.style.opacity = isPillarScreen ? '0.5' : '1';
+    }
   }
 
   function updateProgress(screen) {
@@ -595,33 +609,66 @@
     var list = document.getElementById('pillar-list');
     list.innerHTML = '';
     var html = '';
-    PILLARS.forEach = function(callback) {
-      for (var key in PILLARS) {
-        if (PILLARS.hasOwnProperty(key)) {
-          callback(PILLARS[key], key);
-        }
-      }
-    };
     for (var pillar in PILLARS) {
       var info = PILLARS[pillar];
-      var icon = getIconForPillar(pillar);
       var isCompleted = completedPillars.has(pillar);
-      html += '<div class="pillar-card" style="' + (isCompleted ? 'background:#F0FDF4;border-color:#86EFAC;' : '') + '">' +
-        '<div class="pillar-card__icon">' + icon + '</div>' +
-        '<div style="flex:1;">' +
-        '<div class="pillar-card__title">' + info.name + '</div>';
+      var isIneligible = ineligiblePillars.hasOwnProperty(pillar);
+      var isInProgress = inProgressPillars.has(pillar);
+
+      var checkmarkHtml = '';
+      var metaText = '';
+      var descText = '';
+      var actionHtml = '';
+
       if (isCompleted) {
-        html += '<div style="font-size:14px;color:#22863A;margin-top:6px;">A case worker will contact you in 24 hours</div>';
+        var today = new Date();
+        var dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        metaText = 'Completed ' + dateStr;
+        descText = getPillarMessage(pillar);
+        checkmarkHtml = '<div class="result-checkmark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>';
+      } else if (isIneligible) {
+        var today = new Date();
+        var dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        metaText = 'Ineligible as of ' + dateStr;
+        descText = ineligiblePillars[pillar];
+        actionHtml = '<button class="try-again-btn" onclick="startPillar(\'' + pillar + '\')">Try again</button>';
+        checkmarkHtml = '<div class="result-checkmark" style="background:#F3F4F6;color:#9CA3AF;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg></div>';
+      } else if (isInProgress) {
+        metaText = '<span style="color:var(--color-secondary-base);font-weight:600;">In progress</span>';
+        checkmarkHtml = '<div class="result-checkmark" style="background:#E0E7FF;color:#4F46E5;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg></div>';
+      } else {
+        metaText = '<span style="color:var(--text-secondary);">Not yet started</span>';
+        checkmarkHtml = '<div class="result-checkmark" style="background:#F3F4F6;color:#9CA3AF;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg></div>';
       }
-      html += '</div>';
-      if (!isCompleted) {
-        html += '<button class="pillar-card__btn" onclick="startPillar(\'' + pillar + '\')">Start</button>';
+
+      html += '<div class="result-card">' +
+        '<div class="result-body">' +
+        '<div class="result-title">' + info.name + '</div>' +
+        '<div class="result-meta">' + metaText + '</div>';
+
+      if (descText) {
+        html += '<div class="result-desc">' + descText + '</div>';
       }
-      html += '</div>';
+
+      if (actionHtml) {
+        html += actionHtml;
+      }
+
+      html += '</div>' + checkmarkHtml + '</div>';
     }
     list.innerHTML = html;
     document.getElementById('submit-btn-a').style.display = completedPillars.size > 0 ? '' : 'none';
     navigate(4);
+  }
+
+  function getPillarMessage(pillar) {
+    if (pillar === 'housing') {
+      var gateVal = pillarData[pillar] && pillarData[pillar]['gate-0'];
+      if (gateVal === 'Yes') {
+        return 'If you have received an eviction notice or have a court date for eviction, you can get legal help by calling the WNY-EPP Hotline at (844) 230-7376 or applying for assistance online.';
+      }
+    }
+    return 'A case worker will contact you in 24 hours';
   }
 
   function getIconForPillar(pillar) {
@@ -716,6 +763,10 @@
   function selectChip(el, id) {
     el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
+    if (currentPillar) {
+      if (!pillarData[currentPillar]) pillarData[currentPillar] = {};
+      pillarData[currentPillar][id] = el.dataset.value;
+    }
   }
 
   function getPillarQuestions(pillar) {
@@ -774,8 +825,32 @@
   }
 
   function savePillarAndContinue(pillar) {
-    completedPillars.add(pillar);
+    var ineligibilityReason = checkIneligibility(pillar);
+    if (ineligibilityReason) {
+      ineligiblePillars[pillar] = ineligibilityReason;
+      inProgressPillars.delete(pillar);
+      completedPillars.delete(pillar);
+    } else {
+      completedPillars.add(pillar);
+      ineligiblePillars[pillar] = null;
+      delete ineligiblePillars[pillar];
+      inProgressPillars.delete(pillar);
+    }
     showPillars();
+  }
+
+  function checkIneligibility(pillar) {
+    if (pillar === 'medical') {
+      var q0 = pillarData[pillar] && pillarData[pillar]['medical-gate-0'];
+      if (q0 === 'No') {
+        return 'You said you don\'t have bills you can\'t pay';
+      }
+      var q1 = pillarData[pillar] && pillarData[pillar]['medical-gate-1'];
+      if (q1 === 'No') {
+        return 'You said the hospital is not in NYC';
+      }
+    }
+    return null;
   }
 
   function submitApplications() {
