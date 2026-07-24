@@ -491,8 +491,11 @@
   var selectedSituations = new Set();
   var selectedContact = '';
   var completedPillars = new Set();
+  var pillarSequence = []; // ordered list of pillars to show
+  var currentPillarIndex = 0; // which pillar in sequence we're on
   var screenStack = [];
   var appState = {};
+  var pillarData = {};
 
   var SITUATIONS_TO_PILLARS = {
     health: ['health'],
@@ -555,9 +558,15 @@
   function updateChrome(screen) {
     var chrome = document.getElementById('nav-chrome');
     var progWrap = document.getElementById('progress-wrap');
-    var hideBack = (screen === 0 || screen === 'confirm');
+    var backBtn = document.querySelector('.back-btn');
+    var isPillarScreen = (typeof screen === 'string' && screen.includes('screen-pillar'));
+    var hideBack = (screen === 0 || screen === 'confirm' || isPillarScreen);
     chrome.classList.toggle('hidden', hideBack);
     progWrap.style.display = (screen > 0 && screen < 4) ? '' : 'none';
+    if (backBtn) {
+      backBtn.style.pointerEvents = isPillarScreen ? 'none' : 'auto';
+      backBtn.style.opacity = isPillarScreen ? '0.5' : '1';
+    }
   }
 
   function updateProgress(screen) {
@@ -721,7 +730,7 @@
         html += '</select>';
       } else if (q.type === 'radio') {
         html += '<div class="chip-row">';
-        q.options.forEach(opt => html += '<button class="chip" onclick="selectChip(this)" data-value="' + opt + '">' + opt + '</button>');
+        q.options.forEach(opt => html += '<button class="chip" onclick="selectChip(this, \'' + pillar + '-q' + i + '\')" data-value="' + opt + '">' + opt + '</button>');
         html += '</div>';
       }
       html += '</div>';
@@ -741,7 +750,8 @@
 
   function savePillarAndContinueC(pillar) {
     completedPillars.add(pillar);
-    showResults();
+    currentPillarIndex++;
+    showNextPillarQuestions();
   }
 
   function getIconForPillar(pillar) {
@@ -754,13 +764,49 @@
     return icons[pillar] || '•';
   }
 
-  function showScreeningQuestions() {
-    showPillarCards();
+  function getPillarMessageC(pillar) {
+    if (pillar === 'housing') {
+      var qVal = pillarData[pillar] && pillarData[pillar]['housing-q0'];
+      if (qVal === 'Yes') {
+        return 'If you have received an eviction notice or have a court date for eviction, you can get legal help by calling the WNY-EPP Hotline at (844) 230-7376 or applying for assistance online.';
+      }
+    }
+    return 'A case worker will contact you in 24 hours';
   }
 
-  function selectChip(el) {
+  function showScreeningQuestions() {
+    // Determine pillar sequence based on selected situations
+    pillarSequence = [];
+    selectedSituations.forEach(function(situation) {
+      var pillars = SITUATIONS_TO_PILLARS[situation];
+      if (pillars) pillars.forEach(p => {
+        if (!pillarSequence.includes(p)) pillarSequence.push(p);
+      });
+    });
+
+    currentPillarIndex = 0;
+    if (pillarSequence.length > 0) {
+      showNextPillarQuestions();
+    }
+  }
+
+  function showNextPillarQuestions() {
+    if (currentPillarIndex < pillarSequence.length) {
+      var pillar = pillarSequence[currentPillarIndex];
+      startPillarC(pillar);
+    } else {
+      showResults();
+    }
+  }
+
+  function selectChip(el, id) {
     el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
+    var currentPillar = pillarSequence[currentPillarIndex];
+    if (currentPillar) {
+      if (!pillarData[currentPillar]) pillarData[currentPillar] = {};
+      pillarData[currentPillar][id] = el.dataset.value;
+    }
   }
 
   function showResults() {
@@ -769,11 +815,12 @@
     var dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     var html = '<h3 style="margin-bottom: 16px;">Submitted</h3>';
     completedPillars.forEach(function(pillar) {
+      var msg = getPillarMessageC(pillar);
       html += '<div class="result-card">' +
         '<div class="result-body">' +
         '<div class="result-title">' + PILLARS[pillar].name + '</div>' +
         '<div class="result-meta">Completed ' + dateStr + '</div>' +
-        '<div class="result-desc">A case worker will contact you in 24 hours</div>' +
+        '<div class="result-desc">' + msg + '</div>' +
         '</div>' +
         '<div class="result-checkmark">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>' +
