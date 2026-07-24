@@ -48,14 +48,46 @@
       100% { transform: translateX(0); }
     }
 
+    .modal {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000;
+      justify-content: center; align-items: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: white; border-radius: 8px; padding: 24px; max-width: 320px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15); animation: modalSlideIn 260ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @keyframes modalSlideIn {
+      from { transform: scale(0.9) translateY(-20px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; background: none; border: none;
+      cursor: pointer; font-size: 24px; color: var(--color-black); width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-close:hover { color: var(--color-secondary-base); }
+    .modal-title { font-family: var(--font-display); font-size: 24px; font-weight: 400;
+      color: var(--color-black); margin-bottom: 16px; line-height: 1.3;
+    }
+    .modal-text { font-size: 16px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px; }
+    .modal-phone { font-size: 20px; font-weight: 600; color: var(--color-secondary-base);
+      text-decoration: none; display: block; margin-bottom: 20px; text-align: center;
+    }
+    .modal-phone:hover { color: var(--color-primary-dark); }
+    .modal-btn { width: 100%; background: var(--color-secondary-base); color: white;
+      border: none; padding: 12px 16px; border-radius: 4px; font-weight: 600; cursor: pointer;
+    }
+    .modal-btn:hover { background: var(--color-primary-dark); }
+
     .screen {
       position: absolute; inset: 0; display: flex; flex-direction: column;
-      transform: translateX(100%); transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateX(100%); transition: transform 260ms cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden; background: var(--bg-primary);
     }
     .screen.active { transform: translateX(0); z-index: 2; overflow-y: auto; -webkit-overflow-scrolling: touch; }
     .screen.exit-left { transform: translateX(-100%); z-index: 1; }
-    #screen-4.active { animation: slideInBounce 200ms cubic-bezier(0.4, 0, 0.2, 1) backwards; }
+    #screen-4.active { animation: slideInBounce 260ms cubic-bezier(0.4, 0, 0.2, 1) backwards; }
 
     .supernav {
       background: var(--bg-secondary); border-bottom: 1px solid var(--border-default);
@@ -212,15 +244,22 @@
     .flex-spacer { flex: 1; }
     .results-list { display: flex; flex-direction: column; gap: 16px; }
     .result-card {
-      display: flex; gap: 12px; padding: 16px;
-      border: 1px solid var(--color-neutral-300); border-radius: 8px;
-      background: var(--color-white);
+      display: flex; gap: 16px; padding: 20px; align-items: flex-start;
+      border: none; border-radius: 0; background: var(--color-white);
+      border-bottom: 1px solid var(--color-neutral-300);
     }
-    .result-icon { width: 40px; height: 40px; flex-shrink: 0; color: var(--color-secondary-base); display: flex; align-items: center; justify-content: center; }
-    .result-icon svg { width: 40px; height: 40px; }
-    .result-body { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-    .result-title { font-size: 16px; font-weight: 600; color: var(--color-black); }
-    .result-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+    .result-body { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .result-title { font-family: var(--font-display); font-size: 20px; font-weight: 400;
+      color: var(--color-black); line-height: 1.3;
+    }
+    .result-meta { font-size: 14px; color: var(--text-secondary); }
+    .result-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-top: 8px; }
+    .result-checkmark {
+      width: 44px; height: 44px; flex-shrink: 0; background: #D1FAE5; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; color: #059669;
+    }
+    .result-checkmark svg { width: 24px; height: 24px; }
+    .result-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 
     .nudge-section { border-top: 1px solid var(--color-neutral-300); padding-top: 24px; margin-top: 24px; }
     .nudge-item { display: flex; gap: 12px; padding: 16px; border: 1px solid var(--color-neutral-300); border-radius: 8px; background: #FFFBF0; margin-bottom: 12px; }
@@ -409,7 +448,8 @@
         <div class="scroll-sentinel" id="sentinel-4"></div>
       </div>
       <div class="screen-footer" id="footer-4">
-        <button class="btn-text" onclick="saveAndExit()">Save and continue later</button>
+        <button class="btn-primary" onclick="submitApplications()">Done</button>
+        <button class="btn-text" onclick="openSupportModal()" style="color:var(--color-secondary-base);text-decoration:underline;">I need support</button>
       </div>
     </div>
 
@@ -431,6 +471,17 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Support Modal -->
+  <div class="modal" id="support-modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeSupportModal()">×</button>
+      <h3 class="modal-title">I need support</h3>
+      <p class="modal-text">Call us to speak with a representative:</p>
+      <a href="tel:+12125551234" class="modal-phone">(212) 555-1234</a>
+      <button class="modal-btn" onclick="closeSupportModal()">Close</button>
+    </div>
   </div>
 
 </div>
@@ -714,12 +765,18 @@
 
   function showResults() {
     var submitted = document.getElementById('submitted-section');
-    var html = '<h3>Submitted</h3>';
+    var today = new Date();
+    var dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    var html = '<h3 style="margin-bottom: 16px;">Submitted</h3>';
     completedPillars.forEach(function(pillar) {
-      html += '<div class="result-card" style="background:#F0FDF4;border-color:#86EFAC;">' +
+      html += '<div class="result-card">' +
         '<div class="result-body">' +
         '<div class="result-title">' + PILLARS[pillar].name + '</div>' +
-        '<div class="result-desc" style="color:#22863A;">A case worker will contact you in 24 hours</div>' +
+        '<div class="result-meta">Completed ' + dateStr + '</div>' +
+        '<div class="result-desc">A case worker will contact you in 24 hours</div>' +
+        '</div>' +
+        '<div class="result-checkmark">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>' +
         '</div>' +
         '</div>';
     });
@@ -758,6 +815,14 @@
 
   function submitApplications() {
     navigate('confirm');
+  }
+
+  function openSupportModal() {
+    document.getElementById('support-modal').classList.add('active');
+  }
+
+  function closeSupportModal() {
+    document.getElementById('support-modal').classList.remove('active');
   }
 
   function saveAndExit() {
