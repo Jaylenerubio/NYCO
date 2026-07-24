@@ -19,6 +19,7 @@
       --color-black:           #191919;
       --text-secondary:        #6B6B7A;
       --color-success-text:    #006333;
+      --color-warning-bg:      #FEF3C7;
       --bg-primary:            var(--color-white);
       --bg-secondary:          var(--color-neutral-100);
       --border-default:        var(--color-neutral-300);
@@ -53,7 +54,7 @@
       background: var(--bg-secondary); border-bottom: 1px solid var(--border-default);
       padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
     }
-    .nyc-logo { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; gap: 8px; }
+    .nyc-logo { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; gap: 8px; cursor: pointer; }
     .nyc-logo:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; border-radius: 3px; }
     .nyc-logo-icon { width: 32px; height: 32px; background: var(--color-primary-base); border-radius: 3px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 700; }
     .nyc-logo-text { font-size: 12px; font-weight: 600; color: var(--color-primary-base); line-height: 1.2; }
@@ -71,13 +72,6 @@
     .back-btn:hover { color: var(--color-primary-base); }
     .back-btn:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; border-radius: 3px; }
     .back-btn svg { width: 24px; height: 24px; }
-    .home-link-btn {
-      background: none; border: none; cursor: pointer; color: var(--color-secondary-base);
-      font-family: var(--font-body); font-size: 14px; font-weight: 500;
-      display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; margin-left: 8px;
-    }
-    .home-link-btn:hover { text-decoration: underline; }
-    .home-link-btn:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
 
     .progress-wrap { padding: 24px 16px 16px; flex-shrink: 0; }
     .progress-wrap.enter { animation: progEnter .45s ease both; }
@@ -95,6 +89,7 @@
     h1 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 1.14; letter-spacing: -.5px; color: var(--color-black); }
     .step-screen h1 { font-size: 28px; line-height: 1.3; letter-spacing: normal; }
     h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.3; color: var(--color-black); }
+    h3 { font-family: var(--font-display); font-weight: 400; font-size: 20px; line-height: 1.3; color: var(--color-black); margin-top: 8px; margin-bottom: 16px; }
     .heading-block { display: flex; flex-direction: column; gap: var(--space-1); }
     .screen-subtext { font-size: 16px; color: var(--text-secondary); line-height: 1.5; }
 
@@ -108,6 +103,15 @@
     .btn-primary:hover:not(:disabled) { background: var(--color-primary-dark); }
     .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
     .btn-primary:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
+
+    .btn-secondary {
+      display: inline-block; padding: 12px 16px;
+      background: var(--color-secondary-base); color: var(--color-white);
+      border: 2px solid transparent; border-radius: 4px;
+      font-family: var(--font-body); font-size: 14px; font-weight: 600;
+      text-align: center; cursor: pointer; transition: background 150ms ease;
+    }
+    .btn-secondary:hover { background: var(--color-primary-dark); }
 
     .btn-text {
       background: transparent; border: none; cursor: pointer; color: var(--color-secondary-base);
@@ -171,6 +175,22 @@
     .contact-card__value { font-size: 14px; color: var(--text-secondary); }
     .contact-card__check { width: 20px; color: var(--color-secondary-base); font-size: 18px; font-weight: bold; flex-shrink: 0; }
 
+    .pillar-card {
+      display: flex; align-items: center; gap: 12px; padding: 16px;
+      background: var(--color-white); border: 1.5px solid var(--color-neutral-300); border-radius: 8px;
+      cursor: pointer; font-family: var(--font-body); transition: all 150ms ease; margin-bottom: 12px;
+    }
+    .pillar-card:hover { border-color: var(--color-secondary-base); background: #F1F4FD; }
+    .pillar-card__icon { font-size: 28px; width: 44px; text-align: center; flex-shrink: 0; }
+    .pillar-card__title { flex: 1; font-size: 16px; font-weight: 600; color: var(--color-black); }
+    .pillar-card__btn { background: var(--color-secondary-base); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 14px; flex-shrink: 0; }
+    .pillar-card__btn:hover { background: var(--color-primary-dark); }
+
+    .ineligible-message {
+      background: var(--color-warning-bg); border: 1px solid #F59E0B; border-radius: 8px;
+      padding: 16px; margin-bottom: 16px; color: #7C2D12;
+    }
+
     .confirm-icon {
       width: 80px; height: 80px; background: #DCEFD2;
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -190,15 +210,19 @@
     .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
 
     .flex-spacer { flex: 1; }
-    .program-list { display: flex; flex-direction: column; gap: 12px; }
-    .program-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 16px; background: var(--color-white);
-      border: 1px solid var(--color-neutral-300); border-radius: 8px;
+    .resume-card {
+      background: #DBEAFE; border: 1px solid #93C5FD; border-radius: 8px;
+      padding: 16px; margin-bottom: 16px;
     }
-    .program-item-title { font-weight: 600; font-size: 16px; }
-    .program-item-btn { background: var(--color-secondary-base); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
-    .program-item-btn:hover { background: var(--color-primary-dark); }
+    .resume-card-title { font-weight: 600; font-size: 16px; color: #1E40AF; margin-bottom: 8px; }
+    .resume-card-text { font-size: 14px; color: #1E3A8A; margin-bottom: 12px; }
+    .resume-btn { display: inline-block; background: #3B82F6; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: 600; border: none; cursor: pointer; margin-right: 8px; }
+    .resume-btn:hover { background: #2563EB; }
+    .clear-btn { display: inline-block; background: transparent; color: #3B82F6; padding: 8px 0; text-decoration: underline; font-weight: 600; border: none; cursor: pointer; font-size: 14px; }
+    .clear-btn:hover { color: #2563EB; }
+
+    .btn-row { display: flex; gap: 8px; }
+    .btn-row .btn-secondary { flex: 1; }
   </style>
 </head>
 <body>
@@ -215,19 +239,14 @@
     <button class="back-btn" id="back-btn" aria-label="Go back" onclick="goBack()">
       <i data-lucide="arrow-left"></i> Back
     </button>
-    <button class="home-link-btn" onclick="goToHome()" aria-label="Go to programs">
-      <i data-lucide="home" style="width:14px;height:14px;"></i> Home
-    </button>
   </div>
 
   <div class="progress-wrap" id="progress-wrap" style="display:none">
-    <div class="progress-label" id="progress-label-text">Step 1/5</div>
+    <div class="progress-label" id="progress-label-text">Step 1/3</div>
     <div class="progress-track">
       <div class="progress-seg" id="seg-1"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-2"><span class="seg-fill"></span></div>
       <div class="progress-seg" id="seg-3"><span class="seg-fill"></span></div>
-      <div class="progress-seg" id="seg-4"><span class="seg-fill"></span></div>
-      <div class="progress-seg" id="seg-5"><span class="seg-fill"></span></div>
     </div>
   </div>
 
@@ -238,8 +257,9 @@
       <div class="screen-inner">
         <div class="heading-block">
           <h1>Get your bills covered</h1>
-          <p class="screen-subtext">You're close to getting help with health coverage, food, rent, and more. Takes less than 2&nbsp;minutes.</p>
+          <p class="screen-subtext">You're close to getting help with health coverage, food, rent, and more. Takes less than 5&nbsp;minutes.</p>
         </div>
+        <div id="resume-container"></div>
         <div class="flex-spacer"></div>
       </div>
       <div class="screen-footer" id="footer-0">
@@ -258,21 +278,21 @@
           <button class="situation-card" id="card-health" onclick="toggleSituation('health')" aria-pressed="false">
             <span class="card-icon"><i data-lucide="stethoscope"></i></span>
             <span class="card-body">
-              <span class="card-title">I need health coverage</span>
+              <span class="card-title">I need help getting or keeping my healthcare</span>
               <span class="card-sub">No insurance or need to renew</span>
             </span>
           </button>
           <button class="situation-card" id="card-housing" onclick="toggleSituation('housing')" aria-pressed="false">
             <span class="card-icon"><i data-lucide="home"></i></span>
             <span class="card-body">
-              <span class="card-title">I might lose my home</span>
-              <span class="card-sub">Behind on rent or facing eviction</span>
+              <span class="card-title">I'm behind on rent or might lose my home</span>
+              <span class="card-sub">Facing eviction or housing instability</span>
             </span>
           </button>
           <button class="situation-card" id="card-food" onclick="toggleSituation('food')" aria-pressed="false">
             <span class="card-icon"><i data-lucide="apple"></i></span>
             <span class="card-body">
-              <span class="card-title">I need help with food</span>
+              <span class="card-title">I need help with food or everyday expenses</span>
               <span class="card-sub">SNAP or cash assistance</span>
             </span>
           </button>
@@ -288,6 +308,7 @@
       </div>
       <div class="screen-footer" id="footer-1">
         <button class="btn-primary" id="btn-s1" onclick="navigate(2)" disabled>Continue →</button>
+        <button class="btn-text" onclick="saveAndExit()">Save and continue later</button>
       </div>
     </div>
 
@@ -307,25 +328,26 @@
           <input class="field-input" type="text" id="lname" placeholder="Last name" />
         </div>
         <div class="field-group">
+          <label class="field-label" for="zip">ZIP code</label>
+          <input class="field-input" type="text" id="zip" placeholder="10001" maxlength="5" />
+        </div>
+        <div class="field-group">
           <label class="field-label" for="phone">Phone number</label>
           <input class="field-input" type="tel" id="phone" placeholder="(555) 555-5555" />
         </div>
         <div class="field-group">
           <label class="field-label" for="email">Email</label>
-          <input class="field-input" type="email" id="email" placeholder="your@email.com" />
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="zip">ZIP code</label>
-          <input class="field-input" type="text" id="zip" placeholder="10001" maxlength="5" />
+          <input class="field-input" type="email" id="email" placeholder="you@gmail.com" />
         </div>
         <div class="scroll-sentinel" id="sentinel-2"></div>
       </div>
       <div class="screen-footer" id="footer-2">
         <button class="btn-primary" onclick="navigate(3)">Next →</button>
+        <button class="btn-text" onclick="saveAndExit()">Save and continue later</button>
       </div>
     </div>
 
-    <!-- Screen 3: Phone confirmation -->
+    <!-- Screen 3: Contact preference -->
     <div class="screen step-screen" id="screen-3">
       <div class="screen-inner">
         <div class="heading-block">
@@ -354,26 +376,26 @@
         <div class="scroll-sentinel" id="sentinel-3"></div>
       </div>
       <div class="screen-footer" id="footer-3">
-        <button class="btn-primary" onclick="showPrograms()">Next →</button>
+        <button class="btn-primary" onclick="showPillars()">Next →</button>
+        <button class="btn-text" onclick="saveAndExit()">Save and continue later</button>
       </div>
     </div>
 
-    <!-- Screen 4: Select programs (Modular specific) -->
+    <!-- Screen 4: Pillar selection -->
     <div class="screen step-screen" id="screen-4">
       <div class="screen-inner">
         <div class="heading-block">
           <h1>Let's get started</h1>
-          <p class="screen-subtext">Select a program to begin. You can apply to multiple programs.</p>
+          <p class="screen-subtext">Select a program below. Click "Start" to answer screening questions.</p>
         </div>
-        <div class="program-list" id="program-list"></div>
+        <div id="pillar-list"></div>
         <div class="scroll-sentinel" id="sentinel-4"></div>
       </div>
       <div class="screen-footer" id="footer-4">
-        <button class="btn-primary" id="btn-submit" onclick="submitAll()" style="display:none;">Submit all applications →</button>
+        <button class="btn-primary" id="btn-submit" onclick="submitApplications()" style="display:none;">Submit applications →</button>
+        <button class="btn-text" onclick="saveAndExit()">Save and continue later</button>
       </div>
     </div>
-
-    <!-- Program screens will be dynamically generated -->
 
     <!-- Final confirmation -->
     <div class="screen" id="screen-confirm">
@@ -401,21 +423,22 @@
   var currentScreen = 0;
   var selectedSituations = new Set();
   var selectedContact = '';
-  var completedPrograms = new Set();
-  var currentProgram = null;
-  var programData = {};
+  var completedPillars = new Set();
+  var currentPillar = null;
+  var pillarData = {};
   var screenStack = [];
+  var appState = {};
 
-  var PROGRAMS = {
-    health: { name: 'Healthcare', icon: 'stethoscope' },
+  var PILLARS = {
+    health: { name: 'Healthcare Insurance Assistance', icon: 'stethoscope' },
     housing: { name: 'Eviction Prevention', icon: 'home' },
-    food: { name: 'Food Assistance', icon: 'apple' },
+    food: { name: 'Food or Everyday Expenses', icon: 'apple' },
     medical: { name: 'Medical Debt Relief', icon: 'cross' }
   };
 
   function navigate(screen) {
     var current = document.querySelector('.screen.active');
-    var target = document.getElementById('screen-' + screen);
+    var target = typeof screen === 'number' ? document.getElementById('screen-' + screen) : document.getElementById('screen-' + screen);
     if (!target || current === target) return;
 
     if (current) {
@@ -429,10 +452,10 @@
     }
 
     target.classList.add('active');
-    currentScreen = screen;
-    updateChrome(screen);
-    updateProgress(screen);
-    if (screen === 3) populateContactDisplay();
+    currentScreen = typeof screen === 'number' ? screen : screen;
+    updateChrome(currentScreen);
+    updateProgress(currentScreen);
+    if (currentScreen === 3) populateContactDisplay();
     target.scrollTop = 0;
   }
 
@@ -443,12 +466,10 @@
   }
 
   function goToLanding() {
-    resetAll();
-  }
-
-  function goToHome() {
     screenStack = [];
-    navigate(1);
+    currentScreen = 0;
+    navigate(0);
+    showResumeOption();
   }
 
   function updateChrome(screen) {
@@ -461,11 +482,11 @@
 
   function updateProgress(screen) {
     if (screen <= 0 || screen >= 4) return;
-    for (var i = 1; i <= 5; i++) {
+    for (var i = 1; i <= 3; i++) {
       var seg = document.getElementById('seg-' + i);
       if (seg) seg.classList.toggle('filled', i <= screen);
     }
-    document.getElementById('progress-label-text').textContent = 'Step ' + screen + '/4';
+    document.getElementById('progress-label-text').textContent = 'Step ' + screen + '/3';
   }
 
   function toggleSituation(id) {
@@ -498,137 +519,267 @@
   }
 
   function populateContactDisplay() {
-    var emailDisplay = document.getElementById('email-display');
-    var phoneDisplay = document.getElementById('phone-display');
-    if (emailDisplay && phoneDisplay) {
-      emailDisplay.textContent = 'you@gmail.com';
-      phoneDisplay.textContent = '(555) 555-5555';
-    }
+    var email = document.getElementById('email').value || 'you@gmail.com';
+    var phone = document.getElementById('phone').value || '(555) 555-5555';
+    document.getElementById('email-display').textContent = email;
+    document.getElementById('phone-display').textContent = phone;
   }
 
-  function showPrograms() {
-    var list = document.getElementById('program-list');
+  function showPillars() {
+    var list = document.getElementById('pillar-list');
     list.innerHTML = '';
-    selectedSituations.forEach(function(prog) {
-      var progInfo = PROGRAMS[prog];
-      var html = '<div class="program-item">' +
-        '<span class="program-item-title">' + progInfo.name + '</span>' +
-        '<button class="program-item-btn" onclick="startProgram(\'' + prog + '\')">Start</button>' +
+    var html = '';
+    PILLARS.forEach = function(callback) {
+      for (var key in PILLARS) {
+        if (PILLARS.hasOwnProperty(key)) {
+          callback(PILLARS[key], key);
+        }
+      }
+    };
+    for (var pillar in PILLARS) {
+      var info = PILLARS[pillar];
+      var icon = getIconForPillar(pillar);
+      var completed = completedPillars.has(pillar) ? ' (completed)' : '';
+      html += '<div class="pillar-card">' +
+        '<div class="pillar-card__icon">' + icon + '</div>' +
+        '<div class="pillar-card__title">' + info.name + completed + '</div>' +
+        '<button class="pillar-card__btn" onclick="startPillar(\'' + pillar + '\')">Start</button>' +
         '</div>';
-      list.innerHTML += html;
-    });
+    }
+    list.innerHTML = html;
     navigate(4);
   }
 
-  function startProgram(prog) {
-    currentProgram = prog;
-    programData[prog] = {};
-    var screen = createProgramScreen(prog);
-    navigate(screen);
+  function getIconForPillar(pillar) {
+    var icons = {
+      health: '🏥',
+      housing: '🏠',
+      food: '🍎',
+      medical: '⚕️'
+    };
+    return icons[pillar] || '•';
   }
 
-  function createProgramScreen(prog) {
-    var screenId = 'screen-prog-' + prog;
-    if (document.getElementById(screenId)) {
+  function startPillar(pillar) {
+    currentPillar = pillar;
+    if (!pillarData[pillar]) pillarData[pillar] = {};
+    var screenId = 'screen-pillar-' + pillar;
+    var existing = document.getElementById(screenId);
+    if (existing) {
       navigate(screenId);
-      return screenId;
+      return;
     }
+    createPillarScreen(pillar);
+  }
 
-    var questions = getProgramQuestions(prog);
+  function createPillarScreen(pillar) {
+    var screenId = 'screen-pillar-' + pillar;
     var wrapper = document.querySelector('.screens-wrapper');
+    var questions = getPillarQuestions(pillar);
     var html = '<div class="screen step-screen" id="' + screenId + '">' +
       '<div class="screen-inner">' +
-      '<div class="heading-block"><h1>' + PROGRAMS[prog].name + '</h1><p class="screen-subtext">Tell us more about your situation.</p></div>';
+      '<div class="heading-block"><h1>' + PILLARS[pillar].name + '</h1></div>';
 
-    questions.forEach(function(q, i) {
-      html += '<div class="field-group">' +
-        '<label class="field-label" for="' + prog + '-q' + i + '">' + q.label + '</label>';
-      if (q.type === 'text') {
-        html += '<input class="field-input" type="text" id="' + prog + '-q' + i + '" placeholder="' + q.placeholder + '" />';
-      } else if (q.type === 'select') {
-        html += '<select class="field-select" id="' + prog + '-q' + i + '">';
-        q.options.forEach(opt => html += '<option>' + opt + '</option>');
-        html += '</select>';
-      } else if (q.type === 'radio') {
-        html += '<div class="chip-row">';
-        q.options.forEach(opt => html += '<button class="chip" onclick="selectRadio(this, \'' + prog + '-q' + i + '\')">' + opt + '</button>');
-        html += '</div>';
-      }
-      html += '</div>';
-    });
+    if (questions.type === 'gated') {
+      html += createGatedQuestions(pillar, questions.gating);
+    } else {
+      html += createRegularQuestions(pillar, questions.questions);
+    }
 
-    html += '<div class="scroll-sentinel" id="sentinel-' + screenId + '"></div></div>' +
-      '<div class="screen-footer" id="footer-' + screenId + '">' +
-      '<button class="btn-primary" onclick="saveProgramAndContinue(\'' + prog + '\')">Save and continue</button>' +
+    html += '<div class="scroll-sentinel"></div></div>' +
+      '<div class="screen-footer">' +
+      '<button class="btn-primary" onclick="savePillarAndContinue(\'' + pillar + '\')">Next →</button>' +
+      '<button class="btn-secondary" style="width:auto;" onclick="goBack()">Back to list</button>' +
+      '<button class="btn-text" onclick="saveAndExit()">Save and continue later</button>' +
       '</div></div>';
 
     var div = document.createElement('div');
     div.innerHTML = html;
     wrapper.appendChild(div.firstChild);
-
     navigate(screenId);
-    return screenId;
   }
 
-  function getProgramQuestions(prog) {
-    if (prog === 'health') {
-      return [
-        { label: 'Do you currently have health insurance?', type: 'radio', options: ['Yes', 'No'] },
-        { label: 'Which best describes your situation?', type: 'select', placeholder: 'Select...', options: ['No insurance', 'Need to renew', 'Gap in coverage', 'Looking for better coverage'] }
-      ];
-    } else if (prog === 'housing') {
-      return [
-        { label: 'Do you have a pending eviction case?', type: 'radio', options: ['Yes', 'No'] },
-        { label: 'How much are you behind on rent?', type: 'text', placeholder: '$0' },
-        { label: 'Monthly rent amount', type: 'text', placeholder: '$0' }
-      ];
-    } else if (prog === 'food') {
-      return [
-        { label: 'Number of people in your household', type: 'text', placeholder: '1' },
-        { label: 'Have you applied for SNAP before?', type: 'radio', options: ['Yes', 'No'] },
-        { label: 'Total household income (monthly)', type: 'text', placeholder: '$0' }
-      ];
-    } else if (prog === 'medical') {
-      return [
-        { label: 'Do you have hospital bills?', type: 'radio', options: ['Yes', 'No'] },
-        { label: 'Total amount owed', type: 'text', placeholder: '$0' },
-        { label: 'Which hospital?', type: 'text', placeholder: 'Hospital name' }
-      ];
-    }
-    return [];
+  function createGatedQuestions(pillar, gatings) {
+    var html = '<div class="field-group">';
+    gatings.forEach(function(q, i) {
+      html += '<label class="field-label">' + q.label + '</label>';
+      if (q.type === 'radio') {
+        html += '<div class="chip-row">';
+        q.options.forEach(function(opt) {
+          html += '<button class="chip" onclick="selectChip(this, \'' + pillar + '-gate-' + i + '\')" data-value="' + opt + '">' + opt + '</button>';
+        });
+        html += '</div>';
+      }
+    });
+    html += '</div>';
+    return html;
   }
 
-  function selectRadio(el, id) {
+  function createRegularQuestions(pillar, questions) {
+    var html = '';
+    questions.forEach(function(q, i) {
+      html += '<div class="field-group">' +
+        '<label class="field-label">' + q.label + '</label>';
+      if (q.type === 'text' || q.type === 'number') {
+        html += '<input class="field-input" type="' + q.type + '" id="' + pillar + '-q' + i + '" placeholder="' + q.placeholder + '" />';
+      } else if (q.type === 'select') {
+        html += '<select class="field-select" id="' + pillar + '-q' + i + '">';
+        q.options.forEach(function(opt) {
+          html += '<option>' + opt + '</option>';
+        });
+        html += '</select>';
+      } else if (q.type === 'radio') {
+        html += '<div class="chip-row">';
+        q.options.forEach(function(opt) {
+          html += '<button class="chip" onclick="selectChip(this, \'' + pillar + '-q' + i + '\')" data-value="' + opt + '">' + opt + '</button>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+    });
+    return html;
+  }
+
+  function selectChip(el, id) {
     el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
   }
 
-  function saveProgramAndContinue(prog) {
-    completedPrograms.add(prog);
-    var remaining = [];
-    selectedSituations.forEach(p => {
-      if (!completedPrograms.has(p)) remaining.push(p);
-    });
+  function getPillarQuestions(pillar) {
+    if (pillar === 'health') {
+      return {
+        type: 'regular',
+        questions: [
+          { label: 'First Name', type: 'text', placeholder: '' },
+          { label: 'Last Name', type: 'text', placeholder: '' },
+          { label: 'Home Zip Code', type: 'text', placeholder: '10001' },
+          { label: 'Age', type: 'radio', options: ['65 or older', '64 or younger'] },
+          { label: 'Disability Status', type: 'radio', options: ['I am living with a disability', 'Visually impaired', 'Neither'] },
+          { label: 'Type of service', type: 'radio', options: ['I would like to enroll in health insurance', 'I would like to renew my current health insurance', 'I want information on health insurance only'] }
+        ]
+      };
+    } else if (pillar === 'housing') {
+      return {
+        type: 'regular',
+        questions: [
+          { label: 'Do you have a pending eviction case in Housing Court?', type: 'radio', options: ['Yes', 'No'] },
+          { label: 'Have you received a Motion to Restore/Enforce an Eviction?', type: 'radio', options: ['Yes', 'No'] },
+          { label: 'Have you received a Warrant of Eviction?', type: 'radio', options: ['Yes', 'No'] },
+          { label: 'Have you been locked out of your apartment by your landlord without a court order or warrant?', type: 'radio', options: ['Yes', 'No'] },
+          { label: 'Do you have a termination of tenancy case brought by the New York City Housing Authority?', type: 'radio', options: ['Yes', 'No'] },
+          { label: 'Does your apartment need serious repairs but your landlord won\'t make them?', type: 'radio', options: ['Yes', 'No'] }
+        ]
+      };
+    } else if (pillar === 'food') {
+      return {
+        type: 'regular',
+        questions: [
+          { label: 'What was your total household income over the last 30 days?', type: 'radio', options: ['$0-$1,500', '$1,501-$3,000', '$3,001-$5,000', '$5,000+'] },
+          { label: 'Has anyone in your household ever applied for SNAP before in NYC?', type: 'radio', options: ['Yes', 'No', 'Not sure'] },
+          { label: 'Does anyone in your household have Medicaid or Medicare?', type: 'radio', options: ['Medicaid only', 'Medicare only', 'Both Medicaid and Medicare', 'Neither'] },
+          { label: 'Are you or anyone in your household pregnant?', type: 'radio', options: ['Yes', 'No'] },
+          { label: 'Do you or anyone in your household have a disability?', type: 'radio', options: ['Yes', 'No'] }
+        ]
+      };
+    } else if (pillar === 'medical') {
+      return {
+        type: 'gated',
+        gating: [
+          { label: 'Do you have any hospital bills you are unable to pay?', type: 'radio', options: ['Yes', 'No'] },
+          { label: 'Is the hospital in NYC?', type: 'radio', options: ['Yes', 'No'] }
+        ],
+        questions: [
+          { label: 'Where is your hospital?', type: 'select', options: ['Select city', 'Manhattan', 'Brooklyn', 'Queens', 'Bronx', 'Staten Island'] },
+          { label: 'Which hospital was the bill from?', type: 'select', options: ['Select hospital', 'Hospital A', 'Hospital B'] },
+          { label: 'What\'s the original bill date?', type: 'text', placeholder: 'MM/DD/YYYY' },
+          { label: 'What is the total amount you owe?', type: 'text', placeholder: '$' },
+          { label: 'What\'s your insurance status?', type: 'radio', options: ['Insured', 'Uninsured'] }
+        ]
+      };
+    }
+    return { type: 'regular', questions: [] };
+  }
 
-    if (remaining.length > 0) {
-      navigate(4);
+  function savePillarAndContinue(pillar) {
+    completedPillars.add(pillar);
+    showPillars();
+  }
+
+  function submitApplications() {
+    navigate('confirm');
+  }
+
+  function saveAndExit() {
+    saveState();
+    goToLanding();
+  }
+
+  function saveState() {
+    appState = {
+      selectedSituations: Array.from(selectedSituations),
+      fname: document.getElementById('fname').value,
+      lname: document.getElementById('lname').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      zip: document.getElementById('zip').value,
+      selectedContact: selectedContact,
+      completedPillars: Array.from(completedPillars)
+    };
+    localStorage.setItem('navigationAppState', JSON.stringify(appState));
+  }
+
+  function restoreState() {
+    var saved = localStorage.getItem('navigationAppState');
+    if (saved) {
+      appState = JSON.parse(saved);
+      appState.selectedSituations.forEach(s => selectedSituations.add(s));
+      appState.completedPillars.forEach(p => completedPillars.add(p));
+      document.getElementById('fname').value = appState.fname || '';
+      document.getElementById('lname').value = appState.lname || '';
+      document.getElementById('phone').value = appState.phone || '';
+      document.getElementById('email').value = appState.email || '';
+      document.getElementById('zip').value = appState.zip || '';
+      selectedContact = appState.selectedContact || '';
+      return true;
+    }
+    return false;
+  }
+
+  function showResumeOption() {
+    var container = document.getElementById('resume-container');
+    if (localStorage.getItem('navigationAppState')) {
+      container.innerHTML = '<div class="resume-card">' +
+        '<div class="resume-card-title">You have saved progress</div>' +
+        '<div class="resume-card-text">Pick up where you left off?</div>' +
+        '<button class="resume-btn" onclick="resumeApplication()">Resume</button>' +
+        '<button class="clear-btn" onclick="clearSavedState()">Clear and start fresh</button>' +
+        '</div>';
     } else {
-      navigate('confirm');
+      container.innerHTML = '';
     }
   }
 
-  function submitAll() {
-    navigate('confirm');
+  function resumeApplication() {
+    if (restoreState()) {
+      navigate(2);
+    }
+  }
+
+  function clearSavedState() {
+    localStorage.removeItem('navigationAppState');
+    showResumeOption();
   }
 
   function resetAll() {
     selectedSituations.clear();
-    completedPrograms.clear();
-    currentProgram = null;
-    programData = {};
+    completedPillars.clear();
+    currentPillar = null;
+    pillarData = {};
     screenStack = [];
     currentScreen = 0;
     selectedContact = '';
+    appState = {};
+    localStorage.removeItem('navigationAppState');
 
     document.querySelectorAll('.situation-card').forEach(c => c.classList.remove('selected'));
     document.getElementById('btn-s1').disabled = true;
@@ -638,11 +789,13 @@
     });
 
     navigate(0);
+    showResumeOption();
   }
 
   document.addEventListener('DOMContentLoaded', function() {
     if (window.lucide) lucide.createIcons();
     updateChrome(0);
+    showResumeOption();
   });
 </script>
 </body>
