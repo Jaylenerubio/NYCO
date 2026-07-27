@@ -454,13 +454,6 @@
           <p class="screen-subtext">Select all that apply.</p>
         </div>
         <div class="cards-grid">
-          <button class="situation-card" id="card-health" onclick="toggleCard('health')" aria-pressed="false">
-            <span class="card-icon"><i data-lucide="stethoscope"></i></span>
-            <span class="card-body">
-              <span class="card-title">I need help getting or keeping my healthcare</span>
-              <span class="card-sub">Get started with Medicaid or renew</span>
-            </span>
-          </button>
           <button class="situation-card" id="card-housing" onclick="toggleCard('housing')" aria-pressed="false">
             <span class="card-icon"><i data-lucide="house"></i></span>
             <span class="card-body">
@@ -997,7 +990,6 @@
 
   // ── Results — screened programs (top) + "also apply to" accordion ──
   var PROGRAMS = [
-    { card:'health',  name:'Medicaid health insurance', desc:'Free coverage for doctor visits, hospital stays, mental health care, vision and dental, prescriptions, and more.' },
     { card:'food',    name:'Food assistance',           desc:'Get help paying for groceries with SNAP, also known as EBT or food stamps.' },
     { card:'bills',   name:'Medical Debt Relief',       desc:'Help reducing or forgiving a hospital bill you can’t afford.' },
     { card:'housing', name:'Eviction Prevention',       desc:'Free legal help if you’re facing eviction, harassment, unsafe conditions, or an illegal lockout.' }
