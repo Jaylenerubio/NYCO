@@ -122,8 +122,8 @@
     .form-input, .form-select {
       width: 100%;
       padding: 12px 14px;
-      border: 1.5px solid var(--neutral-300);
-      border-radius: 4px;
+      border: 2px solid var(--neutral-300);
+      border-radius: 8px;
       font-size: 16px;
       font-family: inherit;
       color: var(--black);
@@ -566,8 +566,40 @@
       </div>
     </div>
 
-    <!-- Screen 3: Pillars -->
+    <!-- Screen 3: Preferred Contact Method -->
     <div class="screen" id="screen-3">
+      <div class="screen-header">
+        <div class="screen-title">What's your preferred method of contact?</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px; padding: 24px 24px;">
+        <button style="display: flex; align-items: center; gap: 16px; padding: 24px; border: 2px solid var(--neutral-300); border-radius: 12px; background: var(--white); cursor: pointer; text-align: left; transition: border-color 150ms;" onclick="selectContactMethod('text'); goToScreen(4)">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <div>
+            <div style="font-weight: 600; font-size: 18px; color: var(--black);">Text me</div>
+            <div style="font-size: 16px; color: var(--text-secondary); margin-top: 4px;">(555) 555-5555</div>
+          </div>
+        </button>
+
+        <button style="display: flex; align-items: center; gap: 16px; padding: 24px; border: 2px solid var(--neutral-300); border-radius: 12px; background: var(--white); cursor: pointer; text-align: left; transition: border-color 150ms;" onclick="selectContactMethod('email'); goToScreen(4)">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+          </svg>
+          <div>
+            <div style="font-weight: 600; font-size: 18px; color: var(--black);">Email me</div>
+            <div style="font-size: 16px; color: var(--text-secondary); margin-top: 4px;">you@gmail.com</div>
+          </div>
+        </button>
+      </div>
+
+      <div class="spacer"></div>
+    </div>
+
+    <!-- Screen 4: Pillars -->
+    <div class="screen" id="screen-4">
       <div class="screen-header">
         <div class="screen-title">Let's get started</div>
         <div class="screen-subtitle">Select a program below. Click "Start" to answer screening questions.</div>
@@ -594,9 +626,9 @@
       </div>
     </div>
 
-    <!-- Screen 4: Eviction Prevention -->
-    <div class="screen" id="screen-4">
-      <button class="pillar-back-btn" onclick="goToScreen(3)">Back</button>
+    <!-- Screen 5: Eviction Prevention -->
+    <div class="screen" id="screen-5">
+      <button class="pillar-back-btn" onclick="goToScreen(4)">Back</button>
       <div class="screen-header">
         <div class="screen-title">Tell us about your housing situation</div>
       </div>
@@ -639,13 +671,13 @@
 
       <div class="spacer"></div>
       <div class="footer">
-        <button class="btn-primary" onclick="completePillar('eviction'); goToScreen(3);">Done</button>
+        <button class="btn-primary" onclick="completePillar('eviction'); goToScreen(4);">Done</button>
       </div>
     </div>
 
-    <!-- Screen 5: Food or Everyday Expenses -->
-    <div class="screen" id="screen-5">
-      <button class="pillar-back-btn" onclick="goToScreen(3)">Back</button>
+    <!-- Screen 6: Food or Everyday Expenses -->
+    <div class="screen" id="screen-6">
+      <button class="pillar-back-btn" onclick="goToScreen(4)">Back</button>
       <div class="screen-header">
         <div class="screen-title">Food or Everyday Expenses</div>
       </div>
@@ -702,13 +734,13 @@
 
       <div class="spacer"></div>
       <div class="footer">
-        <button class="btn-primary" onclick="completePillar('food'); goToScreen(3);">Done</button>
+        <button class="btn-primary" onclick="completePillar('food'); goToScreen(4);">Done</button>
       </div>
     </div>
 
-    <!-- Screen 6: Medical Debt Relief -->
-    <div class="screen" id="screen-6">
-      <button class="pillar-back-btn" onclick="goToScreen(3)">Back</button>
+    <!-- Screen 7: Medical Debt Relief -->
+    <div class="screen" id="screen-7">
+      <button class="pillar-back-btn" onclick="goToScreen(4)">Back</button>
       <div class="screen-header">
         <div class="screen-title">Medical Debt Relief</div>
       </div>
@@ -803,7 +835,7 @@
 
       <div class="spacer"></div>
       <div class="footer">
-        <button class="btn-primary" onclick="completePillar('medical'); goToScreen(3);">Done</button>
+        <button class="btn-primary" onclick="completePillar('medical'); goToScreen(4);">Done</button>
       </div>
     </div>
   </div>
@@ -854,27 +886,31 @@
   }
 
   function startPillar(pillar) {
-    if (pillar === 'eviction') goToScreen(4);
-    else if (pillar === 'food') goToScreen(5);
-    else if (pillar === 'medical') goToScreen(6);
+    if (pillar === 'eviction') goToScreen(5);
+    else if (pillar === 'food') goToScreen(6);
+    else if (pillar === 'medical') goToScreen(7);
+  }
+
+  function selectContactMethod(method) {
+    pillarData.contactMethod = method;
   }
 
   function selectAge(age, btn) {
-    document.querySelectorAll('#screen-4 .chips')[0].querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('#screen-5 .chips')[0].querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
     btn.classList.add('selected');
     pillarData.healthcare.age = age;
     checkHealthcareEligibility();
   }
 
   function selectDisability(status, btn) {
-    document.querySelectorAll('#screen-4 .chips')[1].querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('#screen-5 .chips')[1].querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
     btn.classList.add('selected');
     pillarData.healthcare.disability = status;
     checkHealthcareEligibility();
   }
 
   function selectService(service, btn) {
-    document.querySelectorAll('#screen-4 .chips')[2].querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('#screen-5 .chips')[2].querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
     btn.classList.add('selected');
     pillarData.healthcare.service = service;
   }
