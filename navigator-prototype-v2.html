@@ -936,14 +936,11 @@
     var phone  = document.getElementById('phone-input').value.trim();
     var digits = phone.replace(/\D/g, '');
     var list   = document.getElementById('contactpref-list');
-    var html   = '';
-    if (digits.length >= 10) {
-      html += prefCard('message-circle', 'Text me', prettyPhone(digits));
-    }
-    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      html += prefCard('mail', 'Email me', email);
-    }
-    list.innerHTML = html;
+    // Always show both methods; fall back to an example if the field was left blank.
+    var phoneVal = digits.length >= 10 ? prettyPhone(digits) : '(555) 555-5555';
+    var emailVal = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : 'you@gmail.com';
+    list.innerHTML = prefCard('message-circle', 'Text me', phoneVal) +
+                     prefCard('mail', 'Email me', emailVal);
     document.getElementById('btn-contactpref-continue').disabled = true;
     if (window.lucide) lucide.createIcons();
   }
