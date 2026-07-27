@@ -529,7 +529,7 @@
         <div class="scroll-sentinel" id="sentinel-save"></div>
       </div>
       <div class="screen-footer" id="footer-save">
-        <button class="btn-primary" id="btn-save-continue" onclick="navigate('contactpref')" disabled>Continue</button>
+        <button class="btn-primary" id="btn-save-continue" onclick="navigate('contactpref')">Continue</button>
       </div>
     </div>
 
@@ -894,30 +894,19 @@
   }
 
   // ── Save ────────────────────────────────────
+  // No required-field gating — Continue is always available.
   function checkSave() {
     var firstName = document.getElementById('first-name').value.trim();
-    var lastName  = document.getElementById('last-name').value.trim();
-    var dob       = document.getElementById('dob-input').value.trim();
-    var email     = document.getElementById('email-input').value.trim();
-    var phone     = document.getElementById('phone-input').value.trim();
-    var isPhone   = phone.replace(/\D/g,'').length >= 10;
-    var isEmail   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    // Every field is required to continue.
-    var valid = firstName !== '' && lastName !== '' && isValidDob(dob) && isPhone && isEmail;
-    document.getElementById('saved-note').classList.toggle('visible', valid);
-    document.getElementById('btn-save-continue').disabled = !valid;
+    document.getElementById('saved-note').classList.toggle('visible', firstName !== '');
   }
 
-  // Auto-format DOB as MM/DD/YYYY while typing, and validate a real calendar date.
+  // Auto-format DOB as MM/DD/YYYY while typing (formatting only, no validation).
   function formatDob(el) {
     var digits = el.value.replace(/\D/g, '').slice(0, 8);
     var out = digits.slice(0, 2);
     if (digits.length >= 3) out += '/' + digits.slice(2, 4);
     if (digits.length >= 5) out += '/' + digits.slice(4, 8);
     el.value = out;
-    var err = document.getElementById('dob-error');
-    // Only flag once a full date has been entered.
-    err.style.display = (digits.length === 8 && !isValidDob(out)) ? '' : 'none';
   }
   function isValidDob(str) {
     var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(str);
@@ -1071,7 +1060,7 @@
     document.getElementById('dob-error').style.display = 'none';
     ['billdate-more','owed-more'].forEach(function(id){ var el=document.getElementById(id); if(el) el.setAttribute('hidden',''); });
     document.querySelectorAll('.help-toggle').forEach(function(b){ b.textContent = 'See more'; });
-    document.getElementById('btn-save-continue').disabled = true;
+    document.getElementById('btn-save-continue').disabled = false;
     document.getElementById('btn-contactpref-continue').disabled = true;
     document.getElementById('contactpref-list').innerHTML = '';
     document.getElementById('also-apply').classList.remove('collapsed');
