@@ -144,6 +144,12 @@
       flex-wrap: wrap;
     }
 
+    .chips {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
     .chip {
       padding: 18px 8px;
       border: 1px solid var(--neutral-300);
@@ -154,7 +160,7 @@
       font-weight: 400;
       color: var(--black);
       text-align: center;
-      transition: border-color 150ms, background 150ms, box-shadow 150ms;
+      transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
     }
 
     .chip:hover { border-color: var(--secondary); }
@@ -209,10 +215,32 @@
 
     .footer.two-button {
       flex-direction: row;
+      gap: 12px;
     }
 
     .footer.two-button button {
       flex: 1;
+    }
+
+    /* Back button for pillar screens (top right) */
+    .pillar-back-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: var(--neutral-100);
+      color: var(--black);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 150ms;
+      z-index: 10;
+    }
+
+    .pillar-back-btn:hover {
+      background: var(--neutral-200);
     }
 
     /* Situation cards */
@@ -568,6 +596,7 @@
 
     <!-- Screen 4: Eviction Prevention -->
     <div class="screen" id="screen-4">
+      <button class="pillar-back-btn" onclick="goToScreen(3)">Back</button>
       <div class="screen-header">
         <div class="screen-title">Tell us about your housing situation</div>
       </div>
@@ -609,14 +638,14 @@
       </div>
 
       <div class="spacer"></div>
-      <div class="footer two-button">
-        <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
+      <div class="footer">
         <button class="btn-primary" onclick="completePillar('eviction'); goToScreen(3);">Done</button>
       </div>
     </div>
 
     <!-- Screen 5: Food or Everyday Expenses -->
     <div class="screen" id="screen-5">
+      <button class="pillar-back-btn" onclick="goToScreen(3)">Back</button>
       <div class="screen-header">
         <div class="screen-title">Food or Everyday Expenses</div>
       </div>
@@ -672,14 +701,14 @@
       </div>
 
       <div class="spacer"></div>
-      <div class="footer two-button">
-        <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
+      <div class="footer">
         <button class="btn-primary" onclick="completePillar('food'); goToScreen(3);">Done</button>
       </div>
     </div>
 
     <!-- Screen 6: Medical Debt Relief -->
     <div class="screen" id="screen-6">
+      <button class="pillar-back-btn" onclick="goToScreen(3)">Back</button>
       <div class="screen-header">
         <div class="screen-title">Medical Debt Relief</div>
       </div>
@@ -773,8 +802,7 @@
       </div>
 
       <div class="spacer"></div>
-      <div class="footer two-button">
-        <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
+      <div class="footer">
         <button class="btn-primary" onclick="completePillar('medical'); goToScreen(3);">Done</button>
       </div>
     </div>
