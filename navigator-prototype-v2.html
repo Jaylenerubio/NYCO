@@ -346,23 +346,24 @@
     .screened-card + .screened-card { border-top: 1px solid var(--color-neutral-200); }
     .sc-head { display: flex; align-items: center; gap: 10px; }
     .sc-name { flex: 1; font-size: 17px; font-weight: 600; color: var(--color-black); line-height: 1.25; }
-    .sc-check { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--success-bg); color: var(--success-fg); display: flex; align-items: center; justify-content: center; }
-    .sc-check svg { width: 15px; height: 15px; }
+    .sc-check { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: var(--success-bg); color: var(--success-fg); display: flex; align-items: center; justify-content: center; }
+    .sc-check svg { width: 22px; height: 22px; stroke-width: 2.5; }
     .sc-meta { font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; margin-top: 4px; }
     .sc-meta:first-of-type { margin-top: 8px; }
 
     /* Results — "you may also apply to" accordion */
-    .also-apply { border-top: 1px solid var(--color-neutral-200); padding-top: 6px; margin-top: 6px; }
-    .also-toggle { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: none; padding: 16px 2px; cursor: pointer; font-family: var(--font-display); font-size: 18px; color: var(--color-black); text-align: left; line-height: 1.3; }
+    .also-apply { border: 1px solid var(--border-default); border-radius: 14px; padding: 4px 18px; margin-top: 10px; }
+    .also-toggle { display: flex; align-items: flex-start; gap: 12px; width: 100%; background: none; border: none; padding: 18px 0; cursor: pointer; font-family: var(--font-display); font-size: 20px; color: var(--color-black); text-align: left; line-height: 1.25; }
     .also-toggle span { flex: 1; }
-    .also-chev { width: 22px; height: 22px; flex-shrink: 0; color: var(--text-secondary); transition: transform .2s ease; }
-    .also-toggle[aria-expanded="false"] .also-chev { transform: rotate(-90deg); }
-    .also-body { display: flex; flex-direction: column; gap: 14px; }
+    .also-chev { width: 22px; height: 22px; flex-shrink: 0; margin-top: 3px; color: var(--color-black); transition: transform .2s ease; }
+    .also-toggle[aria-expanded="true"] .also-chev { transform: rotate(180deg); }
+    .also-body { display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px; }
     .also-apply.collapsed .also-body { display: none; }
-    .also-card { border: 1px solid var(--border-default); border-radius: 12px; padding: 16px; }
-    .also-name { font-size: 16px; font-weight: 600; color: var(--color-primary-base); }
-    .also-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin: 4px 0 10px; }
-    .also-cta { background: none; border: none; padding: 0; color: var(--color-secondary-base); font-family: var(--font-body); font-size: 15px; font-weight: 600; cursor: pointer; }
+    .also-card { background: var(--color-neutral-100); border-radius: 12px; padding: 18px; }
+    .also-name { font-size: 17px; font-weight: 600; color: var(--color-black); }
+    .also-desc { font-size: 14.5px; color: var(--text-secondary); line-height: 1.55; margin: 6px 0 14px; }
+    .also-cta { align-self: flex-start; background: var(--color-white); border: 1px solid var(--border-default); border-radius: 8px; padding: 12px 18px; color: var(--color-black); font-family: var(--font-body); font-size: 15px; font-weight: 600; cursor: pointer; }
+    .also-cta:hover { border-color: var(--color-secondary-base); }
   </style>
 </head>
 <body>
@@ -731,9 +732,6 @@
           <div class="also-body" id="also-body"></div>
         </div>
         <div class="scroll-sentinel" id="sentinel-results"></div>
-      </div>
-      <div class="screen-footer" id="footer-results">
-        <button class="btn-primary" onclick="navigate('confirm')">TBD</button>
       </div>
     </div>
 
