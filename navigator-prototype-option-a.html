@@ -4,610 +4,831 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NYC Health + Affordability Corps — Navigator Tool</title>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet" />
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --color-primary-base:    #050560;
-      --color-primary-dark:    #030339;
-      --color-secondary-base:  #284CCA;
-      --color-secondary-dark:  #182D79;
-      --color-white:           #FFFFFF;
-      --color-neutral-100:     #F5F5F5;
-      --color-neutral-200:     #EEEEEE;
-      --color-neutral-300:     #DDDDDD;
-      --color-gray-400:        #C2C2C2;
-      --color-gray-500:        #AAAAAA;
-      --color-black:           #191919;
-      --text-secondary:        #6B6B7A;
-      --color-success-text:    #006333;
-      --color-error-base:      #EC131E;
-      --bg-primary:            var(--color-white);
-      --bg-secondary:          var(--color-neutral-100);
-      --border-default:        var(--color-neutral-300);
-      --ease-out:              cubic-bezier(0.16, 1, 0.3, 1);
-      --font-display:          'Source Serif 4', 'Source Serif Pro', Georgia, serif;
-      --font-body:             'Public Sans', system-ui, -apple-system, sans-serif;
-      --space-1: 8px; --space-2: 16px; --space-3: 24px; --space-4: 32px;
+      --primary: #050560;
+      --primary-dark: #030339;
+      --secondary: #284CCA;
+      --white: #FFFFFF;
+      --neutral-100: #F5F5F5;
+      --neutral-200: #EEEEEE;
+      --neutral-300: #DDDDDD;
+      --gray-400: #C2C2C2;
+      --gray-500: #AAAAAA;
+      --black: #191919;
+      --text-secondary: #6B6B7A;
+      --success: #006333;
+      --error: #EC131E;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { height: 100%; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
-      height: 100%; background: var(--bg-secondary); font-family: var(--font-body);
-      color: var(--color-black); font-size: 16px; line-height: 1.5;
-      display: flex; justify-content: center; -webkit-font-smoothing: antialiased;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--neutral-100);
+      color: var(--black);
+      font-size: 16px;
+      line-height: 1.5;
+      display: flex;
+      justify-content: center;
     }
-    #app {
-      width: 100%; max-width: 390px; height: 100%; background: var(--bg-primary);
-      box-shadow: 0 0 60px rgba(0,0,0,0.18); display: flex; flex-direction: column; overflow: hidden;
-    }
-    @media (max-width: 430px) { #app { box-shadow: none; } }
 
-    /* Screen transitions */
-    .screen {
-      position: absolute;
-      inset: 0;
+    #app {
+      width: 100%;
+      max-width: 390px;
+      height: 100%;
+      background: var(--white);
+      box-shadow: 0 0 60px rgba(0,0,0,0.08);
       display: flex;
       flex-direction: column;
-      transform: translateX(100%);
-      transition: transform 280ms ease-out;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      background: var(--bg-primary);
+      overflow: hidden;
     }
 
-    .screen.active {
-      transform: translateX(0);
-      z-index: 2;
+    .header {
+      background: var(--white);
+      border-bottom: 1px solid var(--neutral-300);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
     }
 
-    .screen.exit-left {
-      transform: translateX(-100%);
-      z-index: 1;
+    .logo {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--primary);
     }
 
-    /* Supernav */
-    .supernav {
-      background: var(--bg-secondary); border-bottom: 1px solid var(--border-default);
-      padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
-    }
-    .nyc-logo { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; gap: 8px; }
-    .nyc-logo:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; border-radius: 3px; }
-    .nyc-logo-icon { width: 32px; height: 32px; background: var(--color-primary-base); border-radius: 3px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 700; }
-    .nyc-logo-text { font-size: 12px; font-weight: 600; color: var(--color-primary-base); line-height: 1.2; }
-
-    /* Back nav */
-    .nav-chrome {
-      background: var(--bg-primary); border-bottom: 1px solid var(--border-default);
-      padding: 16px; display: flex; align-items: center; flex-shrink: 0;
-    }
-    .nav-chrome.hidden { display: none; }
     .back-btn {
-      background: none; border: none; cursor: pointer; color: var(--color-black);
-      font-family: var(--font-body); font-size: 16px; font-weight: 400;
-      display: flex; align-items: center; gap: 8px; padding: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 4px 8px;
     }
-    .back-btn:hover { color: var(--color-primary-base); }
-    .back-btn:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; border-radius: 3px; }
-    .back-btn svg { width: 24px; height: 24px; }
-    .home-link-btn {
-      background: none; border: none; cursor: pointer; color: var(--color-secondary-base);
-      font-family: var(--font-body); font-size: 14px; font-weight: 500;
-      display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; margin-left: 8px;
+
+    .back-btn:hover { text-decoration: underline; }
+
+    .screens-wrapper {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
     }
-    .home-link-btn:hover { text-decoration: underline; }
-    .home-link-btn:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
 
-    /* Progress */
-    .progress-wrap { padding: 24px 16px 16px; flex-shrink: 0; }
-    .progress-wrap.enter { animation: progEnter .45s ease both; }
-    @keyframes progEnter { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: translateY(0); } }
-    .progress-label { font-size: 12px; line-height: 1.6; text-transform: uppercase; color: var(--color-black); margin-bottom: 13px; }
-    .progress-track { display: flex; gap: 2px; }
-    .progress-seg { flex: 1; height: 8px; border-radius: 20px; background: var(--color-neutral-200); overflow: hidden; }
-    .progress-seg .seg-fill { display: block; height: 100%; width: 0; background: var(--color-secondary-base); border-radius: 20px; transition: width .45s cubic-bezier(.4,0,.2,1); }
-    .progress-seg.filled .seg-fill { width: 100%; }
+    .screen {
+      display: none;
+      flex-direction: column;
+      padding: 32px 24px 24px;
+      min-height: 100%;
+    }
 
-    /* Screens wrapper */
-    .screens-wrapper { flex: 1; min-height: 0; position: relative; overflow: hidden; }
-    .screen-inner { width: 100%; padding: 24px 16px; flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
-    #screen-landing .screen-inner { padding-top: 32px; }
+    .screen.active { display: flex; }
 
-    /* Typography */
-    h1 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 1.14; letter-spacing: -.5px; color: var(--color-black); }
-    .step-screen h1 { font-size: 28px; line-height: 1.3; letter-spacing: normal; }
-    h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.3; color: var(--color-black); }
-    .heading-block { display: flex; flex-direction: column; gap: var(--space-1); }
-    .screen-subtext { font-size: 16px; color: var(--text-secondary); line-height: 1.5; }
+    .screen-header {
+      margin-bottom: 32px;
+    }
 
-    /* Buttons */
+    .screen-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .screen-subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--neutral-300);
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--black);
+      background: var(--white);
+      transition: border-color 150ms, box-shadow 150ms;
+    }
+
+    .form-input::placeholder { color: var(--gray-500); }
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(40, 76, 202, 0.1);
+    }
+
+    .chips {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 12px 20px;
+      border: 1.5px solid var(--neutral-300);
+      border-radius: 8px;
+      background: var(--white);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--black);
+      transition: all 150ms;
+    }
+
+    .chip:hover { border-color: var(--secondary); }
+    .chip.selected {
+      border-color: var(--secondary);
+      background: #F1F4FD;
+      color: var(--secondary);
+    }
+
     .btn-primary {
-      display: block; width: 100%; padding: 16px 24px;
-      background: var(--color-primary-base); color: var(--color-white);
-      border: 2px solid transparent; border-radius: 4px;
-      font-family: var(--font-body); font-size: 18px; font-weight: 600; line-height: 22px;
-      text-align: center; cursor: pointer; transition: background 150ms ease;
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 150ms;
     }
-    .btn-primary:hover:not(:disabled) { background: var(--color-primary-dark); }
-    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-primary:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
 
-    .btn-text {
-      background: transparent; border: none; cursor: pointer; color: var(--color-secondary-base);
-      font-family: var(--font-body); font-size: 14px; font-weight: 500;
-      display: block; text-align: center; width: 100%; padding: 12px 0; text-decoration: underline;
+    .btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--neutral-100);
+      color: var(--black);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 150ms;
     }
-    .btn-text:hover { color: var(--color-secondary-dark); }
-    .btn-text:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
 
-    .btn-disabled-link { display: block; text-align: center; font-size: 14px; color: var(--color-gray-500); margin-top: 12px; cursor: not-allowed; pointer-events: none; }
+    .btn-secondary:hover { background: var(--neutral-200); }
 
-    /* Situation cards */
-    .cards-grid { display: flex; flex-direction: column; gap: 8px; }
-    .situation-card {
-      display: flex; align-items: flex-start; gap: 8px;
-      padding: 12px 16px; background: var(--color-white);
-      border: 2px solid var(--color-neutral-200); border-radius: 8px;
-      cursor: pointer; text-align: left; width: 100%;
-      transition: border-color 150ms ease, background 150ms ease;
+    .spacer { flex: 1; }
+
+    .footer {
+      padding: 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid var(--neutral-300);
+      flex-shrink: 0;
     }
-    .situation-card:hover { border-color: var(--color-secondary-base); }
-    .situation-card.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
-    .situation-card:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
-    .card-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--color-black); display: flex; align-items: center; justify-content: center; margin-top: 14px; }
-    .situation-card.selected .card-icon { color: var(--color-secondary-base); }
-    .card-icon svg { width: 24px; height: 24px; }
-    .card-body { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 12px 0; min-width: 0; }
-    .card-title { font-size: 16px; font-weight: 400; color: var(--color-black); line-height: 1.5; }
-    .card-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 
-    /* Form fields */
-    .field-group { display: flex; flex-direction: column; gap: 8px; }
-    .field-label { font-size: 16px; font-weight: 400; color: var(--color-black); }
-    .field-input {
-      width: 100%; padding: 12px 14px;
-      border: 1.5px solid var(--border-default); border-radius: 4px;
-      font-family: var(--font-body); font-size: 16px; color: var(--color-black);
-      background: var(--color-white); transition: border-color 150ms ease;
+    /* Pillars page */
+    .pillar-card {
+      border: 1.5px solid var(--neutral-300);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      background: var(--white);
+      transition: all 150ms;
     }
-    .field-input:focus { outline: none; border-color: var(--color-secondary-base); box-shadow: 0 0 0 3px rgba(40,76,202,0.15); }
-    .field-input::placeholder { color: var(--color-gray-500); }
-    .field-input:disabled { background: var(--color-neutral-100); color: var(--color-gray-500); cursor: default; }
 
-    /* Saved note */
-    .saved-note { display: none; font-size: 14px; line-height: 1.5; color: var(--color-success-text); align-items: flex-start; gap: 6px; }
-    .saved-note.visible { display: flex; }
-    .saved-note svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+    .pillar-card:hover { border-color: var(--secondary); }
 
-    /* Info chip */
-    .info-chip { background: var(--color-neutral-100); border-radius: 8px; padding: 16px; display: flex; gap: 12px; align-items: flex-start; }
-    .info-chip-icon { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-black); margin-top: 2px; }
-    .info-chip-text { font-size: 14px; line-height: 1.5; color: var(--color-black); }
-
-    /* Results */
-    .results-list { display: flex; flex-direction: column; }
-    .result-card { display: flex; flex-direction: column; gap: 8px; padding: 20px 0; }
-    .result-card-header { display: flex; align-items: center; gap: 12px; }
-    .result-card-icon { flex-shrink: 0; color: var(--color-black); display: flex; }
-    .result-card-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
-    .result-card-name { font-size: 20px; font-weight: 600; color: var(--color-black); line-height: 1.2; }
-    .result-card-desc { font-size: 16px; color: var(--text-secondary); line-height: 1.55; padding-left: 34px; }
-    .result-divider { height: 1px; background: var(--color-neutral-200); width: 100%; }
-
-    /* Confirmation */
-    .confirm-icon {
-      width: 80px; height: 80px; background: #DCEFD2;
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      margin: 0 auto var(--space-3);
+    .pillar-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--black);
     }
-    .confirm-icon svg { width: 36px; height: 36px; stroke: #2F7D32; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* Scroll-gate footer */
-    .screen-footer {
-      position: sticky; bottom: 0; background: var(--bg-primary);
-      padding: 16px 16px 24px; flex-shrink: 0;
-      display: flex; flex-direction: column; gap: 8px;
-      opacity: 0; pointer-events: none; transition: opacity 200ms var(--ease-out);
+    .pillar-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 150ms;
     }
-    .screen-footer.footer-visible { opacity: 1; pointer-events: auto; }
-    #screen-results .screen-inner, #screen-confirm .screen-inner { flex: 0 0 auto; }
-    #screen-confirm .screen-inner { justify-content: center; align-items: center; text-align: center; padding-top: 72px; }
-    .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
 
-    /* Spacer */
-    .flex-spacer { flex: 1; }
+    .pillar-btn.start {
+      background: var(--secondary);
+      color: var(--white);
+    }
 
+    .pillar-btn.start:hover { background: #1a3ba8; }
+
+    .pillar-btn.completed {
+      background: var(--neutral-200);
+      color: var(--text-secondary);
+      cursor: default;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active { display: flex; }
+
+    .modal-content {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 32px 24px;
+      max-width: 90%;
+      text-align: center;
+    }
+
+    .modal-icon {
+      width: 80px;
+      height: 80px;
+      background: #DCEFD2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 40px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 12px;
+    }
+
+    .modal-text {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .modal-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    @media (max-width: 430px) {
+      #app { box-shadow: none; }
+    }
   </style>
 </head>
 <body>
 <div id="app">
-
-  <div class="supernav" role="banner">
-    <a href="#" class="nyc-logo" aria-label="NYC Health and Affordability Corps home" onclick="resetAll();return false;">
-      <div class="nyc-logo-icon">NYC</div>
-      <span class="nyc-logo-text">Health +<br>Affordability</span>
-    </a>
-  </div>
-
-  <div class="nav-chrome hidden" id="nav-chrome" role="navigation">
-    <button class="back-btn" id="back-btn" aria-label="Go back" onclick="goBack()">
-      <i data-lucide="arrow-left"></i> Back
-    </button>
-    <button class="home-link-btn" onclick="resetAll()" aria-label="Return to home">
-      <i data-lucide="home" style="width:14px;height:14px;"></i> Home
-    </button>
-  </div>
-
-  <div class="progress-wrap" id="progress-wrap" style="display:none">
-    <div class="progress-label" id="progress-label-text">Step 1/5</div>
-    <div class="progress-track">
-      <div class="progress-seg" id="seg-1"><span class="seg-fill"></span></div>
-      <div class="progress-seg" id="seg-2"><span class="seg-fill"></span></div>
-      <div class="progress-seg" id="seg-3"><span class="seg-fill"></span></div>
-      <div class="progress-seg" id="seg-4"><span class="seg-fill"></span></div>
-      <div class="progress-seg" id="seg-5"><span class="seg-fill"></span></div>
-    </div>
+  <div class="header">
+    <div class="logo">NYC Health + Affordability</div>
+    <button class="back-btn" id="backBtn" style="display: none;" onclick="goBack()">← Back</button>
   </div>
 
   <div class="screens-wrapper">
-
-    <!-- Landing -->
+    <!-- Screen 0: Landing -->
     <div class="screen active" id="screen-0">
-      <div class="screen-inner">
-        <div class="heading-block">
-          <h1>Get your bills covered</h1>
-          <p class="screen-subtext">You're close to getting help with health coverage, food, rent, and more. Takes less than 2&nbsp;minutes.</p>
-        </div>
-        <div class="flex-spacer"></div>
+      <div class="screen-header">
+        <div class="screen-title">Get your bills covered</div>
+        <div class="screen-subtitle">You're close to getting help with health coverage, food, rent, and more. Takes less than 2 minutes.</div>
       </div>
-      <div class="screen-footer" id="footer-0">
-        <button class="btn-primary" onclick="navigate(1)">Let's see what you qualify for</button>
-        <button class="btn-text" aria-disabled="true" style="opacity: 0.5; pointer-events: none;">I already know what I need →</button>
-      </div>
-    </div>
 
-
-    <!-- S1: What can we help with -->
-    <div class="screen step-screen" id="screen-1">
-      <div class="screen-inner">
-        <div class="heading-block">
-          <h1>What's going on?</h1>
-          <p class="screen-subtext">Pick everything that fits.</p>
-        </div>
-        <div class="cards-grid">
-          <button class="situation-card" id="card-housing" onclick="toggleCard('housing')" aria-pressed="false">
-            <span class="card-icon"><i data-lucide="home"></i></span>
-            <span class="card-body">
-              <span class="card-title">I might lose my home</span>
-              <span class="card-sub">Eviction notice, late rent, or unstable housing</span>
-            </span>
-          </button>
-          <button class="situation-card" id="card-health" onclick="toggleCard('health')" aria-pressed="false">
-            <span class="card-icon"><i data-lucide="stethoscope"></i></span>
-            <span class="card-body">
-              <span class="card-title">I need health coverage</span>
-              <span class="card-sub">No insurance, renewal due, or gap in coverage</span>
-            </span>
-          </button>
-          <button class="situation-card" id="card-food" onclick="toggleCard('food')" aria-pressed="false">
-            <span class="card-icon"><i data-lucide="apple"></i></span>
-            <span class="card-body">
-              <span class="card-title">Struggling with food or bills</span>
-              <span class="card-sub">SNAP, cash help, or monthly expenses</span>
-            </span>
-          </button>
-          <button class="situation-card" id="card-medical" onclick="toggleCard('medical')" aria-pressed="false">
-            <span class="card-icon"><i data-lucide="cross"></i></span>
-            <span class="card-body">
-              <span class="card-title">Can't pay medical bills</span>
-              <span class="card-sub">Old bills, hospital debt, or new charges</span>
-            </span>
-          </button>
-        </div>
-        <div class="scroll-sentinel" id="sentinel-1"></div>
+      <div class="form-group">
+        <label class="form-label">Select language</label>
+        <select class="form-select" id="langSelect">
+          <option>English</option>
+          <option>Spanish</option>
+          <option>Korean</option>
+          <option>French</option>
+          <option>Chinese</option>
+        </select>
       </div>
-      <div class="screen-footer" id="footer-1">
-        <button class="btn-primary" id="btn-situations" onclick="navigate(2)" disabled>These apply to me →</button>
+
+      <div class="spacer"></div>
+      <div class="footer">
+        <button class="btn-primary" onclick="goToScreen(1)">Let's get started</button>
       </div>
     </div>
 
-
-    <!-- S2: Save your progress -->
-    <div class="screen step-screen" id="screen-2">
-      <div class="screen-inner">
-        <div class="heading-block">
-          <h1>Save your spot</h1>
-          <p class="screen-subtext">We'll text you if you need to come back. No spam.</p>
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="phone-input">Phone number</label>
-          <input class="field-input" type="tel" id="phone-input" placeholder="(555) 555-5555" inputmode="tel" oninput="checkPhone()" />
-          <div class="saved-note" id="phone-success" role="status" aria-live="polite">
-            <i data-lucide="check"></i>
-            <span>Got it! You can pick up right where you left off.</span>
-          </div>
-        </div>
-        <div class="scroll-sentinel" id="sentinel-2"></div>
+    <!-- Screen 1: What's going on -->
+    <div class="screen" id="screen-1">
+      <div class="screen-header">
+        <div class="screen-title">What's going on?</div>
+        <div class="screen-subtitle">Select all that apply.</div>
       </div>
-      <div class="screen-footer" id="footer-2">
-        <button class="btn-primary" id="btn-save-phone" onclick="navigate(3)" disabled>Keep going →</button>
-        <button class="btn-text" onclick="navigate(3)">Skip for now</button>
+
+      <div class="form-group">
+        <div class="chips">
+          <button class="chip" onclick="toggleSituation('housing', this)">I'm behind on rent</button>
+          <button class="chip" onclick="toggleSituation('health', this)">Need health coverage</button>
+          <button class="chip" onclick="toggleSituation('food', this)">Struggling with food/bills</button>
+          <button class="chip" onclick="toggleSituation('medical', this)">Medical bills</button>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+      <div class="footer">
+        <button class="btn-primary" id="btn-continue-s1" onclick="goToScreen(2)" disabled>Continue →</button>
       </div>
     </div>
 
-
-    <!-- S3: About you -->
-    <div class="screen step-screen" id="screen-3">
-      <div class="screen-inner">
-        <div class="heading-block">
-          <h1>A little about you</h1>
-          <p class="screen-subtext">This helps us match you to real programs. We never share your info.</p>
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="name-input">Full name</label>
-          <input class="field-input" type="text" id="name-input" placeholder="Your full name" autocomplete="name" />
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="dob-input">Date of birth</label>
-          <input class="field-input" type="date" id="dob-input" autocomplete="bday" />
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="zip-input">NYC zip code</label>
-          <input class="field-input" type="text" id="zip-input" placeholder="e.g. 10036" maxlength="5" inputmode="numeric" pattern="[0-9]{5}" autocomplete="postal-code" />
-        </div>
-        <div class="scroll-sentinel" id="sentinel-3"></div>
+    <!-- Screen 2: Tell us about yourself -->
+    <div class="screen" id="screen-2">
+      <div class="screen-header">
+        <div class="screen-title">Tell us about yourself</div>
+        <div class="screen-subtitle">By using this navigator tool, you agree to share basic information with the City of New York to help us connect you with relevant service providers.</div>
       </div>
-      <div class="screen-footer" id="footer-3">
-        <button class="btn-primary" onclick="navigate(4)">See my results →</button>
+
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input class="form-input" id="firstName" type="text" placeholder="First Name" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <input class="form-input" id="lastName" type="text" placeholder="Last Name" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" id="email" type="email" placeholder="Email Address" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <input class="form-input" id="phone" type="tel" placeholder="Phone Number" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Date of Birth (MM/DD/YYYY)</label>
+        <input class="form-input" id="dob" type="text" placeholder="MM/DD/YYYY" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Home Zip Code</label>
+        <input class="form-input" id="zipCode" type="text" placeholder="Zip Code" maxlength="5" />
+      </div>
+
+      <div class="spacer"></div>
+      <div class="footer">
+        <button class="btn-primary" onclick="goToScreen(3)">Continue →</button>
       </div>
     </div>
 
+    <!-- Screen 3: Pillars -->
+    <div class="screen" id="screen-3">
+      <div class="screen-header">
+        <div class="screen-title">Let's get started</div>
+        <div class="screen-subtitle">Select a program below. Click "Start" to answer screening questions.</div>
+      </div>
 
-    <!-- S4: Results -->
+      <div id="pillarsContainer">
+        <div class="pillar-card">
+          <div class="pillar-name">Healthcare Insurance Assistance</div>
+          <button class="pillar-btn start" onclick="startPillar('healthcare')">Start</button>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-name">Eviction Prevention</div>
+          <button class="pillar-btn start" onclick="startPillar('eviction')">Start</button>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-name">Food or Everyday Expenses</div>
+          <button class="pillar-btn start" onclick="startPillar('food')">Start</button>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-name">Medical Debt Relief</div>
+          <button class="pillar-btn start" onclick="startPillar('medical')">Start</button>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+      <div class="footer">
+        <button class="btn-primary" id="btn-send-answers" onclick="sendAnswers()" disabled>Send my answers</button>
+      </div>
+    </div>
+
+    <!-- Screen 4: Healthcare Insurance Assistance -->
     <div class="screen" id="screen-4">
-      <div class="screen-inner">
-        <h2 id="results-title">Here's what we found for you.</h2>
-        <div class="results-list">
-          <div class="result-card">
-            <div class="result-card-header">
-              <span class="result-card-icon"><i data-lucide="stethoscope"></i></span>
-              <span class="result-card-name">Health coverage</span>
-            </div>
-            <p class="result-card-desc">Free coverage for doctor visits, hospital stays, mental health care, vision and dental, prescriptions, and more.</p>
-          </div>
-          <div class="result-divider"></div>
-          <div class="result-card">
-            <div class="result-card-header">
-              <span class="result-card-icon"><i data-lucide="home"></i></span>
-              <span class="result-card-name">Eviction help</span>
-            </div>
-            <p class="result-card-desc">Get support if you're facing eviction. We can help with rent assistance, legal representation, and negotiation with landlords.</p>
-          </div>
-          <div class="result-divider"></div>
-          <div class="result-card">
-            <div class="result-card-header">
-              <span class="result-card-icon"><i data-lucide="apple"></i></span>
-              <span class="result-card-name">Food &amp; cash help</span>
-            </div>
-            <p class="result-card-desc">Get help paying for groceries with SNAP (food stamps), and explore cash assistance programs for monthly expenses.</p>
-          </div>
-          <div class="result-divider"></div>
-          <div class="result-card">
-            <div class="result-card-header">
-              <span class="result-card-icon"><i data-lucide="cross"></i></span>
-              <span class="result-card-name">Medical debt relief</span>
-            </div>
-            <p class="result-card-desc">Get help with past-due hospital bills. Many bills can be forgiven if you qualify for financial hardship programs.</p>
-          </div>
-        </div>
-        <div class="info-chip" style="margin-top: 24px;">
-          <div class="info-chip-icon"><i data-lucide="shield-check"></i></div>
-          <div class="info-chip-text">Your info stays private. We only share it to help connect you with these programs.</div>
-        </div>
-        <div class="scroll-sentinel" id="sentinel-4"></div>
+      <div class="screen-header">
+        <div class="screen-title">Healthcare Insurance Assistance</div>
       </div>
-      <div class="screen-footer" id="footer-4">
-        <button class="btn-primary" onclick="navigate(5)">Connect me with a benefits worker</button>
+
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input class="form-input" id="healthFirstName" type="text" placeholder="First Name" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <input class="form-input" id="healthLastName" type="text" placeholder="Last Name" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Home Zip Code</label>
+        <input class="form-input" id="healthZipCode" type="text" placeholder="Zip Code" maxlength="5" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Age</label>
+        <div class="chips">
+          <button class="chip" onclick="selectAge('65+', this)">65 or older</button>
+          <button class="chip" onclick="selectAge('under65', this)">64 or younger</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Disability Status</label>
+        <div class="chips">
+          <button class="chip" onclick="selectDisability('yes', this)">I am living with a disability</button>
+          <button class="chip" onclick="selectDisability('no', this)">Visually impaired</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Type of Service</label>
+        <div class="chips">
+          <button class="chip" onclick="selectService('enroll', this)">Enroll in health insurance</button>
+          <button class="chip" onclick="selectService('renew', this)">Renew current health insurance</button>
+          <button class="chip" onclick="selectService('info', this)">Information only</button>
+        </div>
+      </div>
+
+      <div id="notEligibleMsg" style="display: none; background: #FFF3CD; border: 1px solid #FFEAA7; border-radius: 8px; padding: 16px; color: #856404; font-size: 14px; margin-top: 24px;">
+        Sorry, but you are not eligible at this time.
+      </div>
+
+      <div class="spacer"></div>
+      <div class="footer">
+        <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
       </div>
     </div>
 
-
-    <!-- S5: Confirmation -->
+    <!-- Screen 5: Eviction Prevention -->
     <div class="screen" id="screen-5">
-      <div class="screen-inner centered">
-        <div>
-          <div class="confirm-icon">
-            <svg viewBox="0 0 40 40"><polyline points="8 21 16 29 32 11"/></svg>
-          </div>
-          <h2 id="confirm-title">You're in the system!</h2>
-          <p style="margin-top:24px;color:var(--text-secondary);font-size:16px;line-height:1.6;">
-            A Health + Affordability Corps worker will follow up in 24 hours. Watch for a text from our team.
-          </p>
-          <p style="font-size:13px;color:var(--text-secondary);margin-top:24px;">Reference #: NYC-2026-00847</p>
-        </div>
-        <div class="scroll-sentinel" id="sentinel-5"></div>
+      <div class="screen-header">
+        <div class="screen-title">Eviction Prevention</div>
       </div>
-      <div class="screen-footer" id="footer-5">
-        <button class="btn-primary" onclick="resetAll()" style="background: #008703;">Done</button>
+
+      <div class="form-group">
+        <label class="form-label">Are you facing eviction?</label>
+        <div class="chips">
+          <button class="chip" onclick="selectChip('eviction', 'yes', this)">Yes</button>
+          <button class="chip" onclick="selectChip('eviction', 'no', this)">No</button>
+          <button class="chip" onclick="selectChip('eviction', 'notsure', this)">Not sure</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Are you facing landlord harassment?</label>
+        <div class="chips">
+          <button class="chip" onclick="selectChip('harassment', 'yes', this)">Yes</button>
+          <button class="chip" onclick="selectChip('harassment', 'no', this)">No</button>
+          <button class="chip" onclick="selectChip('harassment', 'notsure', this)">Not sure</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Do you have repairs your landlord isn't addressing?</label>
+        <div class="chips">
+          <button class="chip" onclick="selectChip('repairs', 'yes', this)">Yes</button>
+          <button class="chip" onclick="selectChip('repairs', 'no', this)">No</button>
+          <button class="chip" onclick="selectChip('repairs', 'notsure', this)">Not sure</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Are you experiencing an illegal lockout?</label>
+        <div class="chips">
+          <button class="chip" onclick="selectChip('lockout', 'yes', this)">Yes</button>
+          <button class="chip" onclick="selectChip('lockout', 'no', this)">No</button>
+          <button class="chip" onclick="selectChip('lockout', 'notsure', this)">Not sure</button>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+      <div class="footer">
+        <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
       </div>
     </div>
 
-  </div><!-- /screens-wrapper -->
-</div><!-- /app -->
+    <!-- Screen 6: Food or Everyday Expenses -->
+    <div class="screen" id="screen-6">
+      <div class="screen-header">
+        <div class="screen-title">Food or Everyday Expenses</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Household income amount</label>
+        <input class="form-input" id="foodIncome" type="number" placeholder="Monthly income" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Household size</label>
+        <input class="form-input" id="foodHouseholdSize" type="number" placeholder="Number of people" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Have you ever applied to SNAP before?</label>
+        <div class="chips">
+          <button class="chip" onclick="selectChip('snap', 'yes', this)">Yes</button>
+          <button class="chip" onclick="selectChip('snap', 'no', this)">No</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Do you have Medicaid or Medicare?</label>
+        <div class="chips">
+          <button class="chip" onclick="selectChip('medicare', 'yes', this)">Yes</button>
+          <button class="chip" onclick="selectChip('medicare', 'no', this)">No</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Are you pregnant?</label>
+        <div class="chips">
+          <button class="chip" onclick="selectChip('pregnant', 'yes', this)">Yes</button>
+          <button class="chip" onclick="selectChip('pregnant', 'no', this)">No</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Do you have a disability?</label>
+        <div class="chips">
+          <button class="chip" onclick="selectChip('disability', 'yes', this)">Yes</button>
+          <button class="chip" onclick="selectChip('disability', 'no', this)">No</button>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+      <div class="footer">
+        <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
+      </div>
+    </div>
+
+    <!-- Screen 7: Medical Debt Relief -->
+    <div class="screen" id="screen-7">
+      <div class="screen-header">
+        <div class="screen-title">Medical Debt Relief</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Do you have any hospital bills you are unable to pay?</label>
+        <div class="chips">
+          <button class="chip" onclick="selectChip('hasBills', 'yes', this)">Yes</button>
+          <button class="chip" onclick="selectChip('hasBills', 'no', this)">No</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Is the hospital in NYC?</label>
+        <div class="chips">
+          <button class="chip" onclick="selectChip('nycHospital', 'yes', this)">Yes</button>
+          <button class="chip" onclick="selectChip('nycHospital', 'no', this)">No</button>
+        </div>
+      </div>
+
+      <div id="medicalDetailedForm" style="display: none;">
+        <div class="form-group">
+          <label class="form-label">Where is your hospital?</label>
+          <select class="form-select" id="medicalCity">
+            <option>Select city</option>
+            <option>Manhattan</option>
+            <option>Brooklyn</option>
+            <option>Queens</option>
+            <option>Bronx</option>
+            <option>Staten Island</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Which hospital was the bill from?</label>
+          <select class="form-select" id="medicalHospital">
+            <option>Select hospital</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">What's the original bill date?</label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <select class="form-select" id="medicalMonth">
+              <option>Month</option>
+              <option>January</option>
+              <option>February</option>
+              <option>March</option>
+              <option>April</option>
+              <option>May</option>
+              <option>June</option>
+              <option>July</option>
+              <option>August</option>
+              <option>September</option>
+              <option>October</option>
+              <option>November</option>
+              <option>December</option>
+            </select>
+            <select class="form-select" id="medicalYear">
+              <option>Year</option>
+              <option>2026</option>
+              <option>2025</option>
+              <option>2024</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">What is the total amount you owe?</label>
+          <input class="form-input" id="medicalAmount" type="number" placeholder="$" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">What's your insurance status?</label>
+          <div class="chips">
+            <button class="chip" onclick="selectChip('medicalInsurance', 'insured', this)">Insured</button>
+            <button class="chip" onclick="selectChip('medicalInsurance', 'uninsured', this)">Uninsured</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+      <div class="footer">
+        <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="confirmationModal">
+    <div class="modal-content">
+      <div class="modal-icon">✓</div>
+      <div class="modal-title">We got your information</div>
+      <div class="modal-text">A Health + Affordability Corps worker will contact you in 24 hours. Watch for a text from our team.</div>
+      <button class="modal-btn" onclick="resetApp()">Done</button>
+    </div>
+  </div>
+</div>
 
 <script>
-  // ── State ──────────────────────────────────────────────
-  var currentScreen = 0;
-  var selectedSituations = new Set();
-  var navHistory = [];
+  let selectedSituations = new Set();
+  let completedPillars = new Set();
+  let currentScreen = 0;
 
-  // ── Screen navigation ──────────────────────────────────
-  function getScreen(n) {
-    return document.getElementById('screen-' + n);
-  }
+  let pillarData = {
+    healthcare: {},
+    eviction: {},
+    food: {},
+    medical: {}
+  };
 
-  function navigate(toScreen) {
-    var current = document.querySelector('.screen.active');
-    var target  = getScreen(toScreen);
-    if (!target || current === target) return;
-
-    if (current) {
-      navHistory.push(current.id);
-      current.classList.remove('active');
-      current.classList.add('exit-left');
-      current.addEventListener('transitionend', function handler() {
-        current.classList.remove('exit-left');
-        current.removeEventListener('transitionend', handler);
-      });
-    }
-
-    target.classList.add('active');
-    currentScreen = toScreen;
-    updateChrome(toScreen);
-    updateProgress(toScreen);
-    onScreenEnter(toScreen);
-    target.scrollTop = 0;
-    setTimeout(function() { setupFooterGate(target, toScreen); }, 50);
+  function goToScreen(screen) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + screen).classList.add('active');
+    document.getElementById('backBtn').style.display = screen > 0 ? 'block' : 'none';
+    currentScreen = screen;
+    window.scrollTo(0, 0);
   }
 
   function goBack() {
-    if (currentScreen <= 0) return;
-    navigate(currentScreen - 1);
+    if (currentScreen > 0) goToScreen(currentScreen - 1);
   }
 
-  // ── Screen enter hooks ──────────────────────────────────
-  function onScreenEnter(n) {
-    if (n === 4) {
-      var nameVal = document.getElementById('name-input').value.trim();
-      document.getElementById('results-title').textContent = nameVal
-        ? ("Here's what we found for you, " + nameVal + ".")
-        : "Here's what we found for you.";
-    }
-    if (n === 5) {
-      var cname = document.getElementById('name-input').value.trim();
-      document.getElementById('confirm-title').textContent = cname ? ('You got this, ' + cname + '!') : 'You got this!';
-    }
-  }
-
-  // ── Chrome & progress ───────────────────────────────────
-  function updateChrome(n) {
-    var chrome = document.getElementById('nav-chrome');
-    var progWrap = document.getElementById('progress-wrap');
-    var hideBack = (n === 0 || n === 5);
-    chrome.classList.toggle('hidden', hideBack);
-    progWrap.style.display = (n > 0 && n < 5) ? '' : 'none';
-  }
-
-  function updateProgress(n) {
-    if (n <= 0 || n >= 5) return;
-    for (var i = 1; i <= 5; i++) {
-      var seg = document.getElementById('seg-' + i);
-      if (seg) seg.classList.toggle('filled', i <= n);
-    }
-    var label = 'Step ' + n + '/5';
-    document.getElementById('progress-label-text').textContent = label;
-  }
-
-  // ── Situation cards ────────────────────────────────────
-  function toggleCard(id) {
-    var card = document.getElementById('card-' + id);
-    if (selectedSituations.has(id)) {
-      selectedSituations.delete(id);
-      card.classList.remove('selected');
-      card.setAttribute('aria-pressed', 'false');
+  function toggleSituation(situation, btn) {
+    if (selectedSituations.has(situation)) {
+      selectedSituations.delete(situation);
+      btn.classList.remove('selected');
     } else {
-      selectedSituations.add(id);
-      card.classList.add('selected');
-      card.setAttribute('aria-pressed', 'true');
+      selectedSituations.add(situation);
+      btn.classList.add('selected');
     }
-    updateSituationsButton();
+    document.getElementById('btn-continue-s1').disabled = selectedSituations.size === 0;
   }
 
-  function updateSituationsButton() {
-    var btn = document.getElementById('btn-situations');
-    if (selectedSituations.size > 0) {
-      btn.disabled = false;
-    } else {
-      btn.disabled = true;
+  function startPillar(pillar) {
+    if (pillar === 'healthcare') goToScreen(4);
+    else if (pillar === 'eviction') goToScreen(5);
+    else if (pillar === 'food') goToScreen(6);
+    else if (pillar === 'medical') goToScreen(7);
+  }
+
+  function selectAge(age, btn) {
+    document.querySelectorAll('#screen-4 .chips')[0].querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    btn.classList.add('selected');
+    pillarData.healthcare.age = age;
+    checkHealthcareEligibility();
+  }
+
+  function selectDisability(status, btn) {
+    document.querySelectorAll('#screen-4 .chips')[1].querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    btn.classList.add('selected');
+    pillarData.healthcare.disability = status;
+    checkHealthcareEligibility();
+  }
+
+  function selectService(service, btn) {
+    document.querySelectorAll('#screen-4 .chips')[2].querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    btn.classList.add('selected');
+    pillarData.healthcare.service = service;
+  }
+
+  function checkHealthcareEligibility() {
+    const notEligible = pillarData.healthcare.age === 'under65' || pillarData.healthcare.disability === 'no';
+    document.getElementById('notEligibleMsg').style.display = notEligible ? 'block' : 'none';
+
+    if (!notEligible && pillarData.healthcare.age && pillarData.healthcare.disability) {
+      completePillar('healthcare');
     }
   }
 
-  // ── Phone validation ────────────────────────────────────
-  function checkPhone() {
-    var phoneInput = document.getElementById('phone-input');
-    var successEl = document.getElementById('phone-success');
-    var btn = document.getElementById('btn-save-phone');
-    var isPhone = phoneInput.value.replace(/\D/g, '').length >= 10;
-    successEl.classList.toggle('visible', isPhone);
-    btn.disabled = !isPhone;
-  }
+  function selectChip(group, value, btn) {
+    btn.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    btn.classList.add('selected');
 
-  // ── Scroll-gate footer ──────────────────────────────────
-  function setupFooterGate(screenEl, screenNum) {
-    var sentinelId = 'sentinel-' + screenNum;
-    var footerId = 'footer-' + screenNum;
-    var sentinel = document.getElementById(sentinelId);
-    var footer = document.getElementById(footerId);
-    if (!sentinel || !footer) return;
-
-    var sr = sentinel.getBoundingClientRect();
-    var pr = screenEl.getBoundingClientRect();
-    if (sr.top <= pr.bottom + 10) {
-      footer.classList.add('footer-visible');
-      return;
+    if (group === 'hasBills' || group === 'nycHospital') {
+      pillarData.medical[group] = value;
+      if (pillarData.medical.hasBills === 'yes' && pillarData.medical.nycHospital === 'yes') {
+        document.getElementById('medicalDetailedForm').style.display = 'block';
+      } else {
+        document.getElementById('medicalDetailedForm').style.display = 'none';
+      }
     }
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) {
-          footer.classList.add('footer-visible');
-          obs.disconnect();
-        }
-      });
-    }, { root: screenEl, threshold: 0.1 });
-    obs.observe(sentinel);
   }
 
-  // ── Reset all ──────────────────────────────────────────
-  function resetAll() {
-    selectedSituations.forEach(function(id) {
-      var card = document.getElementById('card-' + id);
-      if (card) {
-        card.classList.remove('selected');
-        card.setAttribute('aria-pressed', 'false');
+  function completePillar(pillar) {
+    completedPillars.add(pillar);
+    updatePillarButtons();
+    document.getElementById('btn-send-answers').disabled = completedPillars.size === 0;
+  }
+
+  function updatePillarButtons() {
+    const pillars = ['healthcare', 'eviction', 'food', 'medical'];
+    const pillarsContainer = document.getElementById('pillarsContainer');
+    const cards = pillarsContainer.querySelectorAll('.pillar-card');
+
+    const pilliarNames = {
+      'healthcare': 'Healthcare Insurance Assistance',
+      'eviction': 'Eviction Prevention',
+      'food': 'Food or Everyday Expenses',
+      'medical': 'Medical Debt Relief'
+    };
+
+    cards.forEach((card, i) => {
+      const pillar = pillars[i];
+      const btn = card.querySelector('.pillar-btn');
+      if (completedPillars.has(pillar)) {
+        btn.textContent = 'Completed';
+        btn.classList.remove('start');
+        btn.classList.add('completed');
+        btn.onclick = null;
       }
     });
-    selectedSituations.clear();
-    updateSituationsButton();
-
-    ['phone-input', 'name-input', 'dob-input', 'zip-input'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.value = '';
-    });
-
-    var successEl = document.getElementById('phone-success');
-    if (successEl) successEl.classList.remove('visible');
-
-    document.querySelectorAll('.screen-footer').forEach(function(f) { f.classList.remove('footer-visible'); });
-
-    var current = document.querySelector('.screen.active');
-    var home = getScreen(0);
-    if (current && current !== home) current.classList.remove('active');
-    home.classList.add('active');
-    currentScreen = 0;
-    navHistory = [];
-    updateChrome(0);
-    updateProgress(0);
-    home.scrollTop = 0;
   }
 
-  // ── Init ─────────────────────────────────────────────────
-  document.addEventListener('DOMContentLoaded', function() {
-    if (window.lucide) lucide.createIcons();
-    updateChrome(0);
-    updateProgress(0);
-    setTimeout(function() { setupFooterGate(getScreen(0), 0); }, 100);
-  });
+  function sendAnswers() {
+    if (completedPillars.size > 0) {
+      document.getElementById('confirmationModal').classList.add('active');
+    }
+  }
+
+  function resetApp() {
+    selectedSituations.clear();
+    completedPillars.clear();
+    pillarData = {healthcare: {}, eviction: {}, food: {}, medical: {}};
+    document.getElementById('confirmationModal').classList.remove('active');
+    goToScreen(0);
+  }
 </script>
 </body>
 </html>
