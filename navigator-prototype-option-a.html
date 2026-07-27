@@ -579,28 +579,36 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Household income amount</label>
-        <input class="form-input" id="foodIncome" type="number" placeholder="Monthly income" />
+        <label class="form-label">How many people are in your household?</label>
+        <input class="form-input" id="foodHouseholdSize" type="number" placeholder="2" />
       </div>
 
       <div class="form-group">
-        <label class="form-label">Household size</label>
-        <input class="form-input" id="foodHouseholdSize" type="number" placeholder="Number of people" />
+        <label class="form-label">What was your total household income over the last 30 days?</label>
+        <div class="chips">
+          <button class="chip" onclick="selectChip('incomeRange', '$0-$1,500', this)">$0–$1,500</button>
+          <button class="chip" onclick="selectChip('incomeRange', '$1,501-$3,000', this)">$1,501–$3,000</button>
+          <button class="chip" onclick="selectChip('incomeRange', '$3,001-$5,000', this)">$3,001–$5,000</button>
+          <button class="chip" onclick="selectChip('incomeRange', '$5,000+', this)">$5,000+</button>
+        </div>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Have you ever applied to SNAP before?</label>
+        <label class="form-label">Have you ever applied for SNAP before in NYC?</label>
         <div class="chips">
           <button class="chip" onclick="selectChip('snap', 'yes', this)">Yes</button>
           <button class="chip" onclick="selectChip('snap', 'no', this)">No</button>
+          <button class="chip" onclick="selectChip('snap', 'notsure', this)">Not sure</button>
         </div>
       </div>
 
       <div class="form-group">
         <label class="form-label">Do you have Medicaid or Medicare?</label>
         <div class="chips">
-          <button class="chip" onclick="selectChip('medicare', 'yes', this)">Yes</button>
-          <button class="chip" onclick="selectChip('medicare', 'no', this)">No</button>
+          <button class="chip" onclick="selectChip('insurance', 'medicaid', this)">Medicaid only</button>
+          <button class="chip" onclick="selectChip('insurance', 'medicare', this)">Medicare only</button>
+          <button class="chip" onclick="selectChip('insurance', 'both', this)">Both Medicaid and Medicare</button>
+          <button class="chip" onclick="selectChip('insurance', 'neither', this)">Neither</button>
         </div>
       </div>
 
@@ -650,10 +658,12 @@
       </div>
 
       <div id="medicalDetailedForm" style="display: none;">
+        <div class="screen-subtitle" style="margin-bottom: 24px;">We'll check if you qualify for charity care to help pay it off.</div>
+
         <div class="form-group">
-          <label class="form-label">Where is your hospital?</label>
-          <select class="form-select" id="medicalCity">
-            <option>Select city</option>
+          <label class="form-label">Select a city</label>
+          <select class="form-select" id="medicalCity" onchange="updateHospitals()">
+            <option value="">Select a city</option>
             <option>Manhattan</option>
             <option>Brooklyn</option>
             <option>Queens</option>
@@ -665,7 +675,7 @@
         <div class="form-group">
           <label class="form-label">Which hospital was the bill from?</label>
           <select class="form-select" id="medicalHospital">
-            <option>Select hospital</option>
+            <option>Select a city first</option>
           </select>
         </div>
 
@@ -692,13 +702,22 @@
               <option>2026</option>
               <option>2025</option>
               <option>2024</option>
+              <option>2023</option>
+              <option>2022</option>
             </select>
           </div>
+          <div style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">Enter the date that you first received the bill after leaving the hospital. We'll compare it to the deadline for applying for hospital financial assistance.</div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 8px;">
+          <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Start by checking your bill from your most recent hospital visit. You'll be able to add other bills of hospitals later in the process, and the system will check then to see if you're eligible. Not all of your bills may be eligible, depending on the bill date.</div>
         </div>
 
         <div class="form-group">
           <label class="form-label">What is the total amount you owe?</label>
-          <input class="form-input" id="medicalAmount" type="number" placeholder="$" />
+          <input class="form-input" id="medicalAmount" type="number" placeholder="$ e.g. 6,000" />
+          <div style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">It's okay to estimate if you haven't received the bill yet or don't remember the exact amount.</div>
+          <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">Use the amount you owe after insurance, Medicaid, health shares, or any other payers have contributed. We want to know how much you personally owe to the hospital.</div>
         </div>
 
         <div class="form-group">
@@ -855,6 +874,35 @@
     pillarData = {healthcare: {}, eviction: {}, food: {}, medical: {}};
     document.getElementById('confirmationModal').classList.remove('active');
     goToScreen(0);
+  }
+
+  // Hospital data by city
+  const hospitalsByCity = {
+    'Manhattan': ['Mount Sinai Hospital', 'NewYork-Presbyterian Hospital', 'Columbia University Medical Center', 'NYU Langone Medical Center', 'Harlem Hospital Center'],
+    'Brooklyn': ['Brooklyn Hospital Center', 'Maimonides Medical Center', 'New York Eye and Ear Infirmary', 'Coney Island Hospital', 'Kings County Hospital'],
+    'Queens': ['Flushing Hospital Medical Center', 'Jamaica Hospital Medical Center', 'Long Island Jewish Medical Center', 'Forest Hills Hospital', 'Astoria Hospital'],
+    'Bronx': ['Montefiore Medical Center', 'Jacobi Medical Center', 'Bronx-Lebanon Hospital', 'Einstein Hospital', 'SBH Health System'],
+    'Staten Island': ['Staten Island University Hospital', 'Richmond University Medical Center', 'Bayley Seton Hospital']
+  };
+
+  function updateHospitals() {
+    const citySelect = document.getElementById('medicalCity');
+    const hospitalSelect = document.getElementById('medicalHospital');
+    const selectedCity = citySelect.value;
+
+    if (!selectedCity || !hospitalsByCity[selectedCity]) {
+      hospitalSelect.innerHTML = '<option>Select a city first</option>';
+      return;
+    }
+
+    const hospitals = hospitalsByCity[selectedCity];
+    hospitalSelect.innerHTML = '<option>Select hospital</option>';
+    hospitals.forEach(hospital => {
+      const option = document.createElement('option');
+      option.value = hospital;
+      option.textContent = hospital;
+      hospitalSelect.appendChild(option);
+    });
   }
 </script>
 </body>
