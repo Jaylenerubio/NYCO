@@ -205,6 +205,14 @@
       flex-shrink: 0;
     }
 
+    .footer.two-button {
+      flex-direction: row;
+    }
+
+    .footer.two-button button {
+      flex: 1;
+    }
+
     /* Pillars page */
     .pillar-card {
       border: 1.5px solid var(--neutral-300);
@@ -266,35 +274,36 @@
     .modal-content {
       background: var(--white);
       border-radius: 12px;
-      padding: 32px 24px;
+      padding: 24px 20px;
       max-width: 90%;
+      max-width: min(90%, 360px);
       text-align: center;
     }
 
     .modal-icon {
-      width: 80px;
-      height: 80px;
+      width: 64px;
+      height: 64px;
       background: #DCEFD2;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 24px;
-      font-size: 40px;
+      margin: 0 auto 16px;
+      font-size: 32px;
     }
 
     .modal-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--black);
       margin-bottom: 12px;
     }
 
     .modal-text {
-      font-size: 16px;
+      font-size: 14px;
       color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 24px;
+      line-height: 1.5;
+      margin-bottom: 20px;
     }
 
     .modal-btn {
@@ -309,8 +318,22 @@
       cursor: pointer;
     }
 
+    /* Tablet & Responsive */
+    @media (max-width: 768px) {
+      #app {
+        max-width: 100%;
+        box-shadow: none;
+      }
+      .screen {
+        padding: 24px 20px 20px;
+      }
+    }
+
     @media (max-width: 430px) {
       #app { box-shadow: none; }
+      .screen {
+        padding: 24px 16px 16px;
+      }
     }
   </style>
 </head>
@@ -494,8 +517,9 @@
       </div>
 
       <div class="spacer"></div>
-      <div class="footer">
+      <div class="footer two-button">
         <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
+        <button class="btn-primary" onclick="completePillar('healthcare'); goToScreen(3);">Done</button>
       </div>
     </div>
 
@@ -542,8 +566,9 @@
       </div>
 
       <div class="spacer"></div>
-      <div class="footer">
+      <div class="footer two-button">
         <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
+        <button class="btn-primary" onclick="completePillar('eviction'); goToScreen(3);">Done</button>
       </div>
     </div>
 
@@ -596,8 +621,9 @@
       </div>
 
       <div class="spacer"></div>
-      <div class="footer">
+      <div class="footer two-button">
         <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
+        <button class="btn-primary" onclick="completePillar('food'); goToScreen(3);">Done</button>
       </div>
     </div>
 
@@ -685,8 +711,9 @@
       </div>
 
       <div class="spacer"></div>
-      <div class="footer">
+      <div class="footer two-button">
         <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
+        <button class="btn-primary" onclick="completePillar('medical'); goToScreen(3);">Done</button>
       </div>
     </div>
   </div>
