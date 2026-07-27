@@ -609,7 +609,9 @@
     var list = document.getElementById('pillar-list');
     list.innerHTML = '';
     var html = '';
-    for (var pillar in PILLARS) {
+    var pillarKeys = ['health', 'housing', 'food', 'medical'];
+    for (var i = 0; i < pillarKeys.length; i++) {
+      var pillar = pillarKeys[i];
       var info = PILLARS[pillar];
       var isCompleted = completedPillars.has(pillar);
       var isIneligible = ineligiblePillars.hasOwnProperty(pillar);
