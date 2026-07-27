@@ -478,7 +478,7 @@
         <div class="scroll-sentinel" id="sentinel-contactpref"></div>
       </div>
       <div class="screen-footer" id="footer-contactpref">
-        <button class="btn-primary" id="btn-contactpref-continue" onclick="navigate('s3')" disabled>Continue</button>
+        <button class="btn-primary" id="btn-contactpref-continue" onclick="afterContactPref()" disabled>Continue</button>
       </div>
     </div>
 
@@ -835,17 +835,9 @@
 
   // ── Save ────────────────────────────────────
   function checkSave() {
-    var firstName = document.getElementById('first-name').value.trim();
-    var lastName  = document.getElementById('last-name').value.trim();
-    var dob       = document.getElementById('dob-input').value.trim();
-    var email     = document.getElementById('email-input').value.trim();
-    var phone     = document.getElementById('phone-input').value.trim();
-    var isPhone   = phone.replace(/\D/g,'').length >= 10;
-    var isEmail   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    // Every field is required to continue.
-    var valid = firstName !== '' && lastName !== '' && isValidDob(dob) && isPhone && isEmail;
-    document.getElementById('saved-note').classList.toggle('visible', valid);
-    document.getElementById('btn-save-continue').disabled = !valid;
+    // No validation required - user can continue without filling details
+    document.getElementById('saved-note').classList.remove('visible');
+    document.getElementById('btn-save-continue').disabled = false;
   }
 
   // Auto-format DOB as MM/DD/YYYY while typing, and validate a real calendar date.
@@ -906,6 +898,10 @@
     document.getElementById('btn-contactpref-continue').disabled = false;
   }
 
+  function afterContactPref() {
+    if (selectedCards.has('housing')) navigate('housing');
+    else navigate('s7');
+  }
 
   // After S7: medical-bill deep-dive if applicable, else results.
   function afterScreen7() {
