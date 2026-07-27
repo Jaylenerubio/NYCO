@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NYC Health + Affordability Corps — Navigator Tool</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <style>
     :root {
       --primary: #050560;
@@ -25,7 +25,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; }
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
       background: var(--neutral-100);
       color: var(--black);
       font-size: 16px;
@@ -443,10 +443,6 @@
 
       <div id="pillarsContainer">
         <div class="pillar-card">
-          <div class="pillar-name">Healthcare Insurance Assistance</div>
-          <button class="pillar-btn start" onclick="startPillar('healthcare')">Start</button>
-        </div>
-        <div class="pillar-card">
           <div class="pillar-name">Eviction Prevention</div>
           <button class="pillar-btn start" onclick="startPillar('eviction')">Start</button>
         </div>
@@ -462,69 +458,12 @@
 
       <div class="spacer"></div>
       <div class="footer">
-        <button class="btn-primary" id="btn-send-answers" onclick="sendAnswers()" disabled>Send my answers</button>
+        <button class="btn-primary" onclick="sendAnswers()">Submit</button>
       </div>
     </div>
 
-    <!-- Screen 4: Healthcare Insurance Assistance -->
+    <!-- Screen 4: Eviction Prevention -->
     <div class="screen" id="screen-4">
-      <div class="screen-header">
-        <div class="screen-title">Healthcare Insurance Assistance</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">First Name</label>
-        <input class="form-input" id="healthFirstName" type="text" placeholder="First Name" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Last Name</label>
-        <input class="form-input" id="healthLastName" type="text" placeholder="Last Name" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Home Zip Code</label>
-        <input class="form-input" id="healthZipCode" type="text" placeholder="Zip Code" maxlength="5" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Age</label>
-        <div class="chips">
-          <button class="chip" onclick="selectAge('65+', this)">65 or older</button>
-          <button class="chip" onclick="selectAge('under65', this)">64 or younger</button>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Disability Status</label>
-        <div class="chips">
-          <button class="chip" onclick="selectDisability('yes', this)">I am living with a disability</button>
-          <button class="chip" onclick="selectDisability('no', this)">Visually impaired</button>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Type of Service</label>
-        <div class="chips">
-          <button class="chip" onclick="selectService('enroll', this)">Enroll in health insurance</button>
-          <button class="chip" onclick="selectService('renew', this)">Renew current health insurance</button>
-          <button class="chip" onclick="selectService('info', this)">Information only</button>
-        </div>
-      </div>
-
-      <div id="notEligibleMsg" style="display: none; background: #FFF3CD; border: 1px solid #FFEAA7; border-radius: 8px; padding: 16px; color: #856404; font-size: 14px; margin-top: 24px;">
-        Sorry, but you are not eligible at this time.
-      </div>
-
-      <div class="spacer"></div>
-      <div class="footer two-button">
-        <button class="btn-secondary" onclick="goToScreen(3)">Back</button>
-        <button class="btn-primary" onclick="completePillar('healthcare'); goToScreen(3);">Done</button>
-      </div>
-    </div>
-
-    <!-- Screen 5: Eviction Prevention -->
-    <div class="screen" id="screen-5">
       <div class="screen-header">
         <div class="screen-title">Tell us about your housing situation</div>
       </div>
@@ -572,8 +511,8 @@
       </div>
     </div>
 
-    <!-- Screen 6: Food or Everyday Expenses -->
-    <div class="screen" id="screen-6">
+    <!-- Screen 5: Food or Everyday Expenses -->
+    <div class="screen" id="screen-5">
       <div class="screen-header">
         <div class="screen-title">Food or Everyday Expenses</div>
       </div>
@@ -635,8 +574,8 @@
       </div>
     </div>
 
-    <!-- Screen 7: Medical Debt Relief -->
-    <div class="screen" id="screen-7">
+    <!-- Screen 6: Medical Debt Relief -->
+    <div class="screen" id="screen-6">
       <div class="screen-header">
         <div class="screen-title">Medical Debt Relief</div>
       </div>
@@ -783,10 +722,9 @@
   }
 
   function startPillar(pillar) {
-    if (pillar === 'healthcare') goToScreen(4);
-    else if (pillar === 'eviction') goToScreen(5);
-    else if (pillar === 'food') goToScreen(6);
-    else if (pillar === 'medical') goToScreen(7);
+    if (pillar === 'eviction') goToScreen(4);
+    else if (pillar === 'food') goToScreen(5);
+    else if (pillar === 'medical') goToScreen(6);
   }
 
   function selectAge(age, btn) {
@@ -839,12 +777,11 @@
   }
 
   function updatePillarButtons() {
-    const pillars = ['healthcare', 'eviction', 'food', 'medical'];
+    const pillars = ['eviction', 'food', 'medical'];
     const pillarsContainer = document.getElementById('pillarsContainer');
     const cards = pillarsContainer.querySelectorAll('.pillar-card');
 
     const pilliarNames = {
-      'healthcare': 'Healthcare Insurance Assistance',
       'eviction': 'Eviction Prevention',
       'food': 'Food or Everyday Expenses',
       'medical': 'Medical Debt Relief'
