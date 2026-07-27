@@ -708,7 +708,7 @@
         <div class="scroll-sentinel" id="sentinel-medicaldebt"></div>
       </div>
       <div class="screen-footer" id="footer-medicaldebt">
-        <button class="btn-primary" onclick="navigate('s7')">Continue</button>
+        <button class="btn-primary" onclick="afterMedical()">Continue</button>
       </div>
     </div>
 
@@ -754,6 +754,7 @@
   // ── State ──────────────────────────────────
   var navHistory    = [];
   var selectedCards = new Set();
+  var fromResults   = null;   // set to a program's card key when opened via "see if you qualify"
 
   // ── Progress — the numbered steps begin AFTER the situation screen (S1), so
   //    contact info is Step 1. The housing screen appears only if "behind on
@@ -830,7 +831,13 @@
   // ── Screen enter hooks ──────────────────────
   function onScreenEnter(key) {
     if (key === 'contactpref') prepareContactPref();
-    if (key === 'results') renderResults();
+    if (key === 'results') { fromResults = null; renderResults(); }
+    // A screening screen opened from results shows "Complete" and returns there.
+    if (key === 'housing' || key === 'medicaldebt' || key === 's7') {
+      var fEl = getFooterEl(key);
+      var fBtn = fEl && fEl.querySelector('.btn-primary');
+      if (fBtn) fBtn.textContent = fromResults ? 'Complete' : 'Continue';
+    }
     if (key === 'confirm') {
       var cname = document.getElementById('first-name').value.trim();
       document.getElementById('confirm-title').textContent = cname ? ('We got you, ' + cname + '.') : 'We got you.';
@@ -954,11 +961,31 @@
     else navigate('s7');
   }
   function afterHousing() {
+    if (fromResults) return completeScreening();
     if (selectedCards.has('bills')) navigate('medicaldebt');
     else navigate('s7');
   }
+  function afterMedical() {
+    if (fromResults) return completeScreening();
+    navigate('s7');
+  }
   // After the quick questions (always the last step): results.
-  function afterScreen7() { navigate('results'); }
+  function afterScreen7() {
+    if (fromResults) return completeScreening();
+    navigate('results');
+  }
+
+  // "See if you qualify" from the results accordion: open that program's
+  // screening screen, then Complete adds it and returns to results.
+  function seeIfYouQualify(card) {
+    fromResults = card;
+    var scr = (card === 'housing') ? 'housing' : (card === 'bills') ? 'medicaldebt' : 's7';
+    navigate(scr);
+  }
+  function completeScreening() {
+    if (fromResults) { selectedCards.add(fromResults); fromResults = null; }
+    navigate('results');
+  }
   // Progressive-disclosure: reveal/hide the secondary help paragraph.
   function toggleHelp(id, btn) {
     var el = document.getElementById(id);
@@ -1022,7 +1049,7 @@
         return '<div class="also-card">' +
           '<div class="also-name">' + p.name + '</div>' +
           '<div class="also-desc">' + p.desc + '</div>' +
-          '<button class="also-cta" onclick="return false;">see if you qualify</button>' +
+          '<button class="also-cta" onclick="seeIfYouQualify(\'' + p.card + '\')">see if you qualify</button>' +
         '</div>';
       }).join('');
     }
