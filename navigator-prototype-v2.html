@@ -343,13 +343,12 @@
       #app { max-width: 760px; }
     }
 
-    /* Results — screened program cards */
-    .screened-card { padding: 18px 0; }
+    /* Results — completed program rows */
+    .screened-card { display: flex; align-items: center; gap: 14px; padding: 18px 0; }
     .screened-card + .screened-card { border-top: 1px solid var(--color-neutral-200); }
-    .sc-name { font-size: 17px; font-weight: 600; color: var(--color-black); line-height: 1.25; }
-    .sc-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--success-bg); color: var(--success-fg); font-weight: 700; font-size: 14px; padding: 8px 14px; border-radius: 999px; margin-top: 12px; }
-    .sc-chip svg { width: 16px; height: 16px; stroke-width: 2.5; }
-    .sc-meta { font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; margin-top: 12px; }
+    .sc-name { flex: 1; font-size: 17px; font-weight: 600; color: var(--color-black); line-height: 1.25; }
+    .sc-apply { flex-shrink: 0; background: var(--color-primary-base); color: #fff; border: none; border-radius: 8px; padding: 12px 20px; font-family: var(--font-body); font-size: 15px; font-weight: 600; cursor: pointer; }
+    .sc-apply:hover { background: var(--color-primary-dark); }
 
     /* Results — "you may also apply to" accordion */
     .also-apply { border: 1px solid var(--border-default); border-radius: 14px; padding: 4px 18px; margin-top: 10px; }
@@ -715,11 +714,11 @@
     <!-- Results -->
     <div class="screen" id="screen-results">
       <div class="screen-inner">
-        <h2 id="results-title">Here's what we screened you for&hellip;</h2>
+        <h2 id="results-title">You're ready to apply for</h2>
         <div class="results-list" id="screened-list"></div>
         <div class="also-apply" id="also-apply" hidden>
           <button class="also-toggle" id="also-toggle" onclick="toggleAlso()" aria-expanded="true">
-            <span>Based on your information you may also apply to&hellip;</span>
+            <span>Based on your information, you may also qualify for</span>
             <i data-lucide="chevron-down" class="also-chev"></i>
           </button>
           <div class="also-body" id="also-body"></div>
@@ -1027,9 +1026,8 @@
 
     document.getElementById('screened-list').innerHTML = screened.map(function(p) {
       return '<div class="screened-card">' +
-        '<div class="sc-name">' + p.name + '</div>' +
-        '<div><span class="sc-chip"><i data-lucide="check"></i> Completed</span></div>' +
-        '<div class="sc-meta">' + p.q + '/' + p.q + ' questions completed</div>' +
+        '<span class="sc-name">' + p.name + '</span>' +
+        '<button class="sc-apply" onclick="return false;">Apply now</button>' +
       '</div>';
     }).join('');
 
@@ -1042,7 +1040,7 @@
         return '<div class="also-card">' +
           '<div class="also-name">' + p.name + '</div>' +
           '<div class="also-desc">' + p.desc + '</div>' +
-          '<button class="also-cta" onclick="seeIfYouQualify(\'' + p.card + '\')">see if you qualify</button>' +
+          '<button class="also-cta" onclick="seeIfYouQualify(\'' + p.card + '\')">Get started</button>' +
         '</div>';
       }).join('');
     }
