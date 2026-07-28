@@ -20,6 +20,8 @@
       --color-black:           #191919;
       --text-secondary:        #6B6B7A;
       --color-success-text:    #006333;
+      --success-bg:            #DCEFD2;
+      --success-fg:            #2F7D32;
       --color-error-base:      #EC131E;
       --bg-primary:            var(--color-white);
       --bg-secondary:          var(--color-neutral-100);
@@ -344,12 +346,10 @@
     /* Results — screened program cards */
     .screened-card { padding: 18px 0; }
     .screened-card + .screened-card { border-top: 1px solid var(--color-neutral-200); }
-    .sc-head { display: flex; align-items: center; gap: 10px; }
-    .sc-name { flex: 1; font-size: 17px; font-weight: 600; color: var(--color-black); line-height: 1.25; }
-    .sc-check { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: var(--success-bg); color: var(--success-fg); display: flex; align-items: center; justify-content: center; }
-    .sc-check svg { width: 22px; height: 22px; stroke-width: 2.5; }
-    .sc-meta { font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; margin-top: 4px; }
-    .sc-meta:first-of-type { margin-top: 8px; }
+    .sc-name { font-size: 17px; font-weight: 600; color: var(--color-black); line-height: 1.25; }
+    .sc-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--success-bg); color: var(--success-fg); font-weight: 700; font-size: 14px; padding: 8px 14px; border-radius: 999px; margin-top: 12px; }
+    .sc-chip svg { width: 16px; height: 16px; stroke-width: 2.5; }
+    .sc-meta { font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; margin-top: 12px; }
 
     /* Results — "you may also apply to" accordion */
     .also-apply { border: 1px solid var(--border-default); border-radius: 14px; padding: 4px 18px; margin-top: 10px; }
@@ -530,7 +530,7 @@
     <div class="screen step-screen" id="screen-contactpref">
       <div class="screen-inner">
         <div class="heading-block">
-          <h1>What's your preferred method of contact?</h1>
+          <h1>What's your preferred contact method?</h1>
         </div>
         <div class="cards-grid" id="contactpref-list"></div>
         <div class="scroll-sentinel" id="sentinel-contactpref"></div>
@@ -648,7 +648,7 @@
       <div class="screen-inner">
         <div class="heading-block">
           <h1>Tell us about your medical bill.</h1>
-          <p class="screen-subtext">We'll check if you qualify for charity care to help pay it off.</p>
+          <p class="screen-subtext">We'll check if you qualify for your hospital's financial aid program to help pay it off.</p>
         </div>
         <div class="field-group">
           <label class="field-label" for="md-city">Where is your hospital?</label>
@@ -1017,26 +1017,19 @@
 
   // ── Results — screened programs (top) + "also apply to" accordion ──
   var PROGRAMS = [
-    { card:'food',    name:'Food assistance',           desc:'Get help paying for groceries with SNAP, also known as EBT or food stamps.' },
-    { card:'bills',   name:'Medical Debt Relief',       desc:'Help reducing or forgiving a hospital bill you can’t afford.' },
-    { card:'housing', name:'Eviction Prevention',       desc:'Free legal help if you’re facing eviction, harassment, unsafe conditions, or an illegal lockout.' }
+    { card:'food',    name:'Food assistance',     q:6, desc:'Get help paying for groceries with SNAP, also known as EBT or food stamps.' },
+    { card:'bills',   name:'Medical debt relief', q:5, desc:'Help reducing or forgiving a hospital bill you can’t afford.' },
+    { card:'housing', name:'Eviction prevention', q:4, desc:'Free legal help if you’re facing eviction, harassment, unsafe conditions, or an illegal lockout.' }
   ];
-  function todayShort() {
-    var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    var d = new Date();
-    return m[d.getMonth()] + ' ' + d.getDate();
-  }
   function renderResults() {
-    var date = todayShort();
     var screened = PROGRAMS.filter(function(p) { return selectedCards.has(p.card); });
     var others   = PROGRAMS.filter(function(p) { return !selectedCards.has(p.card); });
 
     document.getElementById('screened-list').innerHTML = screened.map(function(p) {
       return '<div class="screened-card">' +
-        '<div class="sc-head"><span class="sc-name">' + p.name + '</span>' +
-        '<span class="sc-check"><i data-lucide="check"></i></span></div>' +
-        '<div class="sc-meta">Completed ' + date + '</div>' +
-        '<div class="sc-meta">Someone will reach out in 24 hours.</div>' +
+        '<div class="sc-name">' + p.name + '</div>' +
+        '<div><span class="sc-chip"><i data-lucide="check"></i> Completed</span></div>' +
+        '<div class="sc-meta">' + p.q + '/' + p.q + ' questions completed</div>' +
       '</div>';
     }).join('');
 
