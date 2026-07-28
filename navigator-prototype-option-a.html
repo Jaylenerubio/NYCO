@@ -417,7 +417,7 @@
     <div class="screen step-screen" id="screen-contactpref">
       <div class="screen-inner">
         <div class="heading-block">
-          <h1>What's your preferred method of contact?</h1>
+          <h1>What's your preferred contact method?</h1>
         </div>
         <div class="cards-grid" id="contactpref-list">
           <button class="pref-card" id="pref-text" onclick="selectContactPref(this)" aria-pressed="false">
@@ -455,15 +455,15 @@
         </div>
         <div class="pillar-list" id="pillar-list">
           <div class="pillar-card">
-            <span class="pillar-name">Eviction Prevention</span>
+            <span class="pillar-name">Eviction prevention</span>
             <button class="pillar-btn start" id="pillar-btn-housing" onclick="navigate('housing')">Start</button>
           </div>
           <div class="pillar-card">
-            <span class="pillar-name">Food Assistance</span>
+            <span class="pillar-name">Food assistance</span>
             <button class="pillar-btn start" id="pillar-btn-food" onclick="navigate('food')">Start</button>
           </div>
           <div class="pillar-card">
-            <span class="pillar-name">Medical Debt Relief</span>
+            <span class="pillar-name">Medical debt relief</span>
             <button class="pillar-btn start" id="pillar-btn-medical" onclick="navigate('medicaldebt')">Start</button>
           </div>
         </div>
@@ -471,7 +471,7 @@
       </div>
     </div>
 
-    <!-- Eviction Prevention -->
+    <!-- Eviction prevention -->
     <div class="screen step-screen" id="screen-housing">
       <div class="screen-inner">
         <div class="heading-block">
@@ -516,11 +516,11 @@
       </div>
     </div>
 
-    <!-- Food Assistance -->
+    <!-- Food assistance -->
     <div class="screen step-screen" id="screen-food">
       <div class="screen-inner">
         <div class="heading-block">
-          <h1>Food Assistance</h1>
+          <h1>Food assistance</h1>
         </div>
         <div class="field-group">
           <label class="field-label" for="food-household-size">How many people are in your household?</label>
@@ -573,12 +573,12 @@
       </div>
     </div>
 
-    <!-- Medical Debt Relief -->
+    <!-- Medical debt relief -->
     <div class="screen step-screen" id="screen-medicaldebt">
       <div class="screen-inner">
         <div class="heading-block">
-          <h1>Tell us about your medical bill.</h1>
-          <p class="screen-subtext">We'll check if you qualify for charity care to help pay it off.</p>
+          <h1>Tell us about your medical bill</h1>
+          <p class="screen-subtext">We'll check if you qualify for your hospital's financial aid program to help pay it off.</p>
         </div>
         <div class="field-group">
           <span class="field-label">Do you have any hospital bills you are unable to pay?</span>
@@ -664,9 +664,9 @@
   var medicalGate      = {};
 
   var PILLAR_LABELS = {
-    housing: 'Eviction Prevention',
-    food:    'Food Assistance',
-    medical: 'Medical Debt Relief'
+    housing: 'Eviction prevention',
+    food:    'Food assistance',
+    medical: 'Medical debt relief'
   };
 
   function getScreenEl(key)   { return document.getElementById('screen-'   + key); }
