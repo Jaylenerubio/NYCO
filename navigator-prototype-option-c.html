@@ -3,1330 +3,961 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NYC Health + Affordability Corps Navigator — Option C</title>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:wght@400&display=swap" rel="stylesheet" />
+  <title>NYC Health + Affordability Corps — Navigator (Hybrid)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
-    /* ── Design tokens ─────────────────────────────────────── */
     :root {
-      /* ── Foundation colors ── */
-      --color-primary-light:   #CCCCE5;
       --color-primary-base:    #050560;
       --color-primary-dark:    #030339;
-      --color-secondary-light: #D3DEFA;
       --color-secondary-base:  #284CCA;
-      --color-secondary-dark:  #182D79;
       --color-white:           #FFFFFF;
-      --color-gray-100:        #F5F5F5;
-      --color-gray-200:        #EEEEEE;
-      --color-gray-300:        #DDDDDD;
-      --color-gray-400:        #C2C2C2;
+      --color-neutral-100:     #F5F5F5;
+      --color-neutral-200:     #EEEEEE;
+      --color-neutral-300:     #DDDDDD;
       --color-gray-500:        #AAAAAA;
-      --color-gray-700:        #767676;
-      --color-gray-900:        #333333;
       --color-black:           #191919;
-      --color-success-base:    #008703;
-      --color-success-light:   #E2F2D5;
-      --color-error-base:      #EC131E;
-      --color-error-light:     #F8D9DE;
-
-      /* ── Semantic layer ── */
-      --text-primary:            var(--color-black);
-      --text-secondary:          var(--color-gray-700);
-      --text-link:               var(--color-secondary-base);
-      --text-link-hover:         var(--color-secondary-dark);
-      --color-interactive:       var(--color-secondary-base);
-      --button-primary-bg:       var(--color-primary-base);
-      --button-primary-hover:    var(--color-primary-dark);
-      --button-secondary-bg:     var(--color-secondary-base);
-      --button-secondary-hover:  var(--color-secondary-dark);
-      --border-default:          var(--color-gray-300);
-      --border-focus:            var(--color-interactive);
-      --border-error:            var(--color-error-base);
-      --bg-primary:              var(--color-white);
-      --bg-secondary:            var(--color-gray-100);
-
-      /* ── Motion ── */
-      --duration-open:           220ms;
-      --duration-close:          140ms;
-      --duration-backdrop-close: 180ms;
-      --ease-out:                cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-in:                 cubic-bezier(0.4, 0.0, 1, 1);
-
-      /* ── Focus ── */
-      --focus-ring-color:  var(--color-interactive);
-      --focus-ring-width:  3px;
-      --focus-ring-offset: 2px;
-
-      /* ── Disabled ── */
-      --disabled-opacity: 0.4;
-
-      /* ── Typography tokens ── */
-      --font-display:  'Source Serif 4', 'Source Serif Pro', Georgia, serif;
-      --font-body:     'Public Sans', system-ui, -apple-system, sans-serif;
-      --type-body-size:          18px;
-      --type-body-weight:        400;
-      --type-body-line-height:   150%;
-      --type-ui-16-size:         16px;
-      --type-ui-14-size:         14px;
-      --type-button-size:        18px;
-      --type-button-weight:      600;
-      --type-button-line-height: 22px;
-      --type-h1-size:            40px;
-      --type-h2-size:            32px;
-      --type-h3-size:            26px;
-
-      /* ── Spacing ── */
-      --space-1: 8px;
-      --space-2: 16px;
-      --space-3: 24px;
-      --space-4: 32px;
-      --space-5: 40px;
-      --space-6: 48px;
+      --text-secondary:        #6B6B7A;
+      --color-success-text:    #006333;
+      --bg-primary:            var(--color-white);
+      --bg-secondary:          var(--color-neutral-100);
+      --border-default:        var(--color-neutral-300);
+      --ease-out:              cubic-bezier(0.16, 1, 0.3, 1);
+      --font-display:          'Source Serif 4', Georgia, serif;
+      --font-body:             'Public Sans', system-ui, -apple-system, sans-serif;
+      --space-1: 8px; --space-2: 16px; --space-3: 24px; --space-4: 32px;
     }
 
-    /* ── Reset ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
+    html { height: 100%; }
     body {
-      font-family: var(--font-body);
-      font-size: var(--type-body-size);
-      font-weight: var(--type-body-weight);
-      line-height: var(--type-body-line-height);
-      color: var(--text-primary);
-      background: var(--bg-secondary);
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
+      height: 100%; background: var(--bg-secondary); font-family: var(--font-body);
+      color: var(--color-black); font-size: 16px; line-height: 1.5;
+      display: flex; justify-content: center; -webkit-font-smoothing: antialiased;
     }
-
-    /* ── App shell ─────────────────────────────────────────── */
     #app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      background: var(--bg-primary);
-      box-shadow: 0 0 40px rgba(0,0,0,0.12);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
+      width: 100%; max-width: 390px; height: 100%; background: var(--bg-primary);
+      box-shadow: 0 0 60px rgba(0,0,0,0.18); display: flex; flex-direction: column; overflow: hidden;
+    }
+    @media (max-width: 430px) { #app { box-shadow: none; } }
+
+    @keyframes slideInBounce {
+      0% { transform: translateX(100%); }
+      60% { transform: translateX(-10px); }
+      80% { transform: translateX(5px); }
+      100% { transform: translateX(0); }
     }
 
-    /* ── Top bar ───────────────────────────────────────────── */
-    .top-bar {
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      padding: 6px var(--space-2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      gap: var(--space-1);
+    .modal {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000;
+      justify-content: center; align-items: center;
     }
-    .top-bar-left {
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-      flex-wrap: wrap;
+    .modal.active { display: flex; }
+    .modal-content {
+      background: white; border-radius: 8px; padding: 24px; max-width: 320px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15); animation: modalSlideIn 260ms cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .free-badge {
-      background: var(--color-success-base);
-      color: var(--color-white);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 999px;
-      white-space: nowrap;
+    @keyframes modalSlideIn {
+      from { transform: scale(0.9) translateY(-20px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
     }
-    .top-bar-tagline {
-      font-size: 11px;
-      color: rgba(255,255,255,0.85);
-      white-space: nowrap;
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; background: none; border: none;
+      cursor: pointer; font-size: 24px; color: var(--color-black); width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
     }
-    .lang-toggles {
-      display: flex;
-      gap: 4px;
-      flex-shrink: 0;
+    .modal-close:hover { color: var(--color-secondary-base); }
+    .modal-title { font-family: var(--font-display); font-size: 24px; font-weight: 400;
+      color: var(--color-black); margin-bottom: 16px; line-height: 1.3;
     }
-    .lang-btn {
-      background: none;
-      border: 1px solid rgba(255,255,255,0.4);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-size: 10px;
-      font-weight: 500;
-      padding: 2px 5px;
-      border-radius: 4px;
-      cursor: pointer;
-      line-height: 1.4;
-      transition: background 0.15s;
+    .modal-text { font-size: 16px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px; }
+    .modal-phone { font-size: 20px; font-weight: 600; color: var(--color-secondary-base);
+      text-decoration: none; display: block; margin-bottom: 20px; text-align: center;
     }
-    .lang-btn:hover { background: rgba(255,255,255,0.15); }
-    .lang-btn.active { background: rgba(255,255,255,0.25); border-color: white; }
-    .lang-btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
+    .modal-phone:hover { color: var(--color-primary-dark); }
+    .modal-btn { width: 100%; background: var(--color-secondary-base); color: white;
+      border: none; padding: 12px 16px; border-radius: 4px; font-weight: 600; cursor: pointer;
     }
+    .modal-btn:hover { background: var(--color-primary-dark); }
 
-    /* ── Nav chrome ────────────────────────────────────────── */
-    .nav-chrome {
-      background: var(--bg-primary);
-      border-bottom: 1px solid var(--border-default);
-      padding: 10px var(--space-2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      gap: var(--space-1);
-    }
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-    }
-    .back-btn {
-      background: none;
-      border: none;
-      color: var(--text-link);
-      font-size: 20px;
-      cursor: pointer;
-      padding: 4px 8px 4px 0;
-      display: flex;
-      align-items: center;
-      line-height: 1;
-      font-weight: 600;
-      transition: color var(--duration-close) var(--ease-out);
-    }
-    .back-btn:hover { color: var(--text-link-hover); }
-    .back-btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
-      border-radius: 4px;
-    }
-    .back-btn.hidden { visibility: hidden; pointer-events: none; }
-    .nyc-logo {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      text-decoration: none;
-    }
-    .nyc-logo-block {
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 4px 6px;
-      border-radius: 3px;
-      letter-spacing: 0.5px;
-      line-height: 1;
-    }
-    .nyc-logo-label {
-      font-family: var(--font-body);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--color-primary-base);
-      line-height: 1.3;
-      max-width: 160px;
-    }
-    .hamburger-btn {
-      background: none;
-      border: none;
-      font-size: 22px;
-      color: var(--color-primary-base);
-      cursor: pointer;
-      padding: 4px;
-      line-height: 1;
-    }
-    .hamburger-btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 4px;
-    }
-
-    /* ── Progress bar ──────────────────────────────────────── */
-    .progress-wrap {
-      padding: 8px var(--space-2) 0;
-      flex-shrink: 0;
-    }
-    .progress-label {
-      font-size: 11px;
-      color: var(--color-gray-700);
-      margin-bottom: 4px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .progress-track {
-      height: 6px;
-      background: var(--color-gray-300);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: var(--color-secondary-base);
-      border-radius: 999px;
-      transition: width var(--duration-open) var(--ease-out);
-    }
-
-    /* ── Screen container ──────────────────────────────────── */
-    .screens-wrapper {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
     .screen {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      overflow-y: auto;
-      transform: translateX(100%);
-      transition: transform var(--duration-open) var(--ease-out);
-      display: flex;
-      flex-direction: column;
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 260ms cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden; background: var(--bg-primary);
     }
-    .screen.active {
-      transform: translateX(0%);
-    }
-    .screen.exit-left {
-      transform: translateX(-100%);
-    }
-    .screen.exit-right {
-      transform: translateX(100%);
-    }
-    .screen.no-transition {
-      transition: none;
-    }
+    .screen.active { transform: translateX(0); z-index: 2; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .screen.exit-left { transform: translateX(-100%); z-index: 1; }
+    #screen-4.active { animation: slideInBounce 260ms cubic-bezier(0.4, 0, 0.2, 1) backwards; }
 
-    /* ── Screen body ───────────────────────────────────────── */
-    .screen-body {
-      padding: var(--space-3) var(--space-2) var(--space-5);
-      flex: 1;
-      position: relative;
+    .supernav {
+      background: var(--bg-secondary); border-bottom: 1px solid var(--border-default);
+      padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
     }
+    .nyc-logo { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; gap: 8px; cursor: pointer; }
+    .nyc-logo:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; border-radius: 3px; }
+    .nyc-logo-icon { width: 32px; height: 32px; background: var(--color-primary-base); border-radius: 3px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 700; }
+    .nyc-logo-text { font-size: 12px; font-weight: 600; color: var(--color-primary-base); line-height: 1.2; }
 
-    /* ── Layer annotation badges ───────────────────────────── */
-    .layer-badge-wrap {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      display: flex;
-      gap: 4px;
-      z-index: 10;
+    .nav-chrome {
+      background: var(--bg-primary); border-bottom: 1px solid var(--border-default);
+      padding: 16px; display: flex; align-items: center; flex-shrink: 0;
     }
-    .layer-badge {
-      font-size: 10px;
-      font-weight: 600;
-      font-family: var(--font-body);
-      padding: 2px 8px;
-      border-radius: 999px;
-      color: white;
-      white-space: nowrap;
-      line-height: 1.5;
+    .nav-chrome.hidden { display: none; }
+    .back-btn {
+      background: none; border: none; cursor: pointer; color: var(--color-black);
+      font-family: var(--font-body); font-size: 16px; font-weight: 400;
+      display: flex; align-items: center; gap: 8px; padding: 0;
     }
-    .layer-badge.layer-a { background: #7C3AED; }
-    .layer-badge.layer-b { background: #050560; }
+    .back-btn:hover { color: var(--color-primary-base); }
+    .back-btn:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; border-radius: 3px; }
+    .back-btn svg { width: 24px; height: 24px; }
 
-    /* ── Typography helpers ────────────────────────────────── */
-    .screen-headline {
-      font-family: var(--font-display);
-      font-size: var(--type-h3-size);
-      font-weight: 400;
-      color: var(--text-primary);
-      line-height: 1.25;
-      margin-bottom: var(--space-2);
-    }
-    .screen-header {
-      font-family: var(--font-body);
-      font-size: var(--type-h2-size);
-      font-weight: 600;
-      color: var(--text-primary);
-      line-height: 1.25;
-      margin-bottom: 6px;
-    }
-    .screen-subtext {
-      font-size: var(--type-ui-16-size);
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: var(--space-3);
-    }
-    .tip-note {
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-style: italic;
-      margin-bottom: var(--space-3);
-      line-height: 1.4;
-    }
-    .small-note {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-style: italic;
-      line-height: 1.4;
-      margin-top: var(--space-2);
-    }
+    .progress-wrap { padding: 24px 16px 16px; flex-shrink: 0; }
+    .progress-wrap.enter { animation: progEnter .45s ease both; }
+    @keyframes progEnter { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: translateY(0); } }
+    .progress-label { font-size: 12px; line-height: 1.6; text-transform: uppercase; color: var(--color-black); margin-bottom: 13px; }
+    .progress-track { display: flex; gap: 2px; }
+    .progress-seg { flex: 1; height: 8px; border-radius: 20px; background: var(--color-neutral-200); overflow: hidden; }
+    .progress-seg .seg-fill { display: block; height: 100%; width: 0; background: var(--color-secondary-base); border-radius: 20px; transition: width .45s cubic-bezier(.4,0,.2,1); }
+    .progress-seg.filled .seg-fill { width: 100%; }
 
-    /* ── Buttons ───────────────────────────────────────────── */
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 14px 24px;
-      border-radius: 8px;
-      border: none;
-      font-family: var(--font-body);
-      font-size: var(--type-button-size);
-      font-weight: var(--type-button-weight);
-      line-height: var(--type-button-line-height);
-      cursor: pointer;
-      text-align: center;
-      transition: background var(--duration-close) var(--ease-out), transform var(--duration-close) var(--ease-out), color var(--duration-close) var(--ease-out), border-color var(--duration-close) var(--ease-out);
-    }
-    .btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
-    }
+    .screens-wrapper { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+    .screen-inner { width: 100%; padding: 24px 16px; flex: 1; display: flex; flex-direction: column; gap: var(--space-3); overflow-y: auto; }
+    #screen-0 .screen-inner { padding-top: 32px; }
+
+    h1 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 1.14; letter-spacing: -.5px; color: var(--color-black); }
+    .step-screen h1 { font-size: 28px; line-height: 1.3; letter-spacing: normal; }
+    h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.3; color: var(--color-black); }
+    h3 { font-family: var(--font-display); font-weight: 400; font-size: 20px; line-height: 1.3; color: var(--color-black); margin-top: 8px; margin-bottom: 16px; }
+    .heading-block { display: flex; flex-direction: column; gap: var(--space-1); }
+    .screen-subtext { font-size: 16px; color: var(--text-secondary); line-height: 1.5; }
+
     .btn-primary {
-      background: var(--button-primary-bg);
-      color: var(--color-white);
+      display: block; width: 100%; padding: 16px 24px;
+      background: var(--color-primary-base); color: var(--color-white);
+      border: 2px solid transparent; border-radius: 4px;
+      font-family: var(--font-body); font-size: 18px; font-weight: 600; line-height: 22px;
+      text-align: center; cursor: pointer; transition: background 150ms ease;
     }
-    .btn-primary:hover:not(:disabled) {
-      background: var(--button-primary-hover);
-      transform: translateY(-1px);
-    }
-    .btn-primary:disabled {
-      opacity: var(--disabled-opacity);
-      cursor: not-allowed;
-    }
-    .btn-ghost {
-      background: transparent;
-      color: var(--color-primary-base);
-      border: 2px solid var(--color-primary-base);
-    }
-    .btn-ghost:hover { background: var(--bg-secondary); }
-    .btn-success {
-      background: var(--color-success-base);
-      color: var(--color-white);
-    }
-    .btn-success:hover { background: #006602; }
-    .btn-stack {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-top: var(--space-3);
-    }
+    .btn-primary:hover:not(:disabled) { background: var(--color-primary-dark); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
 
-    /* ── Screen 0: Landing ─────────────────────────────────── */
-    .landing-wrap {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 100%;
-      padding: var(--space-4) var(--space-2) var(--space-5);
+    .btn-secondary {
+      display: inline-block; padding: 12px 16px;
+      background: var(--color-secondary-base); color: var(--color-white);
+      border: 2px solid transparent; border-radius: 4px;
+      font-family: var(--font-body); font-size: 14px; font-weight: 600;
+      text-align: center; cursor: pointer; transition: background 150ms ease;
     }
-    .landing-icon {
-      font-size: 48px;
-      margin-bottom: var(--space-3);
-      text-align: center;
-    }
-    .landing-body {
-      font-size: var(--type-ui-16-size);
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: var(--space-5);
-    }
-    .no-account-note {
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-top: var(--space-2);
-    }
+    .btn-secondary:hover { background: var(--color-primary-dark); }
 
-    /* ── Screen 1: Situation cards ─────────────────────────── */
-    .situation-cards {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-3);
+    .btn-text {
+      background: transparent; border: none; cursor: pointer; color: var(--color-secondary-base);
+      font-family: var(--font-body); font-size: 14px; font-weight: 500;
+      display: block; text-align: center; width: 100%; padding: 12px 0; text-decoration: underline;
     }
+    .btn-text:hover { color: var(--color-primary-dark); }
+
+    .cards-grid { display: flex; flex-direction: column; gap: 8px; }
     .situation-card {
-      border: 1px solid var(--border-default);
-      border-radius: 12px;
-      padding: var(--space-2) var(--space-2);
-      min-height: 80px;
-      cursor: pointer;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      position: relative;
-      background: var(--bg-primary);
-      transition: box-shadow var(--duration-open) var(--ease-out), transform var(--duration-open) var(--ease-out);
-      text-align: left;
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 12px 16px; background: var(--color-white);
+      border: 2px solid var(--color-neutral-200); border-radius: 8px;
+      cursor: pointer; text-align: left; width: 100%;
+      transition: border-color 150ms ease, background 150ms ease;
     }
-    .situation-card:hover {
-      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-      transform: translateY(-2px);
-    }
-    .situation-card:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
-    }
-    .situation-card.selected {
-      border-left: 4px solid var(--color-primary-base);
-      background: #EEF2FF;
-    }
-    .card-emoji {
-      font-size: 28px;
-      flex-shrink: 0;
-      line-height: 1;
-      margin-top: 2px;
-    }
-    .card-text { flex: 1; }
-    .card-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 3px;
-    }
-    .card-desc {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.4;
-    }
-    .card-check {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--color-primary-base);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-    .situation-card.selected .card-check { opacity: 1; }
+    .situation-card:hover { border-color: var(--color-secondary-base); }
+    .situation-card.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+    .situation-card:focus-visible { outline: 2px solid var(--color-secondary-base); outline-offset: 2px; }
+    .card-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--color-black); display: flex; align-items: center; justify-content: center; margin-top: 14px; }
+    .situation-card.selected .card-icon { color: var(--color-secondary-base); }
+    .card-icon svg { width: 24px; height: 24px; }
+    .card-body { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 12px 0; min-width: 0; }
+    .card-title { font-size: 16px; font-weight: 400; color: var(--color-black); line-height: 1.5; }
+    .card-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 
-    .bg-working-note {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      font-style: italic;
-      opacity: 0;
-      transition: opacity 0.4s;
-      margin-bottom: var(--space-2);
-      min-height: 20px;
+    .field-group { display: flex; flex-direction: column; gap: 8px; }
+    .field-label { font-size: 16px; font-weight: 400; color: var(--color-black); }
+    .field-input, .field-select {
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid var(--border-default); border-radius: 4px;
+      font-family: var(--font-body); font-size: 16px; color: var(--color-black);
+      background: var(--color-white); transition: border-color 150ms ease;
     }
-    .bg-working-note.visible { opacity: 1; }
+    .field-select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23191919' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px; cursor: pointer; }
+    .field-input:focus, .field-select:focus { outline: none; border-color: var(--color-secondary-base); box-shadow: 0 0 0 3px rgba(40,76,202,0.15); }
+    .field-input::placeholder { color: var(--color-gray-500); }
 
-    /* ── Screen 2: Form fields ─────────────────────────────── */
-    .reassurance-box {
-      background: #E6F4E6;
-      border: 1px solid #A3D4A3;
-      border-radius: 8px;
-      padding: var(--space-2);
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: var(--space-3);
-      font-size: 14px;
-      color: #1a5c1a;
-      line-height: 1.4;
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; width: 100%; }
+    .chip {
+      flex: 0 1 auto; min-width: 120px; padding: 12px 16px;
+      background: var(--color-white); border: 1px solid var(--color-neutral-300); border-radius: 8px;
+      font-family: var(--font-body); font-size: 16px; font-weight: 400; color: var(--color-black);
+      cursor: pointer; text-align: center; white-space: nowrap;
+      transition: border-color 150ms ease, background 150ms ease;
     }
-    .reassurance-icon {
-      font-size: 18px;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      margin-bottom: var(--space-3);
-    }
-    .field-wrap { display: flex; flex-direction: column; gap: 5px; }
-    .field-label {
-      font-size: var(--type-ui-14-size);
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .field-input {
-      width: 100%;
-      padding: 11px 12px;
-      border: 1.5px solid var(--border-default);
-      border-radius: 8px;
-      font-family: var(--font-body);
-      font-size: var(--type-ui-16-size);
-      color: var(--text-primary);
-      background: var(--bg-primary);
-      transition: border-color var(--duration-close) var(--ease-out);
-      appearance: none;
-      -webkit-appearance: none;
-    }
-    .field-input:focus {
-      border-color: var(--border-focus);
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
-    }
-    .field-input::placeholder { color: var(--text-secondary); }
-    .field-sub-note {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-style: italic;
-    }
-    .field-success {
-      font-size: 13px;
-      color: var(--color-success-base);
-      font-weight: 500;
-      display: none;
-    }
-    .field-success.visible { display: block; }
+    .chip:hover { border-color: var(--color-secondary-base); }
+    .chip.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
 
-    /* ── Screen 3: Chip cards ──────────────────────────────── */
-    .benefit-chips {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-2);
+    .contact-cards { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+    .contact-card {
+      display: flex; align-items: center; gap: 16px; padding: 16px;
+      background: var(--color-white); border: 1.5px solid var(--color-neutral-300); border-radius: 8px;
+      cursor: pointer; text-align: left; font-family: var(--font-body); transition: all 150ms ease;
     }
-    .benefit-chip {
-      border: 2px solid var(--color-primary-base);
-      border-radius: 12px;
-      padding: 14px var(--space-2);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-2);
-      background: var(--bg-primary);
-      color: var(--color-primary-base);
-      font-family: var(--font-body);
-      font-size: 15px;
-      font-weight: 600;
-      text-align: left;
-      transition: background var(--duration-close) var(--ease-out), color var(--duration-close) var(--ease-out);
-    }
-    .benefit-chip.selected {
-      background: var(--color-primary-base);
-      color: var(--color-white);
-    }
-    .benefit-chip:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
-    }
-    .chip-check {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: 2px solid currentColor;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      flex-shrink: 0;
-      transition: background 0.15s;
-    }
-    .benefit-chip.selected .chip-check {
-      background: var(--color-white);
-      color: var(--color-primary-base);
-      border-color: var(--color-white);
-    }
-    .live-counter {
-      font-size: var(--type-ui-14-size);
-      color: var(--text-secondary);
-      margin-bottom: var(--space-3);
-      font-weight: 500;
-    }
-    .live-counter span { color: var(--color-primary-base); font-weight: 600; }
+    .contact-card:hover { border-color: var(--color-secondary-base); background: #F1F4FD; }
+    .contact-card.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+    .contact-card__icon { font-size: 28px; width: 44px; text-align: center; flex-shrink: 0; }
+    .contact-card__text { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .contact-card__label { font-size: 16px; font-weight: 600; color: var(--color-black); }
+    .contact-card__value { font-size: 14px; color: var(--text-secondary); }
+    .contact-card__check { width: 20px; color: var(--color-secondary-base); font-size: 18px; font-weight: bold; flex-shrink: 0; }
 
-    /* ── Screen 4: Deep dive ───────────────────────────────── */
-    .privacy-note {
-      font-size: 13px;
-      color: var(--text-secondary);
-      background: var(--bg-secondary);
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin-top: var(--space-2);
-      line-height: 1.4;
+    .pillar-card {
+      display: flex; align-items: center; gap: 12px; padding: 16px;
+      background: var(--color-white); border: 1.5px solid var(--color-neutral-300); border-radius: 8px;
+      cursor: pointer; font-family: var(--font-body); transition: all 150ms ease; margin-bottom: 12px;
     }
-    .sensitive-note {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-style: italic;
-      margin-bottom: var(--space-3);
-    }
+    .pillar-card:hover { border-color: var(--color-secondary-base); background: #F1F4FD; }
+    .pillar-card__icon { font-size: 28px; width: 44px; text-align: center; flex-shrink: 0; }
+    .pillar-card__title { flex: 1; font-size: 16px; font-weight: 600; color: var(--color-black); }
+    .pillar-card__btn { background: var(--color-secondary-base); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 14px; flex-shrink: 0; }
+    .pillar-card__btn:hover { background: var(--color-primary-dark); }
 
-    /* ── Screen 5: Results ─────────────────────────────────── */
-    .result-cards {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-3);
+    .confirm-icon {
+      width: 80px; height: 80px; background: #DCEFD2;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto var(--space-3);
     }
+    .confirm-icon svg { width: 36px; height: 36px; stroke: #2F7D32; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+    .screen-footer {
+      position: sticky; bottom: 0; background: var(--bg-primary);
+      padding: 16px 16px 24px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 8px;
+      opacity: 1; pointer-events: auto; transition: opacity 200ms var(--ease-out);
+    }
+    .screen-footer.footer-hidden { opacity: 0; pointer-events: none; }
+    .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
+
+    .flex-spacer { flex: 1; }
+    .results-list { display: flex; flex-direction: column; gap: 16px; }
     .result-card {
-      border: 1px solid var(--border-default);
-      border-radius: 12px;
-      padding: var(--space-2);
-      background: var(--bg-primary);
+      display: flex; gap: 16px; padding: 20px; align-items: flex-start;
+      border: none; border-radius: 0; background: var(--color-white);
+      border-bottom: 1px solid var(--color-neutral-300);
     }
-    .result-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-      gap: var(--space-1);
+    .result-body { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .result-title { font-family: var(--font-display); font-size: 20px; font-weight: 400;
+      color: var(--color-black); line-height: 1.3;
     }
-    .result-card-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
+    .result-meta { font-size: 14px; color: var(--text-secondary); }
+    .result-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-top: 8px; }
+    .result-checkmark {
+      width: 44px; height: 44px; flex-shrink: 0; background: #D1FAE5; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; color: #059669;
     }
-    .match-badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-    .match-badge.strong {
-      background: #E6F4E6;
-      color: #1a5c1a;
-    }
-    .match-badge.possible {
-      background: #FFF3CD;
-      color: #7a4f00;
-    }
-    .result-value {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--color-success-base);
-      margin-bottom: 4px;
-    }
-    .result-desc {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.4;
-    }
+    .result-checkmark svg { width: 24px; height: 24px; }
+    .result-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 
-    .claim-box {
-      background: var(--bg-secondary);
-      border-radius: 10px;
-      padding: var(--space-3) var(--space-2);
-      margin-bottom: var(--space-2);
-    }
-    .claim-box-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: var(--space-2);
-    }
-    .claim-fields {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-    }
+    .nudge-section { border-top: 1px solid var(--color-neutral-300); padding-top: 24px; margin-top: 24px; }
+    .nudge-item { display: flex; gap: 12px; padding: 16px; border: 1px solid var(--color-neutral-300); border-radius: 8px; background: #FFFBF0; margin-bottom: 12px; }
+    .nudge-icon { width: 40px; height: 40px; flex-shrink: 0; color: #D97706; display: flex; align-items: center; justify-content: center; }
+    .nudge-icon svg { width: 40px; height: 40px; }
+    .nudge-body { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .nudge-title { font-size: 16px; font-weight: 600; color: var(--color-black); }
+    .nudge-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 
-    /* ── Screen 6: Confirmation ────────────────────────────── */
-    .confirm-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 100%;
-      padding: var(--space-5) var(--space-3);
+    .resume-card {
+      background: #DBEAFE; border: 1px solid #93C5FD; border-radius: 8px;
+      padding: 16px; margin-bottom: 16px;
     }
-    .confirm-check-wrap {
-      margin-bottom: var(--space-4);
-    }
-    .confirm-check-wrap svg {
-      width: 80px;
-      height: 80px;
-    }
-    .confirm-headline {
-      font-family: var(--font-display);
-      font-size: 28px;
-      font-weight: 400;
-      color: var(--text-primary);
-      margin-bottom: var(--space-2);
-      line-height: 1.2;
-    }
-    .confirm-body {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: var(--space-3);
-      max-width: 320px;
-    }
-    .confirm-ref {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      background: var(--bg-secondary);
-      border-radius: 6px;
-      padding: 8px 16px;
-      margin-bottom: var(--space-4);
-      display: inline-block;
-    }
-    .confirm-done-btn {
-      width: 100%;
-      max-width: 300px;
-    }
-
-    /* ── Utility ───────────────────────────────────────────── */
-    .visually-hidden {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-    .mt-1 { margin-top: var(--space-1); }
-    .mt-2 { margin-top: var(--space-2); }
-    .mt-3 { margin-top: var(--space-3); }
-
-    /* ── Media: full-screen mobile ─────────────────────────── */
-    @media (max-width: 430px) {
-      #app { box-shadow: none; }
-    }
+    .resume-card-title { font-weight: 600; font-size: 16px; color: #1E40AF; margin-bottom: 8px; }
+    .resume-card-text { font-size: 14px; color: #1E3A8A; margin-bottom: 12px; }
+    .resume-btn { display: inline-block; background: #3B82F6; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: 600; border: none; cursor: pointer; margin-right: 8px; }
+    .resume-btn:hover { background: #2563EB; }
+    .clear-btn { display: inline-block; background: transparent; color: #3B82F6; padding: 8px 0; text-decoration: underline; font-weight: 600; border: none; cursor: pointer; font-size: 14px; }
+    .clear-btn:hover { color: #2563EB; }
   </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ── Top bar (persistent) ──────────────────────────────── -->
-  <div class="top-bar" role="banner">
-    <div class="top-bar-left">
-      <span class="free-badge">100% Free</span>
-      <span class="top-bar-tagline">· All New Yorkers</span>
-    </div>
-    <div class="lang-toggles" role="navigation" aria-label="Language selection">
-      <button class="lang-btn active" aria-label="English" aria-pressed="true">EN</button>
-      <button class="lang-btn" aria-label="Español" aria-pressed="false">ES</button>
-      <button class="lang-btn" aria-label="中文" aria-pressed="false">中文</button>
-      <button class="lang-btn" aria-label="বাংলা" aria-pressed="false">BN</button>
-      <button class="lang-btn" aria-label="Haitian Creole" aria-pressed="false">HT</button>
-    </div>
+  <div class="supernav" role="banner">
+    <a href="#" class="nyc-logo" aria-label="NYC Health and Affordability Corps home" onclick="goToLanding();return false;">
+      <div class="nyc-logo-icon">NYC</div>
+      <span class="nyc-logo-text">Health +<br>Affordability</span>
+    </a>
   </div>
 
-  <!-- ── Nav chrome (persistent) ───────────────────────────── -->
-  <div class="nav-chrome" role="navigation" aria-label="Main navigation">
-    <div class="nav-left">
-      <button class="back-btn hidden" id="back-btn" aria-label="Go back">←</button>
-      <a href="#" class="nyc-logo" aria-label="NYC Health + Affordability Corps home">
-        <span class="nyc-logo-block">NYC</span>
-        <span class="nyc-logo-label">Health + Affordability Corps</span>
-      </a>
-    </div>
-    <button class="hamburger-btn" aria-label="Open menu" aria-expanded="false">☰</button>
+  <div class="nav-chrome hidden" id="nav-chrome" role="navigation">
+    <button class="back-btn" id="back-btn" aria-label="Go back" onclick="goBack()">
+      <i data-lucide="arrow-left"></i> Back
+    </button>
   </div>
 
-  <!-- ── Progress bar (persistent, hidden on 0 and 6) ─────── -->
-  <div class="progress-wrap" id="progress-wrap" aria-hidden="true" style="display:none;">
-    <div class="progress-label">
-      <span id="progress-label-text">Step 1 of 5</span>
-    </div>
+  <div class="progress-wrap" id="progress-wrap" style="display:none">
+    <div class="progress-label" id="progress-label-text">Step 1/3</div>
     <div class="progress-track">
-      <div class="progress-fill" id="progress-fill" style="width:20%;"></div>
+      <div class="progress-seg" id="seg-1"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-2"><span class="seg-fill"></span></div>
+      <div class="progress-seg" id="seg-3"><span class="seg-fill"></span></div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════════
-       SCREENS
-  ═══════════════════════════════════════════════════════════ -->
-  <div class="screens-wrapper" id="screens-wrapper">
+  <div class="screens-wrapper">
 
-    <!-- ── Screen 0: Landing ─────────────────────────────────── -->
-    <section class="screen active" id="screen-0" role="main" aria-label="Welcome">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A — Warm entry</span>
+    <!-- Screen 0: Landing -->
+    <div class="screen active" id="screen-0">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Get your bills covered</h1>
+          <p class="screen-subtext">You're close to getting help with health coverage, food, rent, and more. Takes less than 5&nbsp;minutes.</p>
         </div>
-        <div class="landing-wrap">
-          <div class="landing-icon" aria-hidden="true">🤝</div>
-          <h1 class="screen-headline">A neighbor helped you start — let's keep going.</h1>
-          <p class="landing-body">You're close to getting help with health, food, rent, and more. Takes less than 2 minutes.</p>
-          <button class="btn btn-primary" id="s0-cta" onclick="navigate(1)">Let's find out what I qualify for</button>
-          <p class="no-account-note">No account needed. 100% free.</p>
-        </div>
+        <div id="resume-container"></div>
+        <div class="flex-spacer"></div>
       </div>
-    </section>
-
-    <!-- ── Screen 1: Warm Entry ──────────────────────────────── -->
-    <section class="screen" id="screen-1" role="main" aria-label="What's going on">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A — Situation surface</span>
-        </div>
-        <h2 class="screen-header">What's going on?</h2>
-        <p class="screen-subtext">Pick everything that fits.</p>
-        <p class="tip-note">💡 Tip: No SSN needed here — just tell us what's happening.</p>
-
-        <div class="situation-cards" role="group" aria-label="Select your situations">
-          <button class="situation-card" id="card-0" onclick="toggleCard(0)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🏠</span>
-            <span class="card-text">
-              <span class="card-title">I might lose my home</span>
-              <span class="card-desc">Eviction notice, late rent, or unstable housing</span>
-            </span>
-            <span class="card-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="situation-card" id="card-1" onclick="toggleCard(1)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🩺</span>
-            <span class="card-text">
-              <span class="card-title">I need health coverage</span>
-              <span class="card-desc">No insurance, renewal due, or gap in coverage</span>
-            </span>
-            <span class="card-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="situation-card" id="card-2" onclick="toggleCard(2)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🛒</span>
-            <span class="card-text">
-              <span class="card-title">Struggling with food or bills</span>
-              <span class="card-desc">SNAP, cash help, or monthly expenses</span>
-            </span>
-            <span class="card-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="situation-card" id="card-3" onclick="toggleCard(3)" aria-pressed="false">
-            <span class="card-emoji" aria-hidden="true">🏥</span>
-            <span class="card-text">
-              <span class="card-title">Can't pay medical bills</span>
-              <span class="card-desc">Old bills, hospital debt, or new charges</span>
-            </span>
-            <span class="card-check" aria-hidden="true">✓</span>
-          </button>
-        </div>
-
-        <p class="bg-working-note" id="bg-working-note" aria-live="polite">Working out your eligibility in the background…</p>
-
-        <button class="btn btn-primary" id="s1-cta" onclick="navigate(2)" disabled aria-disabled="true">These apply to me →</button>
+      <div class="screen-footer" id="footer-0">
+        <button class="btn-primary" onclick="navigate(1)">Let's see what you qualify for</button>
       </div>
-    </section>
+    </div>
 
-    <!-- ── Screen 2: Quick Basics ────────────────────────────── -->
-    <section class="screen" id="screen-2" role="main" aria-label="Quick basics">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-b">Layer B — Logic running</span>
+    <!-- Screen 1: Select situations -->
+    <div class="screen step-screen" id="screen-1">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>What's going on?</h1>
+          <p class="screen-subtext">Select all that apply.</p>
         </div>
-        <h2 class="screen-header">A few quick questions</h2>
-        <p class="screen-subtext">These help us narrow down what you qualify for.</p>
-
-        <div class="reassurance-box" role="note">
-          <span class="reassurance-icon" aria-hidden="true">✅</span>
-          <span>No Social Security number needed at this step.</span>
+        <div class="cards-grid">
+          <button class="situation-card" id="card-health" onclick="toggleSituation('health')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="stethoscope"></i></span>
+            <span class="card-body">
+              <span class="card-title">I need help getting or keeping my healthcare</span>
+              <span class="card-sub">No insurance or need to renew</span>
+            </span>
+          </button>
+          <button class="situation-card" id="card-housing" onclick="toggleSituation('housing')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="home"></i></span>
+            <span class="card-body">
+              <span class="card-title">I'm behind on rent or might lose my home</span>
+              <span class="card-sub">Facing eviction or housing instability</span>
+            </span>
+          </button>
+          <button class="situation-card" id="card-food" onclick="toggleSituation('food')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="apple"></i></span>
+            <span class="card-body">
+              <span class="card-title">I need help with food or everyday expenses</span>
+              <span class="card-sub">SNAP or cash assistance</span>
+            </span>
+          </button>
+          <button class="situation-card" id="card-medical" onclick="toggleSituation('medical')" aria-pressed="false">
+            <span class="card-icon"><i data-lucide="cross"></i></span>
+            <span class="card-body">
+              <span class="card-title">I have medical bills I can't pay</span>
+              <span class="card-sub">Hospital debt or old bills</span>
+            </span>
+          </button>
         </div>
+        <div class="scroll-sentinel" id="sentinel-1"></div>
+      </div>
+      <div class="screen-footer" id="footer-1">
+        <button class="btn-primary" id="btn-s1" onclick="navigate(2)" disabled>Continue →</button>
+        <button class="btn-text" onclick="saveAndExit()">Save and continue later</button>
+      </div>
+    </div>
 
+    <!-- Screen 2: Personal info -->
+    <div class="screen step-screen" id="screen-2">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Tell us about yourself</h1>
+          <p class="screen-subtext">This helps us match you to the right programs.</p>
+        </div>
         <div class="field-group">
-          <div class="field-wrap">
-            <label class="field-label" for="zip-input">ZIP code</label>
-            <input class="field-input" type="text" id="zip-input" inputmode="numeric" placeholder="e.g. 10036" maxlength="5" autocomplete="postal-code" />
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="household-input">How many people live with you?</label>
-            <input class="field-input" type="number" id="household-input" min="1" max="20" placeholder="e.g. 3" />
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="income-select">About how much does your household make each month?</label>
-            <select class="field-input" id="income-select">
-              <option value="" disabled selected>Select a range…</option>
-              <option value="under-1500">Under $1,500</option>
-              <option value="1500-3000">$1,500–$3,000</option>
-              <option value="3000-5000">$3,000–$5,000</option>
-              <option value="over-5000">Over $5,000</option>
-              <option value="prefer-not">I'd rather not say</option>
-            </select>
-          </div>
+          <label class="field-label" for="fname">First name</label>
+          <input class="field-input" type="text" id="fname" placeholder="First name" />
         </div>
-
-        <p class="small-note">Behind the scenes, we're pre-scoring your eligibility across all 4 benefit areas at once.</p>
-
-        <button class="btn btn-primary mt-3" onclick="navigate(3)">Keep going →</button>
-      </div>
-    </section>
-
-    <!-- ── Screen 3: System Confirms ─────────────────────────── -->
-    <section class="screen" id="screen-3" role="main" aria-label="Confirm benefit areas">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A</span>
-          <span class="layer-badge layer-b">Layer B</span>
-        </div>
-        <h2 class="screen-header">Here's what we'll check for you</h2>
-        <p class="screen-subtext">Based on your situation and basics, you may qualify for all of these. You can remove any you don't need.</p>
-
-        <div class="benefit-chips" role="group" aria-label="Benefit areas to check">
-          <button class="benefit-chip selected" id="chip-0" onclick="toggleChip(0)" aria-pressed="true">
-            <span>✓ Health coverage <span style="font-weight:400;font-size:13px;">(Medicaid, Child Health Plus)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="benefit-chip selected" id="chip-1" onclick="toggleChip(1)" aria-pressed="true">
-            <span>✓ Food &amp; cash help <span style="font-weight:400;font-size:13px;">(SNAP, cash assistance)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="benefit-chip selected" id="chip-2" onclick="toggleChip(2)" aria-pressed="true">
-            <span>✓ Eviction prevention <span style="font-weight:400;font-size:13px;">(legal help, rental assistance)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-          <button class="benefit-chip selected" id="chip-3" onclick="toggleChip(3)" aria-pressed="true">
-            <span>✓ Medical debt relief <span style="font-weight:400;font-size:13px;">(NYC debt relief programs)</span></span>
-            <span class="chip-check" aria-hidden="true">✓</span>
-          </button>
-        </div>
-
-        <p class="live-counter" id="live-counter" aria-live="polite">Checking for <span id="chip-count">4</span> areas</p>
-
-        <button class="btn btn-primary" onclick="navigate(4)">Check these for me →</button>
-      </div>
-    </section>
-
-    <!-- ── Screen 4: Deep-Dive ───────────────────────────────── -->
-    <section class="screen" id="screen-4" role="main" aria-label="More details">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-b">Layer B — Targeted intake</span>
-        </div>
-        <h2 class="screen-header">Just a few more details</h2>
-        <p class="screen-subtext">These are specific to the programs you selected.</p>
-        <p class="sensitive-note">We only ask for sensitive info if a program really needs it.</p>
-
         <div class="field-group">
-          <div class="field-wrap">
-            <label class="field-label" for="name-input">Full name</label>
-            <input class="field-input" type="text" id="name-input" placeholder="Your full name" autocomplete="name" />
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="dob-input">Date of birth</label>
-            <input class="field-input" type="date" id="dob-input" autocomplete="bday" />
-            <span class="field-sub-note">Required for Medicaid eligibility only</span>
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="phone-input">Phone number (optional)</label>
-            <input class="field-input" type="tel" id="phone-input" placeholder="e.g. (212) 555-0100" autocomplete="tel" oninput="checkPhone()" />
-            <span class="field-success" id="phone-success">✓ We'll text you a link if you need to come back.</span>
-          </div>
+          <label class="field-label" for="lname">Last name</label>
+          <input class="field-input" type="text" id="lname" placeholder="Last name" />
         </div>
-
-        <div class="privacy-note" role="note">🔒 Your info is kept private and secure. We never share it.</div>
-
-        <button class="btn btn-primary mt-3" onclick="navigate(5)">See my full results →</button>
+        <div class="field-group">
+          <label class="field-label" for="zip">ZIP code</label>
+          <input class="field-input" type="text" id="zip" placeholder="10001" maxlength="5" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="phone">Phone number</label>
+          <input class="field-input" type="tel" id="phone" placeholder="(555) 555-5555" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="email">Email</label>
+          <input class="field-input" type="email" id="email" placeholder="you@gmail.com" />
+        </div>
+        <div class="scroll-sentinel" id="sentinel-2"></div>
       </div>
-    </section>
-
-    <!-- ── Screen 5: Rich Results ────────────────────────────── -->
-    <section class="screen" id="screen-5" role="main" aria-label="Your results">
-      <div class="screen-body">
-        <div class="layer-badge-wrap">
-          <span class="layer-badge layer-a">Layer A — A+B output</span>
-        </div>
-        <h2 class="screen-header">Here's what we found for you</h2>
-
-        <div class="result-cards" role="list">
-          <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Health coverage</span>
-              <span class="match-badge strong">Strong match</span>
-            </div>
-            <p class="result-value">Est. value: $2,400/yr</p>
-            <p class="result-desc">A Health Corps worker will call you within 24 hours.</p>
-          </div>
-          <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Eviction help</span>
-              <span class="match-badge possible">Possible match</span>
-            </div>
-            <p class="result-desc">Tenant Support Unit will reach out to you.</p>
-          </div>
-          <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Food &amp; cash help</span>
-              <span class="match-badge strong">Strong match</span>
-            </div>
-            <p class="result-desc">Our HRA partner will follow up with next steps.</p>
-          </div>
-          <div class="result-card" role="listitem">
-            <div class="result-card-header">
-              <span class="result-card-title">Medical debt</span>
-              <span class="match-badge possible">Possible match</span>
-            </div>
-            <p class="result-desc">A partner screener will contact you soon.</p>
-          </div>
-        </div>
-
-        <div class="claim-box">
-          <p class="claim-box-title">Ready to connect with a benefits worker?</p>
-          <div class="claim-fields">
-            <div class="field-wrap">
-              <label class="field-label" for="s5-name">Full name</label>
-              <input class="field-input" type="text" id="s5-name" autocomplete="name" placeholder="Your full name" />
-            </div>
-            <div class="field-wrap">
-              <label class="field-label" for="s5-phone">Phone number</label>
-              <input class="field-input" type="tel" id="s5-phone" autocomplete="tel" placeholder="e.g. (212) 555-0100" />
-            </div>
-            <div class="field-wrap">
-              <label class="field-label" for="s5-email">Email address (optional)</label>
-              <input class="field-input" type="email" id="s5-email" autocomplete="email" placeholder="you@example.com" />
-            </div>
-          </div>
-        </div>
-
-        <div class="btn-stack">
-          <button class="btn btn-primary" onclick="navigate(6)">Connect me with a benefits worker</button>
-          <button class="btn btn-ghost" onclick="navigate(6)">Text me instead</button>
-        </div>
+      <div class="screen-footer" id="footer-2">
+        <button class="btn-primary" onclick="navigate(3)">Next →</button>
+        <button class="btn-text" onclick="saveAndExit()">Save and continue later</button>
       </div>
-    </section>
+    </div>
 
-    <!-- ── Screen 6: Confirmation ────────────────────────────── -->
-    <section class="screen" id="screen-6" role="main" aria-label="You're confirmed">
-      <div class="screen-body">
-        <!-- No layer badge on confirmation screen -->
-        <div class="confirm-wrap">
-          <div class="confirm-check-wrap" aria-hidden="true">
-            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Success checkmark">
-              <circle cx="40" cy="40" r="38" fill="#008703" />
-              <path d="M22 41L34 53L58 27" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+    <!-- Screen 3: Contact preference -->
+    <div class="screen step-screen" id="screen-3">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>How should we reach you?</h1>
+          <p class="screen-subtext">Pick whichever is easiest — it's how a benefits worker will follow up.</p>
+        </div>
+        <div class="contact-cards">
+          <button type="button" class="contact-card" id="card-email" onclick="selectContact('email')">
+            <div class="contact-card__icon">✉️</div>
+            <div class="contact-card__text">
+              <div class="contact-card__label">Email me</div>
+              <div class="contact-card__value" id="email-display">you@gmail.com</div>
+            </div>
+            <div class="contact-card__check" id="check-email" style="display:none;">✓</div>
+          </button>
+
+          <button type="button" class="contact-card" id="card-text" onclick="selectContact('text')">
+            <div class="contact-card__icon">💬</div>
+            <div class="contact-card__text">
+              <div class="contact-card__label">Text me</div>
+              <div class="contact-card__value" id="phone-display">(555) 555-5555</div>
+            </div>
+            <div class="contact-card__check" id="check-text" style="display:none;">✓</div>
+          </button>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-3"></div>
+      </div>
+      <div class="screen-footer" id="footer-3">
+        <button class="btn-primary" onclick="showScreeningQuestions()">Answer screening questions →</button>
+        <button class="btn-text" onclick="saveAndExit()">Save and continue later</button>
+      </div>
+    </div>
+
+    <!-- Screen 4: Results with Nudge -->
+    <div class="screen step-screen" id="screen-4">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Based on your responses you may also qualify for...</h1>
+        </div>
+        <div id="submitted-section"></div>
+        <div id="nudge-section"></div>
+        <div class="scroll-sentinel" id="sentinel-4"></div>
+      </div>
+      <div class="screen-footer" id="footer-4">
+        <button class="btn-primary" onclick="submitApplications()">Done</button>
+        <button class="btn-text" onclick="openSupportModal()">I need support</button>
+      </div>
+    </div>
+
+    <!-- Final confirmation -->
+    <div class="screen" id="screen-confirm">
+      <div class="screen-inner" style="justify-content: center; align-items: center; text-align: center; padding-top: 72px;">
+        <div>
+          <div class="confirm-icon">
+            <svg viewBox="0 0 40 40"><polyline points="8 21 16 29 32 11"/></svg>
           </div>
-          <h2 class="confirm-headline">You're in the system!</h2>
-          <p class="confirm-body">A Health + Affordability Corps worker will follow up in 24 hours. Watch for a text from our team.</p>
-          <span class="confirm-ref" aria-label="Reference number NYC-2026-00847">Reference #: NYC-2026-00847</span>
-          <button class="btn btn-success confirm-done-btn" onclick="resetApp()">Done</button>
+          <h2>We've got you</h2>
+          <p style="margin-top:24px;color:var(--text-secondary);font-size:16px;line-height:1.6;">
+            Your information has been sent to our partners. They'll reach out within 24 hours to connect you with these programs.
+          </p>
         </div>
       </div>
-    </section>
+      <div class="screen-footer" id="footer-confirm">
+        <button class="btn-primary" onclick="resetAll()">Start over</button>
+      </div>
+    </div>
 
-  </div><!-- /screens-wrapper -->
-</div><!-- /app -->
+  </div>
+
+  <!-- Support Modal -->
+  <div class="modal" id="support-modal" onclick="if(event.target===this) closeSupportModal()">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeSupportModal()">×</button>
+      <h3 class="modal-title">I need support</h3>
+      <p class="modal-text">Call us to speak with a representative:</p>
+      <a href="tel:+12125551234" class="modal-phone">(212) 555-1234</a>
+      <button class="modal-btn" onclick="closeSupportModal()">Close</button>
+    </div>
+  </div>
+
+</div>
 
 <script>
-  /* ── State ─────────────────────────────────────────────────── */
   var currentScreen = 0;
-  var selectedCards = [false, false, false, false];
-  var selectedChips = [true, true, true, true];
+  var selectedSituations = new Set();
+  var selectedContact = '';
+  var completedPillars = new Set();
+  var pillarSequence = []; // ordered list of pillars to show
+  var currentPillarIndex = 0; // which pillar in sequence we're on
+  var screenStack = [];
+  var appState = {};
+  var pillarData = {};
 
-  /* ── Progress config ───────────────────────────────────────── */
-  var progressMap = {
-    1: { step: 1, pct: 20 },
-    2: { step: 2, pct: 40 },
-    3: { step: 3, pct: 60 },
-    4: { step: 4, pct: 80 },
-    5: { step: 5, pct: 100 },
+  var SITUATIONS_TO_PILLARS = {
+    health: ['health'],
+    housing: ['housing'],
+    food: ['food'],
+    medical: ['medical']
   };
 
-  /* ── Navigation ────────────────────────────────────────────── */
-  function navigate(toScreen) {
-    if (toScreen === currentScreen) return;
-    var direction = toScreen > currentScreen ? 'forward' : 'back';
+  var PILLARS = {
+    health: { name: 'Healthcare Insurance Assistance', icon: 'stethoscope' },
+    housing: { name: 'Eviction Prevention', icon: 'home' },
+    food: { name: 'Food or Everyday Expenses', icon: 'apple' },
+    medical: { name: 'Medical Debt Relief', icon: 'cross' }
+  };
 
-    var fromEl = document.getElementById('screen-' + currentScreen);
-    var toEl   = document.getElementById('screen-' + toScreen);
+  var NUDGE_MAP = {
+    health: ['housing', 'food', 'medical'],
+    housing: ['health', 'food', 'medical'],
+    food: ['health', 'housing', 'medical'],
+    medical: ['health', 'housing', 'food']
+  };
 
-    // Setup incoming screen off-screen
-    toEl.classList.remove('exit-left', 'exit-right', 'active', 'no-transition');
-    toEl.classList.add('no-transition');
-    if (direction === 'forward') {
-      toEl.style.transform = 'translateX(100%)';
-    } else {
-      toEl.style.transform = 'translateX(-100%)';
+  function navigate(screen) {
+    var current = document.querySelector('.screen.active');
+    var screenId = typeof screen === 'number' ? 'screen-' + screen : screen;
+    var target = document.getElementById(screenId);
+    if (!target || current === target) return;
+
+    if (current) {
+      screenStack.push(currentScreen);
+      current.classList.remove('active');
+      current.classList.add('exit-left');
+      current.addEventListener('transitionend', function handler() {
+        current.classList.remove('exit-left');
+        current.removeEventListener('transitionend', handler);
+      });
     }
-    toEl.offsetHeight; // force reflow
 
-    toEl.classList.remove('no-transition');
+    target.classList.add('active');
+    currentScreen = screen;
+    updateChrome(screen);
+    updateProgress(screen);
+    if (currentScreen === 3) populateContactDisplay();
+    target.scrollTop = 0;
+  }
 
-    // Animate
-    requestAnimationFrame(function() {
-      fromEl.classList.remove('active');
-      if (direction === 'forward') {
-        fromEl.classList.add('exit-left');
-        fromEl.style.transform = '';
-      } else {
-        fromEl.classList.add('exit-right');
-        fromEl.style.transform = '';
-      }
-      toEl.style.transform = '';
-      toEl.classList.add('active');
-    });
+  function goBack() {
+    if (screenStack.length === 0) return;
+    var prevScreen = screenStack.pop();
+    navigate(prevScreen);
+  }
 
-    currentScreen = toScreen;
-    updateChrome();
+  function goToLanding() {
+    screenStack = [];
+    currentScreen = 0;
+    navigate(0);
+    showResumeOption();
+  }
 
-    // Pre-fill Screen 5 from Screen 4
-    if (toScreen === 5) {
-      prefillResults();
+  function updateChrome(screen) {
+    var chrome = document.getElementById('nav-chrome');
+    var progWrap = document.getElementById('progress-wrap');
+    var backBtn = document.querySelector('.back-btn');
+    var isPillarScreen = (typeof screen === 'string' && screen.includes('screen-pillar'));
+    var hideBack = (screen === 0 || screen === 'confirm' || isPillarScreen);
+    chrome.classList.toggle('hidden', hideBack);
+    progWrap.style.display = (screen > 0 && screen < 4) ? '' : 'none';
+    if (backBtn) {
+      backBtn.style.pointerEvents = isPillarScreen ? 'none' : 'auto';
+      backBtn.style.opacity = isPillarScreen ? '0.5' : '1';
     }
   }
 
-  function updateChrome() {
-    var backBtn      = document.getElementById('back-btn');
-    var progressWrap = document.getElementById('progress-wrap');
-    var progressFill = document.getElementById('progress-fill');
-    var progressLabel = document.getElementById('progress-label-text');
-
-    // Back button
-    if (currentScreen === 0 || currentScreen === 6) {
-      backBtn.classList.add('hidden');
-    } else {
-      backBtn.classList.remove('hidden');
+  function updateProgress(screen) {
+    if (screen <= 0 || screen >= 4) return;
+    for (var i = 1; i <= 3; i++) {
+      var seg = document.getElementById('seg-' + i);
+      if (seg) seg.classList.toggle('filled', i <= screen);
     }
-
-    // Progress bar
-    if (currentScreen === 0 || currentScreen === 6) {
-      progressWrap.style.display = 'none';
-    } else {
-      progressWrap.style.display = 'block';
-      var prog = progressMap[currentScreen];
-      if (prog) {
-        progressFill.style.width = prog.pct + '%';
-        progressLabel.textContent = 'Step ' + prog.step + ' of 5';
-      }
-    }
+    document.getElementById('progress-label-text').textContent = 'Step ' + screen + '/3';
   }
 
-  /* ── Back button ───────────────────────────────────────────── */
-  document.getElementById('back-btn').addEventListener('click', function() {
-    if (currentScreen > 0) {
-      navigate(currentScreen - 1);
-    }
-  });
-
-  /* ── Screen 1: Situation card toggles ─────────────────────── */
-  function toggleCard(idx) {
-    selectedCards[idx] = !selectedCards[idx];
-    var card = document.getElementById('card-' + idx);
-    if (selectedCards[idx]) {
-      card.classList.add('selected');
-      card.setAttribute('aria-pressed', 'true');
-    } else {
+  function toggleSituation(id) {
+    var card = document.getElementById('card-' + id);
+    if (selectedSituations.has(id)) {
+      selectedSituations.delete(id);
       card.classList.remove('selected');
       card.setAttribute('aria-pressed', 'false');
-    }
-
-    var anySelected = selectedCards.some(function(v) { return v; });
-    var cta = document.getElementById('s1-cta');
-    cta.disabled = !anySelected;
-    cta.setAttribute('aria-disabled', anySelected ? 'false' : 'true');
-
-    // Show background working note on first tap
-    if (anySelected) {
-      document.getElementById('bg-working-note').classList.add('visible');
-    }
-  }
-
-  /* ── Screen 3: Chip toggles ────────────────────────────────── */
-  function toggleChip(idx) {
-    selectedChips[idx] = !selectedChips[idx];
-    var chip = document.getElementById('chip-' + idx);
-    if (selectedChips[idx]) {
-      chip.classList.add('selected');
-      chip.setAttribute('aria-pressed', 'true');
     } else {
-      chip.classList.remove('selected');
-      chip.setAttribute('aria-pressed', 'false');
+      selectedSituations.add(id);
+      card.classList.add('selected');
+      card.setAttribute('aria-pressed', 'true');
     }
-    updateChipCounter();
+    document.getElementById('btn-s1').disabled = (selectedSituations.size === 0);
   }
 
-  function updateChipCounter() {
-    var count = selectedChips.filter(function(v) { return v; }).length;
-    document.getElementById('chip-count').textContent = count;
+  function selectContact(type) {
+    document.querySelectorAll('.contact-card').forEach(card => {
+      card.classList.remove('selected');
+      var check = card.querySelector('.contact-card__check');
+      if (check) check.style.display = 'none';
+    });
+    var selectedCard = document.getElementById('card-' + type);
+    if (selectedCard) {
+      selectedCard.classList.add('selected');
+      var check = selectedCard.querySelector('.contact-card__check');
+      if (check) check.style.display = 'inline';
+    }
+    selectedContact = type;
   }
 
-  /* ── Screen 4: Phone inline success ───────────────────────── */
-  function checkPhone() {
-    var phone = document.getElementById('phone-input');
-    var digits = phone.value.replace(/\D/g, '');
-    var successEl = document.getElementById('phone-success');
-    if (digits.length >= 10) {
-      successEl.classList.add('visible');
-    } else {
-      successEl.classList.remove('visible');
-    }
+  function populateContactDisplay() {
+    var email = document.getElementById('email').value || 'you@gmail.com';
+    var phone = document.getElementById('phone').value || '(555) 555-5555';
+    document.getElementById('email-display').textContent = email;
+    document.getElementById('phone-display').textContent = phone;
   }
 
-  /* ── Screen 5: Pre-fill from Screen 4 ─────────────────────── */
-  function prefillResults() {
-    var name  = document.getElementById('name-input').value;
-    var phone = document.getElementById('phone-input').value;
-    if (name)  document.getElementById('s5-name').value  = name;
-    if (phone) document.getElementById('s5-phone').value = phone;
+  function getPillarQuestionsForSituation(pillar) {
+    if (pillar === 'health') {
+      return [
+        { label: 'First Name', type: 'text', placeholder: '' },
+        { label: 'Last Name', type: 'text', placeholder: '' },
+        { label: 'Home Zip Code', type: 'text', placeholder: '10001' },
+        { label: 'Age', type: 'radio', options: ['65 or older', '64 or younger'] },
+        { label: 'Disability Status', type: 'radio', options: ['I am living with a disability', 'Visually impaired', 'Neither'] },
+        { label: 'Type of service', type: 'radio', options: ['I would like to enroll in health insurance', 'I would like to renew my current health insurance', 'I want information on health insurance only'] }
+      ];
+    } else if (pillar === 'housing') {
+      return [
+        { label: 'Do you have a pending eviction case in Housing Court?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'Have you received a Motion to Restore/Enforce an Eviction?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'Have you received a Warrant of Eviction?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'Have you been locked out of your apartment by your landlord without a court order or warrant?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'Do you have a termination of tenancy case brought by the New York City Housing Authority?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'Does your apartment need serious repairs but your landlord won\'t make them?', type: 'radio', options: ['Yes', 'No'] }
+      ];
+    } else if (pillar === 'food') {
+      return [
+        { label: 'What was your total household income over the last 30 days?', type: 'radio', options: ['$0-$1,500', '$1,501-$3,000', '$3,001-$5,000', '$5,000+'] },
+        { label: 'Has anyone in your household ever applied for SNAP before in NYC?', type: 'radio', options: ['Yes', 'No', 'Not sure'] },
+        { label: 'Does anyone in your household have Medicaid or Medicare?', type: 'radio', options: ['Medicaid only', 'Medicare only', 'Both Medicaid and Medicare', 'Neither'] },
+        { label: 'Are you or anyone in your household pregnant?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'Do you or anyone in your household have a disability?', type: 'radio', options: ['Yes', 'No'] }
+      ];
+    } else if (pillar === 'medical') {
+      return [
+        { label: 'Do you have any hospital bills you are unable to pay?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'Is the hospital in NYC?', type: 'radio', options: ['Yes', 'No'] },
+        { label: 'Where is your hospital?', type: 'select', options: ['Select city', 'Manhattan', 'Brooklyn', 'Queens', 'Bronx', 'Staten Island'] },
+        { label: 'Which hospital was the bill from?', type: 'select', options: ['Select hospital', 'Hospital A', 'Hospital B'] },
+        { label: 'What\'s the original bill date?', type: 'text', placeholder: 'MM/DD/YYYY' },
+        { label: 'What is the total amount you owe?', type: 'text', placeholder: '$' },
+        { label: 'What\'s your insurance status?', type: 'radio', options: ['Insured', 'Uninsured'] }
+      ];
+    }
+    return [];
   }
 
-  /* ── Screen 6: Reset ───────────────────────────────────────── */
-  function resetApp() {
-    // Reset state
-    selectedCards = [false, false, false, false];
-    selectedChips = [true, true, true, true];
-
-    // Reset cards
-    for (var i = 0; i < 4; i++) {
-      var c = document.getElementById('card-' + i);
-      c.classList.remove('selected');
-      c.setAttribute('aria-pressed', 'false');
-    }
-    document.getElementById('bg-working-note').classList.remove('visible');
-    document.getElementById('s1-cta').disabled = true;
-    document.getElementById('s1-cta').setAttribute('aria-disabled', 'true');
-
-    // Reset chips
-    for (var j = 0; j < 4; j++) {
-      var ch = document.getElementById('chip-' + j);
-      ch.classList.add('selected');
-      ch.setAttribute('aria-pressed', 'true');
-    }
-    document.getElementById('chip-count').textContent = '4';
-
-    // Reset fields
-    document.getElementById('zip-input').value      = '';
-    document.getElementById('household-input').value = '';
-    document.getElementById('income-select').value   = '';
-    document.getElementById('name-input').value      = '';
-    document.getElementById('dob-input').value       = '';
-    document.getElementById('phone-input').value     = '';
-    document.getElementById('phone-success').classList.remove('visible');
-    document.getElementById('s5-name').value         = '';
-    document.getElementById('s5-phone').value        = '';
-    document.getElementById('s5-email').value        = '';
-
-    // Navigate back to screen 0 (backward direction)
-    var fromEl = document.getElementById('screen-6');
-    var toEl   = document.getElementById('screen-0');
-
-    toEl.classList.remove('exit-left', 'exit-right', 'active', 'no-transition');
-    toEl.classList.add('no-transition');
-    toEl.style.transform = 'translateX(-100%)';
-    toEl.offsetHeight;
-    toEl.classList.remove('no-transition');
-
-    requestAnimationFrame(function() {
-      fromEl.classList.remove('active');
-      fromEl.classList.add('exit-right');
-      toEl.style.transform = '';
-      toEl.classList.add('active');
+  function showPillarCards() {
+    var relevantPillars = new Set();
+    selectedSituations.forEach(function(situation) {
+      var pillars = SITUATIONS_TO_PILLARS[situation];
+      if (pillars) pillars.forEach(p => relevantPillars.add(p));
     });
 
-    currentScreen = 0;
-    updateChrome();
+    if (relevantPillars.size === 1) {
+      var singlePillar = Array.from(relevantPillars)[0];
+      startPillarC(singlePillar);
+      return;
+    }
+
+    var wrapper = document.querySelector('.screens-wrapper');
+    var screenId = 'screen-pillars';
+    var existing = document.getElementById(screenId);
+    if (existing) existing.remove();
+
+    var html = '<div class="screen step-screen" id="' + screenId + '">' +
+      '<div class="screen-inner">' +
+      '<div class="heading-block"><h1>Let\'s get started</h1><p class="screen-subtext">Answer screening questions for each program.</p></div>' +
+      '<div id="pillar-cards-list">';
+
+    relevantPillars.forEach(function(pillar) {
+      var icon = getIconForPillar(pillar);
+      var isCompleted = completedPillars.has(pillar);
+      html += '<div class="pillar-card" style="' + (isCompleted ? 'background:#F0FDF4;border-color:#86EFAC;' : '') + '">' +
+        '<div class="pillar-card__icon">' + icon + '</div>' +
+        '<div style="flex:1;">' +
+        '<div class="pillar-card__title">' + PILLARS[pillar].name + '</div>';
+      if (isCompleted) {
+        html += '<div style="font-size:14px;color:#22863A;margin-top:6px;">A case worker will contact you in 24 hours</div>';
+      }
+      html += '</div>';
+      if (!isCompleted) {
+        html += '<button class="pillar-card__btn" onclick="startPillarC(\'' + pillar + '\')">Start</button>';
+      }
+      html += '</div>';
+    });
+
+    html += '</div><div class="scroll-sentinel"></div></div>' +
+      '<div class="screen-footer">' +
+      '<button class="btn-text" onclick="saveAndExit()">Save and continue later</button>' +
+      '</div></div>';
+
+    var div = document.createElement('div');
+    div.innerHTML = html;
+    wrapper.appendChild(div.firstChild);
+    navigate(screenId);
   }
 
-  /* ── Language buttons (UI only) ────────────────────────────── */
-  document.querySelectorAll('.lang-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.lang-btn').forEach(function(b) {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
+  function startPillarC(pillar) {
+    var screenId = 'screen-pillar-c-' + pillar;
+    var existing = document.getElementById(screenId);
+    if (existing) {
+      navigate(screenId);
+      return;
+    }
+
+    var wrapper = document.querySelector('.screens-wrapper');
+    var questions = getPillarQuestionsForSituation(pillar);
+    var html = '<div class="screen step-screen" id="' + screenId + '">' +
+      '<div class="screen-inner">' +
+      '<div class="heading-block"><h1>' + PILLARS[pillar].name + '</h1></div>';
+
+    questions.forEach(function(q, i) {
+      html += '<div class="field-group"><label class="field-label">' + q.label + '</label>';
+      if (q.type === 'text') {
+        html += '<input class="field-input" type="text" id="pillar-c-' + pillar + '-q' + i + '" placeholder="' + q.placeholder + '" />';
+      } else if (q.type === 'select') {
+        html += '<select class="field-select" id="pillar-c-' + pillar + '-q' + i + '">';
+        q.options.forEach(opt => html += '<option>' + opt + '</option>');
+        html += '</select>';
+      } else if (q.type === 'radio') {
+        html += '<div class="chip-row">';
+        q.options.forEach(opt => html += '<button class="chip" onclick="selectChip(this, \'' + pillar + '-q' + i + '\')" data-value="' + opt + '">' + opt + '</button>');
+        html += '</div>';
+      }
+      html += '</div>';
+    });
+
+    html += '<div class="scroll-sentinel"></div></div>' +
+      '<div class="screen-footer">' +
+      '<button class="btn-primary" onclick="savePillarAndContinueC(\'' + pillar + '\')">Complete</button>' +
+      '<button class="btn-text" onclick="saveAndExit()">Save and continue later</button>' +
+      '</div></div>';
+
+    var div = document.createElement('div');
+    div.innerHTML = html;
+    wrapper.appendChild(div.firstChild);
+    navigate(screenId);
+  }
+
+  function savePillarAndContinueC(pillar) {
+    completedPillars.add(pillar);
+    currentPillarIndex++;
+    showNextPillarQuestions();
+  }
+
+  function getIconForPillar(pillar) {
+    var icons = {
+      health: '🏥',
+      housing: '🏠',
+      food: '🍎',
+      medical: '⚕️'
+    };
+    return icons[pillar] || '•';
+  }
+
+  function getPillarMessageC(pillar) {
+    if (pillar === 'housing') {
+      var qVal = pillarData[pillar] && pillarData[pillar]['housing-q0'];
+      if (qVal === 'Yes') {
+        return 'If you have received an eviction notice or have a court date for eviction, you can get legal help by calling the WNY-EPP Hotline at (844) 230-7376 or applying for assistance online.';
+      }
+    }
+    return 'A case worker will contact you in 24 hours';
+  }
+
+  function showScreeningQuestions() {
+    // Determine pillar sequence based on selected situations
+    pillarSequence = [];
+    selectedSituations.forEach(function(situation) {
+      var pillars = SITUATIONS_TO_PILLARS[situation];
+      if (pillars) pillars.forEach(p => {
+        if (!pillarSequence.includes(p)) pillarSequence.push(p);
       });
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
     });
-  });
 
-  /* ── Init ──────────────────────────────────────────────────── */
-  updateChrome();
+    currentPillarIndex = 0;
+    if (pillarSequence.length > 0) {
+      showNextPillarQuestions();
+    }
+  }
+
+  function showNextPillarQuestions() {
+    if (currentPillarIndex < pillarSequence.length) {
+      var pillar = pillarSequence[currentPillarIndex];
+      startPillarC(pillar);
+    } else {
+      showResults();
+    }
+  }
+
+  function selectChip(el, id) {
+    el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    var currentPillar = pillarSequence[currentPillarIndex];
+    if (currentPillar) {
+      if (!pillarData[currentPillar]) pillarData[currentPillar] = {};
+      pillarData[currentPillar][id] = el.dataset.value;
+    }
+  }
+
+  function showResults() {
+    var submitted = document.getElementById('submitted-section');
+    var today = new Date();
+    var dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    var html = '<h3 style="margin-bottom: 16px;">Submitted</h3>';
+    completedPillars.forEach(function(pillar) {
+      var msg = getPillarMessageC(pillar);
+      html += '<div class="result-card">' +
+        '<div class="result-body">' +
+        '<div class="result-title">' + PILLARS[pillar].name + '</div>' +
+        '<div class="result-meta">Completed ' + dateStr + '</div>' +
+        '<div class="result-desc">' + msg + '</div>' +
+        '</div>' +
+        '<div class="result-checkmark">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>' +
+        '</div>' +
+        '</div>';
+    });
+    submitted.innerHTML = html;
+
+    var nudgeProgs = [];
+    completedPillars.forEach(function(pillar) {
+      var nudges = NUDGE_MAP[pillar] || [];
+      nudges.forEach(n => {
+        if (!completedPillars.has(n) && !nudgeProgs.includes(n)) nudgeProgs.push(n);
+      });
+    });
+
+    var nudge = document.getElementById('nudge-section');
+    if (nudgeProgs.length > 0) {
+      var html = '<h3>Based on your responses you may also qualify for...</h3>';
+      nudgeProgs.forEach(function(prog) {
+        html += '<div class="nudge-item">' +
+          '<div class="nudge-body">' +
+          '<div class="nudge-title">' + PILLARS[prog].name + '</div>' +
+          '<button class="btn-secondary" onclick="addPillarToSubmit(\'' + prog + '\')">Start</button>' +
+          '</div>' +
+          '</div>';
+      });
+      nudge.innerHTML = html;
+    } else {
+      nudge.innerHTML = '';
+    }
+
+    navigate(4);
+  }
+
+  function addPillarToSubmit(pillar) {
+    startPillarC(pillar);
+  }
+
+  function submitApplications() {
+    navigate('confirm');
+  }
+
+  function openSupportModal() {
+    document.getElementById('support-modal').classList.add('active');
+  }
+
+  function closeSupportModal() {
+    document.getElementById('support-modal').classList.remove('active');
+  }
+
+  function saveAndExit() {
+    saveState();
+    goToLanding();
+  }
+
+  function saveState() {
+    appState = {
+      selectedSituations: Array.from(selectedSituations),
+      fname: document.getElementById('fname').value,
+      lname: document.getElementById('lname').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      zip: document.getElementById('zip').value,
+      selectedContact: selectedContact
+    };
+    localStorage.setItem('navigationAppStateC', JSON.stringify(appState));
+  }
+
+  function restoreState() {
+    var saved = localStorage.getItem('navigationAppStateC');
+    if (saved) {
+      appState = JSON.parse(saved);
+      appState.selectedSituations.forEach(s => selectedSituations.add(s));
+      document.getElementById('fname').value = appState.fname || '';
+      document.getElementById('lname').value = appState.lname || '';
+      document.getElementById('phone').value = appState.phone || '';
+      document.getElementById('email').value = appState.email || '';
+      document.getElementById('zip').value = appState.zip || '';
+      selectedContact = appState.selectedContact || '';
+      return true;
+    }
+    return false;
+  }
+
+  function showResumeOption() {
+    var container = document.getElementById('resume-container');
+    if (localStorage.getItem('navigationAppStateC')) {
+      container.innerHTML = '<div class="resume-card">' +
+        '<div class="resume-card-title">You have saved progress</div>' +
+        '<div class="resume-card-text">Pick up where you left off?</div>' +
+        '<button class="resume-btn" onclick="resumeApplication()">Resume</button>' +
+        '<button class="clear-btn" onclick="clearSavedState()">Clear and start fresh</button>' +
+        '</div>';
+    } else {
+      container.innerHTML = '';
+    }
+  }
+
+  function resumeApplication() {
+    if (restoreState()) {
+      navigate(2);
+    }
+  }
+
+  function clearSavedState() {
+    localStorage.removeItem('navigationAppStateC');
+    showResumeOption();
+  }
+
+  function resetAll() {
+    selectedSituations.clear();
+    screenStack = [];
+    currentScreen = 0;
+    selectedContact = '';
+    appState = {};
+    localStorage.removeItem('navigationAppStateC');
+
+    document.querySelectorAll('.situation-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('btn-s1').disabled = true;
+    ['fname', 'lname', 'phone', 'email', 'zip'].forEach(id => {
+      var el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+
+    var screeningScreen = document.getElementById('screen-screening');
+    if (screeningScreen) screeningScreen.remove();
+
+    navigate(0);
+    showResumeOption();
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.lucide) lucide.createIcons();
+    updateChrome(0);
+    showResumeOption();
+  });
 </script>
 </body>
 </html>
