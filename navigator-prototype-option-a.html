@@ -3,1210 +3,997 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NYC Health + Affordability Corps Navigator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:wght@400&display=swap" rel="stylesheet">
+  <title>NYC Health + Affordability Corps — Navigator Tool</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --color-primary-base:   #050560;
-      --color-primary-dark:   #030339;
-      --color-secondary-base: #284CCA;
-      --color-secondary-dark: #182D79;
-      --color-success-base:   #008703;
-      --color-error-base:     #EC131E;
-      --color-white:          #FFFFFF;
-      --color-gray-100:       #F5F5F5;
-      --color-gray-300:       #DDDDDD;
-      --color-gray-700:       #767676;
-      --color-gray-900:       #333333;
-      --color-black:          #191919;
-      --font-body:    'Public Sans', system-ui, sans-serif;
-      --font-display: 'Source Serif 4', Georgia, serif;
-      --space-1: 8px;
-      --space-2: 16px;
-      --space-3: 24px;
-      --space-4: 32px;
-      --space-5: 40px;
-      --space-6: 48px;
-      --focus-ring-color: var(--color-secondary-base);
-      --focus-ring-width: 3px;
+      --color-primary-base:    #050560;
+      --color-primary-dark:    #030339;
+      --color-secondary-base:  #284CCA;
+      --color-white:           #FFFFFF;
+      --color-neutral-100:     #F5F5F5;
+      --color-neutral-200:     #EEEEEE;
+      --color-neutral-300:     #DDDDDD;
+      --color-gray-400:        #C2C2C2;
+      --color-gray-500:        #AAAAAA;
+      --color-black:           #191919;
+      --text-secondary:        #6B6B7A;
+      --color-success-text:    #006333;
+      --color-error-base:      #EC131E;
+      --bg-primary:            var(--color-white);
+      --bg-secondary:          var(--color-neutral-100);
+      --border-default:        var(--color-neutral-300);
+      --ease-out:              cubic-bezier(0.16, 1, 0.3, 1);
+      --font-display:          'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+      --font-body:             'Public Sans', system-ui, -apple-system, sans-serif;
+      --space-1: 8px; --space-2: 16px; --space-3: 24px; --space-4: 32px;
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+    body {
+      height: 100%; background: var(--bg-secondary); font-family: var(--font-body);
+      color: var(--color-black); font-size: 16px; line-height: 1.5;
+      display: flex; justify-content: center;
     }
-
-    html, body {
-      height: 100%;
-      font-family: var(--font-body);
-      background: var(--color-gray-100);
-      color: var(--color-gray-900);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── Viewport shell ── */
     #app {
-      max-width: 430px;
-      width: 100%;
-      margin: 0 auto;
-      min-height: 100vh;
-      position: relative;
-      overflow: hidden;
-      background: var(--color-white);
-      box-shadow: 0 0 40px rgba(0,0,0,0.12);
+      width: 100%; max-width: 390px; height: 100%; background: var(--bg-primary);
+      box-shadow: 0 0 60px rgba(0,0,0,0.18); display: flex; flex-direction: column; overflow: hidden;
     }
+    @media (max-width: 430px) { #app { box-shadow: none; } }
 
-    /* ── Screen layer ── */
-    .screen {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      transform: translateX(100%);
-      transition: transform 280ms ease-out;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      background: var(--color-white);
+    /* Supernav */
+    .supernav {
+      background: var(--bg-secondary); border-bottom: 1px solid var(--border-default);
+      padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
     }
+    .nyc-logo { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; }
 
-    .screen.active {
-      transform: translateX(0);
-      z-index: 2;
-    }
-
-    .screen.exit-left {
-      transform: translateX(-100%);
-      z-index: 1;
-    }
-
-    /* ── Top bar (nyc.gov strip) ── */
-    .top-bar {
-      background: var(--color-primary-base);
-      padding: 8px var(--space-2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-
-    .top-bar-badge {
-      color: var(--color-white);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      background: rgba(255,255,255,0.15);
-      padding: 3px 8px;
-      border-radius: 3px;
-    }
-
-    .lang-toggles {
-      display: flex;
-      gap: 4px;
-    }
-
-    .lang-btn {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.4);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-size: 10px;
-      font-weight: 500;
-      padding: 3px 7px;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: background 150ms;
-    }
-
-    .lang-btn:hover {
-      background: rgba(255,255,255,0.2);
-    }
-
-    .lang-btn:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-    }
-
-    /* ── Nav chrome ── */
+    /* Back row */
     .nav-chrome {
-      background: var(--color-white);
-      border-bottom: 1px solid var(--color-gray-300);
-      padding: 10px var(--space-2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      min-height: 52px;
+      background: var(--bg-primary); border-bottom: 1px solid var(--border-default);
+      padding: 16px; display: flex; align-items: center; flex-shrink: 0;
     }
-
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-      flex: 1;
+    .nav-chrome.hidden { display: none; }
+    .back-btn {
+      background: none; border: none; cursor: pointer; color: var(--color-black);
+      font-family: var(--font-body); font-size: 16px; font-weight: 400;
+      display: flex; align-items: center; gap: 8px; padding: 0;
     }
+    .back-btn svg { width: 24px; height: 24px; }
 
-    .nav-logo-block {
-      width: 36px;
-      height: 36px;
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      border-radius: 3px;
-      flex-shrink: 0;
+    /* Screens */
+    .screens-wrapper { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+    .screen { position: absolute; inset: 0; overflow-y: auto; display: none; flex-direction: column; }
+    .screen.active { display: flex; }
+    .screen-inner { width: 100%; padding: 24px 16px; flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+    #screen-landing .screen-inner { padding-top: 56px; }
+
+    /* Typography */
+    h1 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 1.14; letter-spacing: -.5px; color: var(--color-black); }
+    .step-screen h1 { font-size: 28px; line-height: 1.3; letter-spacing: normal; }
+    h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.3; color: var(--color-black); }
+    .heading-block { display: flex; flex-direction: column; gap: var(--space-1); }
+    .screen-subtext { font-size: 18px; color: var(--text-secondary); line-height: 1.5; text-wrap: pretty; }
+
+    .divider { height: 1px; background: var(--border-default); width: 100%; }
+
+    /* Consent */
+    .consent-body { font-size: 16px; color: var(--text-secondary); line-height: 1.6; }
+    .consent-more { display: none; }
+    .consent-more.open { display: block; }
+    .consent-fade-wrap { position: relative; }
+    .consent-fade-wrap::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to bottom, transparent, #ffffff); pointer-events: none; }
+    .consent-fade-wrap.expanded::after { display: none; }
+    .btn-readmore { align-self: center; background: var(--color-neutral-100); border: none; border-radius: 999px; padding: 12px 28px; font-family: var(--font-body); font-size: 16px; font-weight: 600; color: var(--color-black); cursor: pointer; }
+    .btn-readmore:hover { background: var(--color-neutral-200); }
+    .consent-check { display: flex; gap: 12px; align-items: flex-start; }
+    .consent-check input {
+      -webkit-appearance: none; appearance: none;
+      width: 24px; height: 24px; flex-shrink: 0; margin-top: 1px;
+      border: 2px solid var(--color-neutral-300); border-radius: 8px;
+      background: var(--color-white); cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background 150ms ease, border-color 150ms ease;
     }
-
-    .nav-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--color-primary-base);
-      line-height: 1.3;
+    .consent-check input:checked { background: var(--color-secondary-base); border-color: var(--color-secondary-base); }
+    .consent-check input:checked::after {
+      content: ''; width: 6px; height: 11px;
+      border: solid var(--color-white); border-width: 0 2.5px 2.5px 0;
+      transform: rotate(45deg) translate(-1px, -1px);
     }
+    .consent-check label { font-size: 16px; line-height: 1.5; color: var(--color-black); cursor: pointer; }
 
-    .nav-hamburger {
-      background: transparent;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      color: var(--color-primary-base);
-      padding: 4px;
-      line-height: 1;
-    }
-
-    .nav-hamburger:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 3px;
-    }
-
-    .back-link {
-      background: transparent;
-      border: none;
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--color-secondary-base);
-      cursor: pointer;
-      padding: 4px 0;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-    }
-
-    .back-link:hover {
-      color: var(--color-secondary-dark);
-    }
-
-    .back-link:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 3px;
-    }
-
-    /* ── Screen body ── */
-    .screen-body {
-      flex: 1;
-      padding: var(--space-3) var(--space-2);
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ── Typography ── */
-    .heading-display {
-      font-family: var(--font-display);
-      font-size: 26px;
-      font-weight: 400;
-      color: var(--color-primary-base);
-      line-height: 1.3;
-      margin-bottom: var(--space-2);
-    }
-
-    .heading-screen {
-      font-family: var(--font-body);
-      font-size: 22px;
-      font-weight: 600;
-      color: var(--color-primary-base);
-      line-height: 1.3;
-      margin-bottom: var(--space-1);
-    }
-
-    .subtext {
-      font-size: 15px;
-      color: var(--color-gray-700);
-      line-height: 1.5;
-      margin-bottom: var(--space-3);
-    }
-
-    .body-text {
-      font-size: 15px;
-      color: var(--color-gray-900);
-      line-height: 1.6;
-      margin-bottom: var(--space-4);
-    }
-
-    /* ── Buttons ── */
+    /* Buttons */
     .btn-primary {
-      display: block;
-      width: 100%;
-      background: var(--color-primary-base);
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-size: 16px;
-      font-weight: 600;
-      padding: 15px var(--space-3);
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      text-align: center;
-      transition: background 150ms;
-      line-height: 1.3;
+      display: block; width: 100%; padding: 16px 24px;
+      background: var(--color-primary-base); color: var(--color-white);
+      border: 2px solid transparent; border-radius: 4px;
+      font-family: var(--font-body); font-size: 18px; font-weight: 600; line-height: 22px;
+      text-align: center; cursor: pointer; transition: background 150ms ease;
     }
+    .btn-primary:hover:not(:disabled) { background: var(--color-primary-dark); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .btn-primary:hover:not(:disabled) {
-      background: var(--color-primary-dark);
+    /* Fields */
+    .field-group { display: flex; flex-direction: column; gap: 8px; }
+    .field-label { font-size: 16px; font-weight: 400; color: var(--color-black); }
+    .field-input, .field-select {
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid var(--border-default); border-radius: 4px;
+      font-family: var(--font-body); font-size: 16px; color: var(--color-black);
+      background: var(--color-white); transition: border-color 150ms ease;
     }
-
-    .btn-primary:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
+    .field-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23191919' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px; cursor: pointer;
     }
+    .field-input:focus, .field-select:focus { outline: none; border-color: var(--color-secondary-base); box-shadow: 0 0 0 3px rgba(40,76,202,0.15); }
+    .field-input::placeholder { color: var(--color-gray-500); }
+    .field-input:disabled { background: var(--color-neutral-100); color: var(--color-gray-500); cursor: default; }
+    .input-affix { position: relative; }
+    .input-affix .affix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-black); font-size: 16px; pointer-events: none; }
+    .field-input.has-affix { padding-left: 28px; }
+    .field-help { font-size: 13px; line-height: 1.4; color: var(--text-secondary); margin-top: 6px; }
+    .help-toggle { display: block; align-self: flex-start; text-align: left; background: none; border: none; padding: 2px 0; margin-top: 2px; cursor: pointer; font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--color-secondary-base); }
+    .help-toggle:hover { text-decoration: underline; }
+    .help-more[hidden] { display: none; }
+    .dob-grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 10px; }
 
-    .btn-primary:disabled {
-      background: var(--color-gray-300);
-      color: var(--color-gray-700);
-      cursor: not-allowed;
-    }
-
-    .btn-text {
-      background: transparent;
-      border: none;
-      font-family: var(--font-body);
-      font-size: 14px;
-      color: var(--color-secondary-base);
-      cursor: pointer;
-      padding: var(--space-1) 0;
-      text-align: center;
-      width: 100%;
-      display: block;
-      margin-top: var(--space-1);
-      font-weight: 500;
-    }
-
-    .btn-text:hover {
-      color: var(--color-secondary-dark);
-      text-decoration: underline;
-    }
-
-    .btn-text:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-      border-radius: 3px;
-    }
-
-    .btn-disabled-link {
-      display: block;
-      text-align: center;
-      font-size: 14px;
-      color: var(--color-gray-700);
-      margin-top: var(--space-2);
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-
-    /* ── Progress ── */
-    .progress-bar-wrap {
-      padding: var(--space-2);
-      flex-shrink: 0;
-      border-top: 1px solid var(--color-gray-100);
-    }
-
-    .progress-label {
-      text-align: center;
-      font-size: 12px;
-      color: var(--color-gray-700);
-      margin-bottom: 8px;
-    }
-
-    .progress-track {
-      height: 4px;
-      background: var(--color-gray-300);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--color-secondary-base);
-      border-radius: 2px;
-      transition: width 280ms ease-out;
-    }
-
-    /* ── Situation cards ── */
-    .situation-cards {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-1);
-      margin-bottom: var(--space-3);
-    }
-
+    /* Situation cards */
+    .cards-grid { display: flex; flex-direction: column; gap: var(--space-1); }
     .situation-card {
-      position: relative;
-      border: 2px solid var(--color-gray-300);
-      border-radius: 8px;
-      padding: var(--space-2);
-      min-height: 80px;
-      cursor: pointer;
-      display: flex;
-      align-items: flex-start;
-      gap: var(--space-2);
-      background: var(--color-white);
-      transition: border-color 150ms, background 150ms;
-      text-align: left;
-      width: 100%;
-      font-family: var(--font-body);
-      -webkit-tap-highlight-color: transparent;
+      display: flex; align-items: flex-start; gap: var(--space-1);
+      padding: 8px 16px; background: var(--color-white);
+      border: 2px solid var(--color-neutral-200); border-radius: 8px;
+      cursor: pointer; text-align: left; width: 100%;
+      transition: border-color 150ms ease, background 150ms ease;
+    }
+    .situation-card:hover { border-color: var(--color-secondary-base); }
+    .situation-card.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+    .card-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--color-black); display: flex; align-items: center; justify-content: center; margin-top: 14px; }
+    .situation-card.selected .card-icon { color: var(--color-secondary-base); }
+    .card-icon svg { width: 24px; height: 24px; }
+    .card-body { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 12px 0; min-width: 0; }
+    .card-title { font-size: 16px; font-weight: 400; color: var(--color-black); line-height: 1.5; }
+    .card-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* Contact-method cards */
+    #contactpref-list { gap: 14px; }
+    .pref-card {
+      display: flex; align-items: center; gap: 16px; width: 100%;
+      padding: 18px 20px; background: var(--color-white);
+      border: 1px solid var(--color-neutral-300); border-radius: 12px;
+      cursor: pointer; text-align: left;
+      transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+    }
+    .pref-card:hover { border-color: var(--color-secondary-base); }
+    .pref-card.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+    .pref-icon { flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: var(--color-black); }
+    .pref-card.selected .pref-icon { color: var(--color-secondary-base); }
+    .pref-icon svg { width: 28px; height: 28px; }
+    .pref-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .pref-title { font-size: 18px; font-weight: 400; color: var(--color-black); line-height: 1.3; }
+    .pref-value { font-size: 15px; color: var(--text-secondary); line-height: 1.4; }
+
+    /* Chips */
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .chip {
+      flex: 1; min-width: 0; padding: 18px 8px;
+      background: var(--color-white); border: 1px solid var(--color-neutral-300); border-radius: 8px;
+      font-family: var(--font-body); font-size: 16px; font-weight: 400; color: var(--color-black);
+      cursor: pointer; text-align: center;
+      transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease, transform .12s ease;
+    }
+    .chip-row.hug-content .chip { flex: 0 1 auto; padding: 18px 22px; white-space: nowrap; }
+    .chip:hover { border-color: var(--color-secondary-base); }
+    .chip:active { transform: scale(.97); }
+    .chip.selected { border-color: var(--color-secondary-base); background: #F1F4FD; box-shadow: inset 0 0 0 1px var(--color-secondary-base); }
+
+    /* Pillar list */
+    .pillar-list { display: flex; flex-direction: column; }
+    .pillar-card {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 20px 0; border-bottom: 1px solid var(--color-neutral-200);
+    }
+    .pillar-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .pillar-name { font-size: 17px; font-weight: 600; color: var(--color-black); line-height: 1.3; }
+    .pillar-progress { font-size: 14px; color: var(--text-secondary); line-height: 1.4; }
+    .pillar-btn {
+      flex-shrink: 0; border-radius: 8px; padding: 12px 22px;
+      font-family: var(--font-body); font-size: 15px; font-weight: 600; cursor: pointer;
+      transition: border-color 150ms ease, background 150ms ease;
+    }
+    .pillar-btn.start { background: var(--color-white); border: 1px solid var(--border-default); color: var(--color-black); }
+    .pillar-btn.start:hover { border-color: var(--color-secondary-base); }
+    .pillar-btn.apply { background: var(--color-primary-base); border: 1px solid var(--color-primary-base); color: var(--color-white); }
+    .pillar-btn.apply:hover { background: var(--color-primary-dark); border-color: var(--color-primary-dark); }
+
+    /* Scroll-gate footer */
+    .screen-footer {
+      position: sticky; bottom: 0; background: var(--bg-primary);
+      padding: 16px 16px 24px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: var(--space-1);
+      opacity: 0; pointer-events: none; transition: opacity 200ms var(--ease-out);
+    }
+    .screen-footer.footer-visible { opacity: 1; pointer-events: auto; }
+    .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
+
+    /* ── Responsive ── */
+    @media (min-width: 600px) {
+      body { align-items: center; padding: 32px 0; }
+      #app {
+        max-width: 480px;
+        height: calc(100dvh - 64px);
+        max-height: 900px;
+        border-radius: 22px;
+        box-shadow: 0 14px 54px rgba(0,0,0,0.16);
+      }
+      .screen-inner { padding: 32px 36px; }
+      #screen-landing .screen-inner { padding-top: 60px; }
+      .nav-chrome { padding: 18px 36px; }
+      .screen-footer { padding: 20px 36px 28px; }
     }
 
-    .situation-card:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
+    @media (min-width: 768px) {
+      #app { max-width: 640px; }
+      .screen-inner { padding: 36px 44px; gap: var(--space-4); }
+      .nav-chrome { padding: 18px 44px; }
+      .screen-footer { padding: 20px 44px 28px; }
+      h1 { font-size: 46px; }
+      .step-screen h1 { font-size: 34px; }
+      h2 { font-size: 34px; }
+      .screen-subtext { font-size: 19px; }
+      .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+      #contactpref-list { grid-template-columns: 1fr 1fr; }
     }
 
-    .situation-card.selected {
-      border-color: var(--color-primary-base);
-      border-left-width: 4px;
-      background: #EEF2FF;
+    @media (min-width: 1024px) {
+      body { padding: 40px 0; }
+      #app { max-width: 720px; max-height: 960px; }
+      .screen-inner { padding-left: 56px; padding-right: 56px; }
+      .nav-chrome, .screen-footer { padding-left: 56px; padding-right: 56px; }
+      h1 { font-size: 50px; }
     }
 
-    .card-emoji {
-      font-size: 28px;
-      line-height: 1;
-      flex-shrink: 0;
-      margin-top: 2px;
+    @media (min-width: 1440px) {
+      #app { max-width: 760px; }
     }
-
-    .card-text {
-      flex: 1;
-    }
-
-    .card-label {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--color-black);
-      display: block;
-      margin-bottom: 3px;
-    }
-
-    .card-sublabel {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      line-height: 1.4;
-    }
-
-    .card-check {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      color: var(--color-primary-base);
-      font-size: 18px;
-      font-weight: 700;
-      opacity: 0;
-      transition: opacity 150ms;
-    }
-
-    .situation-card.selected .card-check {
-      opacity: 1;
-    }
-
-    /* ── Form fields ── */
-    .field-group {
-      margin-bottom: var(--space-3);
-    }
-
-    .field-label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--color-gray-900);
-      margin-bottom: 6px;
-    }
-
-    .field-input {
-      display: block;
-      width: 100%;
-      padding: 12px var(--space-2);
-      border: 2px solid var(--color-gray-300);
-      border-radius: 6px;
-      font-family: var(--font-body);
-      font-size: 16px;
-      color: var(--color-black);
-      background: var(--color-white);
-      transition: border-color 150ms;
-      -webkit-appearance: none;
-    }
-
-    .field-input:focus {
-      outline: none;
-      border-color: var(--color-secondary-base);
-      box-shadow: 0 0 0 var(--focus-ring-width) rgba(40, 76, 202, 0.2);
-    }
-
-    .field-input::placeholder {
-      color: var(--color-gray-700);
-    }
-
-    .privacy-note {
-      font-size: 12px;
-      color: var(--color-gray-700);
-      margin-top: var(--space-2);
-      margin-bottom: var(--space-3);
-    }
-
-    /* ── Inline success ── */
-    .inline-success {
-      display: none;
-      align-items: center;
-      gap: 6px;
-      color: var(--color-success-base);
-      font-size: 14px;
-      font-weight: 500;
-      margin-top: 10px;
-      margin-bottom: 4px;
-      padding: 10px 12px;
-      background: #F0FBF0;
-      border-radius: 6px;
-      border: 1px solid #C3E6C3;
-    }
-
-    .inline-success.visible {
-      display: flex;
-    }
-
-    /* ── Program result cards ── */
-    .result-cards {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      margin-bottom: var(--space-4);
-    }
-
-    .result-card {
-      border: 1px solid var(--color-gray-300);
-      border-radius: 8px;
-      padding: var(--space-2);
-    }
-
-    .result-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-
-    .result-card-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--color-black);
-    }
-
-    .badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
-
-    .badge-green {
-      color: #065F46;
-      background: #D1FAE5;
-    }
-
-    .badge-amber {
-      color: #B45309;
-      background: #FEF3C7;
-    }
-
-    .result-card-value {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      margin-bottom: 4px;
-      font-weight: 500;
-    }
-
-    .result-card-note {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      line-height: 1.4;
-    }
-
-    /* ── Claim section ── */
-    .claim-section {
-      background: var(--color-gray-100);
-      border-radius: 8px;
-      padding: var(--space-3);
-      margin-bottom: var(--space-3);
-    }
-
-    .claim-section-header {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--color-primary-base);
-      margin-bottom: var(--space-2);
-    }
-
-    /* ── Screen 5 success ── */
-    .success-screen-body {
-      flex: 1;
-      padding: var(--space-4) var(--space-2) var(--space-3);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .success-icon {
-      margin-bottom: var(--space-3);
-    }
-
-    .reference-text {
-      font-size: 13px;
-      color: var(--color-gray-700);
-      margin-top: var(--space-2);
-      margin-bottom: var(--space-5);
-    }
-
-    /* ── Bottom action area ── */
-    .screen-actions {
-      padding: var(--space-2) var(--space-2) var(--space-1);
-      flex-shrink: 0;
-    }
-
-    /* ── Spacer ── */
-    .flex-spacer { flex: 1; }
-
   </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ═══════════════════════════════════════════
-       SCREEN 0: Landing
-  ════════════════════════════════════════════ -->
-  <div class="screen active" id="screen-0" role="main" aria-label="Welcome">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles" role="group" aria-label="Language selector">
-        <button class="lang-btn" aria-pressed="true" aria-label="English">EN</button>
-        <button class="lang-btn" aria-label="Español">ES</button>
-        <button class="lang-btn" aria-label="Chinese">中文</button>
-        <button class="lang-btn" aria-label="Bengali">BN</button>
-        <button class="lang-btn" aria-label="Haitian Creole">HT</button>
-      </div>
-    </div>
-
-    <!-- Nav chrome -->
-    <div class="nav-chrome">
-      <div class="nav-left">
-        <div class="nav-logo-block" aria-hidden="true">NYC</div>
-        <span class="nav-label">Health +<br>Affordability Corps</span>
-      </div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="screen-body">
-      <h1 class="heading-display">A neighbor helped you start — let's keep going.</h1>
-      <p class="body-text">You're close to getting help with health coverage, food, rent, and more. Takes less than 2&nbsp;minutes.</p>
-      <div class="flex-spacer"></div>
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" onclick="goTo(1)" aria-label="Get started">Let's see what you qualify for</button>
-      <span class="btn-disabled-link" aria-disabled="true">I already know what I need →</span>
-    </div>
-
-    <div style="height: var(--space-4);"></div>
-
+  <div class="supernav" role="banner">
+    <a href="#" class="nyc-logo" aria-label="NYC Health and Affordability Corps home" onclick="resetToStart();return false;">
+      <img src="./logo (5).svg" alt="NYC Health and Affordability Corps" height="20" />
+    </a>
   </div>
 
-
-  <!-- ═══════════════════════════════════════════
-       SCREEN 1: What's going on?
-  ════════════════════════════════════════════ -->
-  <div class="screen" id="screen-1" role="main" aria-label="Step 1: What's going on">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles">
-        <button class="lang-btn">EN</button>
-        <button class="lang-btn">ES</button>
-        <button class="lang-btn">中文</button>
-        <button class="lang-btn">BN</button>
-        <button class="lang-btn">HT</button>
-      </div>
-    </div>
-
-    <!-- Nav chrome -->
-    <div class="nav-chrome">
-      <button class="back-link" onclick="goBack()" aria-label="Go back to welcome screen">← Back</button>
-      <div class="nav-logo-block" aria-hidden="true">NYC</div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="screen-body">
-      <h1 class="heading-screen">What's going on?</h1>
-      <p class="subtext">Pick everything that fits. We'll check what help is available.</p>
-
-      <div class="situation-cards" role="group" aria-label="Select all situations that apply">
-
-        <button class="situation-card" id="card-housing" onclick="toggleCard('housing')" aria-pressed="false">
-          <span class="card-emoji" aria-hidden="true">🏠</span>
-          <div class="card-text">
-            <span class="card-label">I might lose my home</span>
-            <span class="card-sublabel">Eviction notice, late rent, or unstable housing</span>
-          </div>
-          <span class="card-check" aria-hidden="true">✓</span>
-        </button>
-
-        <button class="situation-card" id="card-health" onclick="toggleCard('health')" aria-pressed="false">
-          <span class="card-emoji" aria-hidden="true">🩺</span>
-          <div class="card-text">
-            <span class="card-label">I need health coverage</span>
-            <span class="card-sublabel">No insurance, renewal due, or gap in coverage</span>
-          </div>
-          <span class="card-check" aria-hidden="true">✓</span>
-        </button>
-
-        <button class="situation-card" id="card-food" onclick="toggleCard('food')" aria-pressed="false">
-          <span class="card-emoji" aria-hidden="true">🛒</span>
-          <div class="card-text">
-            <span class="card-label">Struggling with food or bills</span>
-            <span class="card-sublabel">SNAP, cash help, or monthly expenses</span>
-          </div>
-          <span class="card-check" aria-hidden="true">✓</span>
-        </button>
-
-        <button class="situation-card" id="card-medical" onclick="toggleCard('medical')" aria-pressed="false">
-          <span class="card-emoji" aria-hidden="true">🏥</span>
-          <div class="card-text">
-            <span class="card-label">Can't pay medical bills</span>
-            <span class="card-sublabel">Old bills, hospital debt, or new charges</span>
-          </div>
-          <span class="card-check" aria-hidden="true">✓</span>
-        </button>
-
-      </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" id="btn-situations" onclick="goTo(2)" disabled aria-disabled="true">These apply to me →</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-bar-wrap">
-      <p class="progress-label">Step 1 of 5</p>
-      <div class="progress-track" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" aria-label="20% complete">
-        <div class="progress-fill" style="width: 20%;"></div>
-      </div>
-    </div>
-
+  <div class="nav-chrome hidden" id="nav-chrome" role="navigation">
+    <button class="back-btn" id="back-btn" aria-label="Go back" onclick="goBack()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      Back
+    </button>
   </div>
 
+  <div class="screens-wrapper">
 
-  <!-- ═══════════════════════════════════════════
-       SCREEN 2: Save your progress
-  ════════════════════════════════════════════ -->
-  <div class="screen" id="screen-2" role="main" aria-label="Step 2: Save your progress">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles">
-        <button class="lang-btn">EN</button>
-        <button class="lang-btn">ES</button>
-        <button class="lang-btn">中文</button>
-        <button class="lang-btn">BN</button>
-        <button class="lang-btn">HT</button>
-      </div>
-    </div>
-
-    <!-- Nav chrome -->
-    <div class="nav-chrome">
-      <button class="back-link" onclick="goBack()" aria-label="Go back to previous step">← Back</button>
-      <div class="nav-logo-block" aria-hidden="true">NYC</div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="screen-body">
-      <h1 class="heading-screen">Save your spot</h1>
-      <p class="subtext">We'll text you if you need to come back. No spam.</p>
-
-      <div class="field-group">
-        <label class="field-label" for="phone-input">Your phone number</label>
-        <input
-          class="field-input"
-          type="tel"
-          id="phone-input"
-          placeholder="e.g. (212) 555-0100"
-          autocomplete="tel"
-          inputmode="tel"
-        />
-        <div class="inline-success" id="phone-success" role="status" aria-live="polite">
-          <span aria-hidden="true">✓</span>
-          <span>Got it! You can pick up right where you left off.</span>
+    <!-- Landing -->
+    <div class="screen active" id="screen-landing">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Get your bills covered</h1>
+          <p class="screen-subtext">You're close to getting help with healthcare, food, rent, and more.</p>
         </div>
-      </div>
-
-      <div class="flex-spacer"></div>
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" id="btn-save-phone" onclick="savePhone()">Save and keep going</button>
-      <button class="btn-text" onclick="goTo(3)" aria-label="Skip phone number and continue">Skip for now</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-bar-wrap">
-      <p class="progress-label">Step 2 of 5</p>
-      <div class="progress-track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="40% complete">
-        <div class="progress-fill" style="width: 40%;"></div>
-      </div>
-    </div>
-
-  </div>
-
-
-  <!-- ═══════════════════════════════════════════
-       SCREEN 3: About you
-  ════════════════════════════════════════════ -->
-  <div class="screen" id="screen-3" role="main" aria-label="Step 3: About you">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles">
-        <button class="lang-btn">EN</button>
-        <button class="lang-btn">ES</button>
-        <button class="lang-btn">中文</button>
-        <button class="lang-btn">BN</button>
-        <button class="lang-btn">HT</button>
-      </div>
-    </div>
-
-    <!-- Nav chrome -->
-    <div class="nav-chrome">
-      <button class="back-link" onclick="goBack()" aria-label="Go back to previous step">← Back</button>
-      <div class="nav-logo-block" aria-hidden="true">NYC</div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="screen-body">
-      <h1 class="heading-screen">A little about you</h1>
-      <p class="subtext">This helps us match you to real programs. We never share your info.</p>
-
-      <div class="field-group">
-        <label class="field-label" for="name-input">Full name</label>
-        <input
-          class="field-input"
-          type="text"
-          id="name-input"
-          placeholder="Your full name"
-          autocomplete="name"
-        />
-      </div>
-
-      <div class="field-group">
-        <label class="field-label" for="dob-input">Date of birth</label>
-        <input
-          class="field-input"
-          type="date"
-          id="dob-input"
-          autocomplete="bday"
-        />
-      </div>
-
-      <div class="field-group">
-        <label class="field-label" for="zip-input">NYC zip code</label>
-        <input
-          class="field-input"
-          type="text"
-          id="zip-input"
-          placeholder="e.g. 10036"
-          maxlength="5"
-          inputmode="numeric"
-          pattern="[0-9]{5}"
-          autocomplete="postal-code"
-        />
-      </div>
-
-      <p class="privacy-note">🔒 Your info is kept private and secure.</p>
-      <div class="flex-spacer"></div>
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" onclick="goTo(4)">See my results →</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-bar-wrap">
-      <p class="progress-label">Step 3 of 5</p>
-      <div class="progress-track" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="60% complete">
-        <div class="progress-fill" style="width: 60%;"></div>
-      </div>
-    </div>
-
-  </div>
-
-
-  <!-- ═══════════════════════════════════════════
-       SCREEN 4: What we found
-  ════════════════════════════════════════════ -->
-  <div class="screen" id="screen-4" role="main" aria-label="Step 4: Your results">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles">
-        <button class="lang-btn">EN</button>
-        <button class="lang-btn">ES</button>
-        <button class="lang-btn">中文</button>
-        <button class="lang-btn">BN</button>
-        <button class="lang-btn">HT</button>
-      </div>
-    </div>
-
-    <!-- Nav chrome -->
-    <div class="nav-chrome">
-      <button class="back-link" onclick="goBack()" aria-label="Go back to previous step">← Back</button>
-      <div class="nav-logo-block" aria-hidden="true">NYC</div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="screen-body">
-      <h1 class="heading-screen">Here's what we found for you</h1>
-
-      <div class="result-cards" role="list" aria-label="Matched programs">
-
-        <div class="result-card" role="listitem">
-          <div class="result-card-header">
-            <span class="result-card-title">Health coverage</span>
-            <span class="badge badge-green">Strong match</span>
-          </div>
-          <p class="result-card-value">Est. value: $2,400/yr</p>
-          <p class="result-card-note">A Health Corps worker will call you within 24 hours.</p>
-        </div>
-
-        <div class="result-card" role="listitem">
-          <div class="result-card-header">
-            <span class="result-card-title">Eviction help</span>
-            <span class="badge badge-amber">Possible match</span>
-          </div>
-          <p class="result-card-note">Tenant Support Unit will reach out to you.</p>
-        </div>
-
-        <div class="result-card" role="listitem">
-          <div class="result-card-header">
-            <span class="result-card-title">Food &amp; cash help</span>
-            <span class="badge badge-green">Strong match</span>
-          </div>
-          <p class="result-card-note">Our HRA partner will follow up with next steps.</p>
-        </div>
-
-        <div class="result-card" role="listitem">
-          <div class="result-card-header">
-            <span class="result-card-title">Medical debt</span>
-            <span class="badge badge-amber">Possible match</span>
-          </div>
-          <p class="result-card-note">A partner screener will contact you soon.</p>
-        </div>
-
-      </div>
-
-      <!-- Claim section -->
-      <div class="claim-section">
-        <p class="claim-section-header">Ready to claim these benefits?</p>
-
+        <div class="divider"></div>
         <div class="field-group">
-          <label class="field-label" for="confirm-name">Full name</label>
-          <input class="field-input" type="text" id="confirm-name" placeholder="Your full name" autocomplete="name" />
+          <label class="field-label" for="lang-input">Select language</label>
+          <select class="field-select" id="lang-input">
+            <option value="" disabled>Select language</option>
+            <option selected>English</option>
+            <option>Spanish</option>
+            <option>Korean</option>
+            <option>French</option>
+            <option>Japanese</option>
+            <option>Chinese</option>
+          </select>
         </div>
+        <div class="scroll-sentinel" id="sentinel-landing"></div>
+      </div>
+      <div class="screen-footer" id="footer-landing">
+        <button class="btn-primary" onclick="navigate('consent')">Get started</button>
+      </div>
+    </div>
 
+    <!-- Consent -->
+    <div class="screen" id="screen-consent">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h2>What you should know before we begin</h2>
+        </div>
+        <div class="consent-fade-wrap" id="consent-fade-wrap">
+          <p class="consent-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <p class="consent-body consent-more" id="consent-more">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        <button class="btn-readmore" id="readmore-btn" onclick="toggleReadMore()">Read more</button>
+        <div class="consent-check">
+          <input type="checkbox" id="consent-checkbox" onchange="checkConsent()" />
+          <label for="consent-checkbox">I have read, understand, and agree to the Privacy Policy, and Terms of Use.</label>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-consent"></div>
+      </div>
+      <div class="screen-footer" id="footer-consent">
+        <button class="btn-primary" id="btn-consent-continue" onclick="navigate('situations')" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- Situations -->
+    <div class="screen step-screen" id="screen-situations">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>How can we help?</h1>
+          <p class="screen-subtext">Select all that apply.</p>
+        </div>
+        <div class="cards-grid">
+          <button class="situation-card" id="card-housing" onclick="toggleCard('housing')" aria-pressed="false">
+            <span class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            </span>
+            <span class="card-body">
+              <span class="card-title">I'm behind on rent or might lose my home</span>
+              <span class="card-sub">Eviction prevention</span>
+            </span>
+          </button>
+          <button class="situation-card" id="card-food" onclick="toggleCard('food')" aria-pressed="false">
+            <span class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/><path d="M10 2c1 .5 2 2 2 5"/></svg>
+            </span>
+            <span class="card-body">
+              <span class="card-title">I need help with food or everyday expenses</span>
+              <span class="card-sub">SNAP (food stamps), cash assistance</span>
+            </span>
+          </button>
+          <button class="situation-card" id="card-bills" onclick="toggleCard('bills')" aria-pressed="false">
+            <span class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9a2 2 0 0 1 2-2h1a2 2 0 0 0 2-2V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-1a2 2 0 0 0-2 2v1a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H6a2 2 0 0 1-2-2z"/></svg>
+            </span>
+            <span class="card-body">
+              <span class="card-title">I have medical bills I can't pay</span>
+              <span class="card-sub">Hospital financial assistance</span>
+            </span>
+          </button>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-situations"></div>
+      </div>
+      <div class="screen-footer" id="footer-situations">
+        <button class="btn-primary" id="btn-situations-continue" onclick="navigate('save')" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- Personal info -->
+    <div class="screen step-screen" id="screen-save">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Don't miss out on personalized support.</h1>
+          <p class="screen-subtext">Tell us how to keep in touch — we'll never spam you or share your information without your consent.</p>
+        </div>
         <div class="field-group">
-          <label class="field-label" for="confirm-phone">Phone number</label>
-          <input class="field-input" type="tel" id="confirm-phone" placeholder="(212) 555-0100" autocomplete="tel" />
+          <label class="field-label" for="first-name">First name</label>
+          <input class="field-input" type="text" id="first-name" placeholder="First name" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="last-name">Last name</label>
+          <input class="field-input" type="text" id="last-name" placeholder="Last name" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="email-input">Email</label>
+          <input class="field-input" type="email" id="email-input" placeholder="you@example.com" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="phone-input">Phone number</label>
+          <input class="field-input" type="tel" id="phone-input" placeholder="(555) 555-5555" inputmode="tel" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="dob-input">When were you born?</label>
+          <input class="field-input" type="text" id="dob-input" placeholder="MM/DD/YYYY" inputmode="numeric" maxlength="10" oninput="formatDob(this)" />
+          <p class="field-help" id="dob-error" style="display:none;color:#B42318;">Please enter a valid date as MM/DD/YYYY.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="zip-input">Home zip code</label>
+          <input class="field-input" type="text" id="zip-input" placeholder="e.g. 10001" inputmode="numeric" maxlength="5" />
+        </div>
+        <div class="scroll-sentinel" id="sentinel-save"></div>
+      </div>
+      <div class="screen-footer" id="footer-save">
+        <button class="btn-primary" onclick="navigate('contactpref')">Continue</button>
+      </div>
+    </div>
+
+    <!-- Contact preference -->
+    <div class="screen step-screen" id="screen-contactpref">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>What's your preferred contact method?</h1>
+        </div>
+        <div class="cards-grid" id="contactpref-list">
+          <button class="pref-card" id="pref-text" onclick="selectContactPref(this)" aria-pressed="false">
+            <span class="pref-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            </span>
+            <span class="pref-body">
+              <span class="pref-title">Text me</span>
+              <span class="pref-value">(555) 555-5555</span>
+            </span>
+          </button>
+          <button class="pref-card" id="pref-email" onclick="selectContactPref(this)" aria-pressed="false">
+            <span class="pref-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </span>
+            <span class="pref-body">
+              <span class="pref-title">Email me</span>
+              <span class="pref-value">you@gmail.com</span>
+            </span>
+          </button>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-contactpref"></div>
+      </div>
+      <div class="screen-footer" id="footer-contactpref">
+        <button class="btn-primary" id="btn-contactpref-continue" onclick="navigate('pillars')" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- Pillar list -->
+    <div class="screen step-screen" id="screen-pillars">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Let's get started</h1>
+        </div>
+        <div class="pillar-list" id="pillar-list">
+          <div class="pillar-card">
+            <span class="pillar-info">
+              <span class="pillar-name">Eviction prevention</span>
+              <span class="pillar-progress" id="pillar-progress-housing"></span>
+            </span>
+            <button class="pillar-btn start" id="pillar-btn-housing">Get started</button>
+          </div>
+          <div class="pillar-card">
+            <span class="pillar-info">
+              <span class="pillar-name">Food assistance</span>
+              <span class="pillar-progress" id="pillar-progress-food"></span>
+            </span>
+            <button class="pillar-btn start" id="pillar-btn-food">Get started</button>
+          </div>
+          <div class="pillar-card">
+            <span class="pillar-info">
+              <span class="pillar-name">Medical debt relief</span>
+              <span class="pillar-progress" id="pillar-progress-medical"></span>
+            </span>
+            <button class="pillar-btn start" id="pillar-btn-medical">Get started</button>
+          </div>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-pillars"></div>
+      </div>
+    </div>
+
+    <!-- Eviction prevention -->
+    <div class="screen step-screen" id="screen-housing">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Tell us about your housing situation</h1>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Are you facing eviction?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+            <button class="chip" onclick="selectSingle(this)">Not sure</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Are you facing landlord harassment?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+            <button class="chip" onclick="selectSingle(this)">Not sure</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Do you have repairs in your unit that your landlord is not addressing?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+            <button class="chip" onclick="selectSingle(this)">Not sure</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Are you experiencing an illegal lockout?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+            <button class="chip" onclick="selectSingle(this)">Not sure</button>
+          </div>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-housing"></div>
+      </div>
+      <div class="screen-footer" id="footer-housing">
+        <button class="btn-primary" onclick="backToPillars()">Done</button>
+      </div>
+    </div>
+
+    <!-- Food assistance -->
+    <div class="screen step-screen" id="screen-food">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Food assistance</h1>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="food-household-size">How many people are in your household?</label>
+          <input class="field-input" type="number" id="food-household-size" placeholder="e.g. 2" min="1" max="20" />
+        </div>
+        <div class="field-group">
+          <span class="field-label">What was your total household income over the last 30 days?</span>
+          <div class="chip-grid-2">
+            <button class="chip" onclick="selectSingle(this)">$0&ndash;$1,500</button>
+            <button class="chip" onclick="selectSingle(this)">$1,501&ndash;$3,000</button>
+            <button class="chip" onclick="selectSingle(this)">$3,001&ndash;$5,000</button>
+            <button class="chip" onclick="selectSingle(this)">$5,000+</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Have you ever applied for SNAP before in NYC?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+            <button class="chip" onclick="selectSingle(this)">Not sure</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Do you have Medicaid or Medicare?</span>
+          <div class="chip-row hug-content">
+            <button class="chip" onclick="selectSingle(this)">Medicaid only</button>
+            <button class="chip" onclick="selectSingle(this)">Medicare only</button>
+            <button class="chip" onclick="selectSingle(this)">Both Medicaid and Medicare</button>
+            <button class="chip" onclick="selectSingle(this)">Neither</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Are you pregnant?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Do you have a disability?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectSingle(this)">Yes</button>
+            <button class="chip" onclick="selectSingle(this)">No</button>
+          </div>
+        </div>
+        <div class="scroll-sentinel" id="sentinel-food"></div>
+      </div>
+      <div class="screen-footer" id="footer-food">
+        <button class="btn-primary" onclick="backToPillars()">Done</button>
+      </div>
+    </div>
+
+    <!-- Medical debt relief -->
+    <div class="screen step-screen" id="screen-medicaldebt">
+      <div class="screen-inner">
+        <div class="heading-block">
+          <h1>Tell us about your medical bill</h1>
+          <p class="screen-subtext">We'll check if you qualify for your hospital's financial aid program to help pay it off.</p>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Do you have any hospital bills you are unable to pay?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectMedicalGate(this, 'hasBills', 'yes')">Yes</button>
+            <button class="chip" onclick="selectMedicalGate(this, 'hasBills', 'no')">No</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Is the hospital in NYC?</span>
+          <div class="chip-row">
+            <button class="chip" onclick="selectMedicalGate(this, 'nycHospital', 'yes')">Yes</button>
+            <button class="chip" onclick="selectMedicalGate(this, 'nycHospital', 'no')">No</button>
+          </div>
         </div>
 
-        <div class="field-group" style="margin-bottom: 0;">
-          <label class="field-label" for="email-input">Email <span style="font-weight:400;color:var(--color-gray-700);">(optional)</span></label>
-          <input class="field-input" type="email" id="email-input" placeholder="Email (optional)" autocomplete="email" />
+        <div id="medical-detail" style="display:none; flex-direction:column; gap:var(--space-3);">
+          <div class="field-group">
+            <label class="field-label" for="md-city">Where is your hospital?</label>
+            <select class="field-select" id="md-city" onchange="populateHospitals()">
+              <option value="">Select a city</option>
+              <option>Manhattan</option>
+              <option>Brooklyn</option>
+              <option>Queens</option>
+              <option>Bronx</option>
+              <option>Staten Island</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="md-hospital">Which hospital was the bill from?</label>
+            <select class="field-select" id="md-hospital" disabled>
+              <option value="">Select a city first</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <span class="field-label">What's the original bill date?</span>
+            <div class="dob-grid-2">
+              <select class="field-select" id="md-billmonth" aria-label="Bill month"><option value="">Month</option></select>
+              <select class="field-select" id="md-billyear" aria-label="Bill year"><option value="">Year</option></select>
+            </div>
+            <p class="field-help">Enter the date that you first received the bill after leaving the hospital. We'll compare it to the deadline for applying for hospital financial assistance.</p>
+            <div class="help-more" id="billdate-more" hidden>
+              <p class="field-help">Start by checking your bill from your most recent hospital visit. You'll be able to add other bills or hospitals later in the process, and the system will check then to see if you're eligible. Not all of your bills may be eligible, depending on the bill date.</p>
+            </div>
+            <button type="button" class="help-toggle" onclick="toggleHelp('billdate-more', this)">See more</button>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="md-bill">What is the total amount you owe?</label>
+            <div class="input-affix">
+              <span class="affix">$</span>
+              <input class="field-input has-affix" type="number" id="md-bill" placeholder="e.g. 6,000" min="0" inputmode="numeric" />
+            </div>
+            <p class="field-help">It's okay to estimate if you haven't received the bill yet or don't remember the exact amount.</p>
+            <div class="help-more" id="owed-more" hidden>
+              <p class="field-help">Use the amount you owe after insurance, Medicaid, health shares, or any other payers have contributed. We want to know how much you personally owe to the hospital.</p>
+            </div>
+            <button type="button" class="help-toggle" onclick="toggleHelp('owed-more', this)">See more</button>
+          </div>
+          <div class="field-group">
+            <span class="field-label">What is your insurance status?</span>
+            <div class="chip-grid-2">
+              <button class="chip" onclick="selectSingle(this)">Insured</button>
+              <button class="chip" onclick="selectSingle(this)">Uninsured</button>
+            </div>
+          </div>
         </div>
+
+        <div class="scroll-sentinel" id="sentinel-medicaldebt"></div>
       </div>
-
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" onclick="goTo(5)">Connect me with a benefits worker</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-bar-wrap">
-      <p class="progress-label">Step 4 of 5</p>
-      <div class="progress-track" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" aria-label="80% complete">
-        <div class="progress-fill" style="width: 80%;"></div>
+      <div class="screen-footer" id="footer-medicaldebt">
+        <button class="btn-primary" onclick="backToPillars()">Done</button>
       </div>
     </div>
 
-  </div>
-
-
-  <!-- ═══════════════════════════════════════════
-       SCREEN 5: You're in!
-  ════════════════════════════════════════════ -->
-  <div class="screen" id="screen-5" role="main" aria-label="Step 5: Confirmation">
-
-    <!-- Top bar -->
-    <div class="top-bar">
-      <span class="top-bar-badge">100% Free · All New Yorkers</span>
-      <div class="lang-toggles">
-        <button class="lang-btn">EN</button>
-        <button class="lang-btn">ES</button>
-        <button class="lang-btn">中文</button>
-        <button class="lang-btn">BN</button>
-        <button class="lang-btn">HT</button>
-      </div>
-    </div>
-
-    <!-- Nav chrome (no back) -->
-    <div class="nav-chrome">
-      <div class="nav-left">
-        <div class="nav-logo-block" aria-hidden="true">NYC</div>
-        <span class="nav-label">Health +<br>Affordability Corps</span>
-      </div>
-      <button class="nav-hamburger" aria-label="Open menu">☰</button>
-    </div>
-
-    <!-- Body -->
-    <div class="success-screen-body">
-      <div class="success-icon" aria-hidden="true">
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Success checkmark">
-          <circle cx="40" cy="40" r="36" stroke="#008703" stroke-width="4" fill="#F0FBF0"/>
-          <path d="M24 41L35 52L56 29" stroke="#008703" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-
-      <h1 class="heading-display" style="font-size: 28px; margin-bottom: var(--space-2);">You're in the system!</h1>
-      <p class="body-text" style="margin-bottom: var(--space-1);">A Health + Affordability Corps worker will follow up in 24 hours. Watch for a text from our team.</p>
-      <p class="reference-text">Reference #: NYC-2026-00847</p>
-
-      <div class="flex-spacer"></div>
-    </div>
-
-    <!-- Actions -->
-    <div class="screen-actions">
-      <button class="btn-primary" onclick="resetAll()" style="background: var(--color-success-base);">Done</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-bar-wrap">
-      <p class="progress-label">Step 5 of 5</p>
-      <div class="progress-track" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Complete">
-        <div class="progress-fill" style="width: 100%;"></div>
-      </div>
-    </div>
-
-  </div>
-
-</div><!-- /#app -->
+  </div><!-- /screens-wrapper -->
+</div><!-- /app -->
 
 <script>
-  // ── State ──────────────────────────────────────────────
-  var currentScreen = 0;
-  var selectedSituations = new Set();
-  var phoneSaved = false;
+  // ── State ──────────────────────────────────
+  var navHistory    = [];
+  var selectedCards = new Set();
+  var medicalGate   = {};
 
-  // ── Screen navigation ──────────────────────────────────
-  function getScreen(n) {
-    return document.getElementById('screen-' + n);
-  }
+  function getScreenEl(key)   { return document.getElementById('screen-'   + key); }
+  function getFooterEl(key)   { return document.getElementById('footer-'   + key); }
+  function getSentinelEl(key) { return document.getElementById('sentinel-' + key); }
 
-  function goTo(n) {
-    var current = getScreen(currentScreen);
-    var next    = getScreen(n);
-
-    if (n === 4) prefillScreen4();
-
-    // Clear any leftover inline styles so CSS default (translateX(100%)) applies
-    next.style.transform = '';
-    next.style.transition = '';
-    currentScreen = n;
-
-    // Adding .active triggers CSS transition: translateX(100%) → translateX(0)
-    next.classList.add('active');
-
-    current.classList.remove('active');
-    current.classList.add('exit-left');
-
-    current.addEventListener('transitionend', function handler() {
-      current.classList.remove('exit-left');
-      current.removeEventListener('transitionend', handler);
-    });
+  // ── Navigate ────────────────────────────────
+  function navigate(toKey) {
+    var current = document.querySelector('.screen.active');
+    var target  = getScreenEl(toKey);
+    if (!target || current === target) return;
+    if (current) {
+      navHistory.push(current.id.replace('screen-', ''));
+      current.classList.remove('active');
+    }
+    target.classList.add('active');
+    updateChrome(toKey);
+    target.scrollTop = 0;
+    setTimeout(function() { setupFooterGate(target, toKey); }, 50);
   }
 
   function goBack() {
-    if (currentScreen <= 0) return;
-
-    var current = getScreen(currentScreen);
-    var prev    = getScreen(currentScreen - 1);
-
-    // Position prev off-screen left instantly, then animate it in
-    prev.style.transition = 'none';
-    prev.style.transform  = 'translateX(-100%)';
-    prev.offsetHeight; // reflow — lock in -100% position
-
-    prev.style.transition = 'transform 280ms ease-out';
-    prev.style.transform  = 'translateX(0)';
-    prev.classList.add('active');
-
-    // Slide current out to the right
+    if (!navHistory.length) return;
+    var prevKey = navHistory.pop();
+    var current = document.querySelector('.screen.active');
+    var target  = getScreenEl(prevKey);
+    if (!target || current === target) return;
     current.classList.remove('active');
-    current.style.transition = 'transform 280ms ease-out';
-    current.style.transform  = 'translateX(100%)';
+    target.classList.add('active');
+    updateChrome(prevKey);
+    target.scrollTop = 0;
+    setTimeout(function() { setupFooterGate(target, prevKey); }, 50);
+  }
 
-    current.addEventListener('transitionend', function handler() {
-      current.style.transform  = '';
-      current.style.transition = '';
-      prev.style.transform     = '';
-      prev.style.transition    = '';
-      current.removeEventListener('transitionend', handler);
+  // Return to the pillar list without stacking history.
+  function backToPillars() {
+    var current = document.querySelector('.screen.active');
+    var target  = getScreenEl('pillars');
+    if (current) current.classList.remove('active');
+    target.classList.add('active');
+    // Drop the pillar-form entry so Back from the list goes to contact preference.
+    if (navHistory[navHistory.length - 1] === 'pillars') navHistory.pop();
+    updateChrome('pillars');
+    target.scrollTop = 0;
+    setTimeout(function() { setupFooterGate(target, 'pillars'); }, 50);
+  }
+
+  // ── Chrome ──────────────────────────────────
+  function updateChrome(key) {
+    document.getElementById('nav-chrome').classList.toggle('hidden', key === 'landing');
+  }
+
+  // ── Situation cards ─────────────────────────
+  function toggleCard(key) {
+    var el = document.getElementById('card-' + key);
+    if (selectedCards.has(key)) {
+      selectedCards.delete(key);
+      el.classList.remove('selected');
+      el.setAttribute('aria-pressed', 'false');
+    } else {
+      selectedCards.add(key);
+      el.classList.add('selected');
+      el.setAttribute('aria-pressed', 'true');
+    }
+    document.getElementById('btn-situations-continue').disabled = (selectedCards.size === 0);
+  }
+
+  // ── Consent ─────────────────────────────────
+  function toggleReadMore() {
+    var more = document.getElementById('consent-more');
+    var btn  = document.getElementById('readmore-btn');
+    var wrap = document.getElementById('consent-fade-wrap');
+    var open = more.classList.toggle('open');
+    wrap.classList.toggle('expanded', open);
+    btn.textContent = open ? 'Read less' : 'Read more';
+  }
+  function checkConsent() {
+    document.getElementById('btn-consent-continue').disabled = !document.getElementById('consent-checkbox').checked;
+  }
+
+  // ── DOB formatting ──────────────────────────
+  function formatDob(el) {
+    var digits = el.value.replace(/\D/g, '').slice(0, 8);
+    var out = digits.slice(0, 2);
+    if (digits.length >= 3) out += '/' + digits.slice(2, 4);
+    if (digits.length >= 5) out += '/' + digits.slice(4, 8);
+    el.value = out;
+    document.getElementById('dob-error').style.display =
+      (digits.length === 8 && !isValidDob(out)) ? '' : 'none';
+  }
+  function isValidDob(str) {
+    var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(str);
+    if (!m) return false;
+    var mo = +m[1], da = +m[2], yr = +m[3];
+    if (mo < 1 || mo > 12 || yr < 1900 || yr > 2026) return false;
+    var dim = [31, (yr % 4 === 0 && (yr % 100 !== 0 || yr % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    return da >= 1 && da <= dim[mo - 1];
+  }
+
+  // ── Contact preference ──────────────────────
+  function selectContactPref(el) {
+    document.querySelectorAll('#contactpref-list .pref-card').forEach(function(c) {
+      c.classList.remove('selected');
+      c.setAttribute('aria-pressed', 'false');
+    });
+    el.classList.add('selected');
+    el.setAttribute('aria-pressed', 'true');
+    document.getElementById('btn-contactpref-continue').disabled = false;
+  }
+
+  // ── Chips ───────────────────────────────────
+  function selectSingle(el) {
+    el.parentElement.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+    updatePillarList();
+  }
+
+  // Medical gate: the detailed bill form only shows for an unpayable NYC hospital bill.
+  function selectMedicalGate(el, group, value) {
+    selectSingle(el);
+    medicalGate[group] = value;
+    var show = medicalGate.hasBills === 'yes' && medicalGate.nycHospital === 'yes';
+    var detail = document.getElementById('medical-detail');
+    detail.style.display = show ? 'flex' : 'none';
+    updatePillarList();
+    // Re-gate the footer: revealing fields makes the screen taller.
+    setTimeout(function() { setupFooterGate(getScreenEl('medicaldebt'), 'medicaldebt'); }, 50);
+  }
+
+  function toggleHelp(id, btn) {
+    var el = document.getElementById(id);
+    if (el.hasAttribute('hidden')) { el.removeAttribute('hidden'); btn.textContent = 'See less'; }
+    else { el.setAttribute('hidden', ''); btn.textContent = 'See more'; }
+  }
+
+  // ── Pillar question counts ──────────────────
+  // Every .field-group inside a pillar screen is one question. The medical
+  // screen hides its detail fields until both gate questions are answered
+  // Yes, so the denominator there grows from 2 to 7.
+  var PILLAR_SCREENS = { housing: 'housing', food: 'food', medical: 'medicaldebt' };
+
+  // A group counts only while it's on screen — we toggle #medical-detail with
+  // an inline display, so walk up looking for that rather than using layout
+  // (the pillar screen itself is hidden whenever the list is showing).
+  function isGroupShown(group, screenEl) {
+    var el = group;
+    while (el && el !== screenEl) {
+      if (el.style && el.style.display === 'none') return false;
+      el = el.parentElement;
+    }
+    return true;
+  }
+
+  // Answered means every control in the group has a value — the bill-date
+  // group holds two selects and needs both.
+  function isGroupAnswered(group) {
+    var controls = group.querySelectorAll('input, select');
+    for (var i = 0; i < controls.length; i++) {
+      if (!controls[i].value || !String(controls[i].value).trim()) return false;
+    }
+    var chipSets = group.querySelectorAll('.chip-row, .chip-grid-2');
+    for (var j = 0; j < chipSets.length; j++) {
+      if (!chipSets[j].querySelector('.chip.selected')) return false;
+    }
+    return controls.length > 0 || chipSets.length > 0;
+  }
+
+  // Each pillar row reads from its own answers, so it stays right whether the
+  // user finished the form or wandered off half way:
+  //   nothing answered -> "Get started", no status line
+  //   part answered    -> "Continue", status shows answered/total
+  //   all answered     -> "Apply now", status reads "You're ready to apply"
+  function updatePillarList() {
+    var rows = Object.keys(PILLAR_SCREENS).map(function(pillar, i) {
+      var screenKey = PILLAR_SCREENS[pillar];
+      var screenEl  = getScreenEl(screenKey);
+      var total = 0, answered = 0;
+      screenEl.querySelectorAll('.field-group').forEach(function(group) {
+        if (!isGroupShown(group, screenEl)) return;
+        total++;
+        if (isGroupAnswered(group)) answered++;
+      });
+
+      var done   = total > 0 && answered === total;
+      var status = document.getElementById('pillar-progress-' + pillar);
+      var btn    = document.getElementById('pillar-btn-' + pillar);
+
+      status.textContent = done ? "You're ready to apply"
+                         : answered > 0 ? answered + '/' + total
+                         : '';
+
+      btn.classList.toggle('apply', done);
+      btn.classList.toggle('start', !done);
+      btn.textContent = done ? 'Apply now' : answered > 0 ? 'Continue' : 'Get started';
+      // "Apply now" is a stub for now; the other two reopen the form.
+      btn.onclick = done ? null : function() { navigate(screenKey); };
+
+      return {
+        card: btn.closest('.pillar-card'),
+        rank: done ? 2 : answered > 0 ? 1 : 0,
+        order: i
+      };
     });
 
-    currentScreen = currentScreen - 1;
+    // Surface the work left to do: untouched first, then in progress, with the
+    // finished programs settling to the bottom. Ties keep their listed order.
+    var list = document.getElementById('pillar-list');
+    rows.sort(function(a, b) { return a.rank - b.rank || a.order - b.order; })
+        .forEach(function(row) { list.appendChild(row.card); });
   }
 
-  // ── Situation cards ────────────────────────────────────
-  function toggleCard(id) {
-    var card = document.getElementById('card-' + id);
-    if (selectedSituations.has(id)) {
-      selectedSituations.delete(id);
-      card.classList.remove('selected');
-      card.setAttribute('aria-pressed', 'false');
-    } else {
-      selectedSituations.add(id);
-      card.classList.add('selected');
-      card.setAttribute('aria-pressed', 'true');
+  // ── Medical debt: hospitals by city + bill-date dropdowns ──
+  var HOSPITALS_BY_CITY = {
+    'Manhattan':     ['Mount Sinai Hospital', 'NewYork-Presbyterian Hospital', 'Columbia University Medical Center', 'NYU Langone Medical Center', 'Harlem Hospital Center'],
+    'Brooklyn':      ['The Brooklyn Hospital Center', 'Maimonides Medical Center', 'Coney Island Hospital', 'Kings County Hospital', 'NYC Health + Hospitals / Woodhull'],
+    'Queens':        ['Flushing Hospital Medical Center', 'Jamaica Hospital Medical Center', 'Long Island Jewish Medical Center', 'Forest Hills Hospital', 'NYC Health + Hospitals / Elmhurst'],
+    'Bronx':         ['Montefiore Medical Center', 'Jacobi Medical Center', 'BronxCare Health System', 'NYC Health + Hospitals / Lincoln', 'SBH Health System'],
+    'Staten Island': ['Staten Island University Hospital', 'Richmond University Medical Center', 'NYC Health + Hospitals / Sea View']
+  };
+  function populateHospitals() {
+    var city = document.getElementById('md-city').value;
+    var sel  = document.getElementById('md-hospital');
+    var list = HOSPITALS_BY_CITY[city] || [];
+    if (!city) {
+      sel.innerHTML = '<option value="">Select a city first</option>';
+      sel.disabled = true;
+      return;
     }
-    updateSituationsButton();
+    var opts = '<option value="">Select a hospital</option>';
+    list.forEach(function(h) { opts += '<option>' + h + '</option>'; });
+    opts += '<option>Other / not listed</option>';
+    sel.innerHTML = opts;
+    sel.disabled = false;
   }
-
-  function updateSituationsButton() {
-    var btn = document.getElementById('btn-situations');
-    if (selectedSituations.size > 0) {
-      btn.disabled = false;
-      btn.removeAttribute('aria-disabled');
-    } else {
-      btn.disabled = true;
-      btn.setAttribute('aria-disabled', 'true');
+  function populateBillDate() {
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var mSel = document.getElementById('md-billmonth');
+    var ySel = document.getElementById('md-billyear');
+    if (mSel.options.length <= 1) {
+      months.forEach(function(m) { mSel.insertAdjacentHTML('beforeend', '<option>' + m + '</option>'); });
+    }
+    if (ySel.options.length <= 1) {
+      [2026, 2025, 2024, 2023, 2022].forEach(function(y) { ySel.insertAdjacentHTML('beforeend', '<option>' + y + '</option>'); });
     }
   }
 
-  // ── Phone save ─────────────────────────────────────────
-  function savePhone() {
-    var phoneInput  = document.getElementById('phone-input');
-    var successEl   = document.getElementById('phone-success');
-    var btn         = document.getElementById('btn-save-phone');
+  // ── Reset ───────────────────────────────────
+  function resetToStart() {
+    selectedCards.clear();
+    medicalGate = {};
+    navHistory  = [];
 
-    successEl.classList.add('visible');
-    btn.textContent = 'Keep going →';
-    phoneSaved = true;
-
-    // Navigate after short delay so user sees success message
-    setTimeout(function() { goTo(3); }, 900);
-  }
-
-  // ── Prefill Screen 4 ───────────────────────────────────
-  function prefillScreen4() {
-    var nameVal  = document.getElementById('name-input').value.trim();
-    var phoneVal = document.getElementById('phone-input').value.trim();
-
-    var confirmName  = document.getElementById('confirm-name');
-    var confirmPhone = document.getElementById('confirm-phone');
-
-    if (nameVal)  confirmName.value  = nameVal;
-    if (phoneVal) confirmPhone.value = phoneVal;
-  }
-
-  // ── Reset all ──────────────────────────────────────────
-  function resetAll() {
-    // Clear selections
-    selectedSituations.forEach(function(id) {
-      var card = document.getElementById('card-' + id);
-      if (card) {
-        card.classList.remove('selected');
-        card.setAttribute('aria-pressed', 'false');
-      }
+    document.querySelectorAll('.situation-card').forEach(function(c) {
+      c.classList.remove('selected');
+      c.setAttribute('aria-pressed', 'false');
     });
-    selectedSituations.clear();
-    updateSituationsButton();
+    document.querySelectorAll('.pref-card').forEach(function(c) {
+      c.classList.remove('selected');
+      c.setAttribute('aria-pressed', 'false');
+    });
+    document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
 
-    // Clear inputs
-    ['phone-input','name-input','dob-input','zip-input','confirm-name','confirm-phone','email-input'].forEach(function(id) {
+    ['first-name','last-name','email-input','phone-input','dob-input','zip-input',
+     'food-household-size','md-city','md-bill','md-billmonth','md-billyear'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el) el.value = '';
     });
-
-    // Reset phone success UI
-    var successEl = document.getElementById('phone-success');
-    if (successEl) successEl.classList.remove('visible');
-    var saveBtn = document.getElementById('btn-save-phone');
-    if (saveBtn) saveBtn.textContent = 'Save and keep going';
-
-    phoneSaved = false;
-
-    // Slide back to screen 0
-    var current = getScreen(currentScreen);
-    var home    = getScreen(0);
-
-    home.style.transition = 'none';
-    home.style.transform  = 'translateX(-100%)';
-    home.offsetHeight; // reflow
-
-    home.style.transition = 'transform 280ms ease-out';
-    home.style.transform  = 'translateX(0)';
-    home.classList.add('active');
-
-    current.classList.remove('active');
-    current.style.transition = 'transform 280ms ease-out';
-    current.style.transform  = 'translateX(100%)';
-
-    current.addEventListener('transitionend', function handler() {
-      current.style.transform  = '';
-      current.style.transition = '';
-      home.style.transform     = '';
-      home.style.transition    = '';
-      current.removeEventListener('transitionend', handler);
+    populateHospitals();
+    document.getElementById('dob-error').style.display = 'none';
+    document.getElementById('medical-detail').style.display = 'none';
+    ['billdate-more','owed-more'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.setAttribute('hidden', '');
     });
+    document.querySelectorAll('.help-toggle').forEach(function(b) { b.textContent = 'See more'; });
 
-    currentScreen = 0;
+    // The pillar rows rebuild themselves from the (now cleared) answers below.
+    document.getElementById('btn-situations-continue').disabled = true;
+    document.getElementById('btn-contactpref-continue').disabled = true;
+    document.getElementById('lang-input').value = 'English';
+    document.getElementById('consent-checkbox').checked = false;
+    document.getElementById('btn-consent-continue').disabled = true;
+    document.getElementById('consent-more').classList.remove('open');
+    document.getElementById('consent-fade-wrap').classList.remove('expanded');
+    document.getElementById('readmore-btn').textContent = 'Read more';
+    document.querySelectorAll('.screen-footer').forEach(function(f) { f.classList.remove('footer-visible'); });
+    updatePillarList();
+
+    var cur     = document.querySelector('.screen.active');
+    var landing = getScreenEl('landing');
+    if (cur && cur !== landing) cur.classList.remove('active');
+    landing.classList.add('active');
+    updateChrome('landing');
+    landing.scrollTop = 0;
+    setTimeout(function() { setupFooterGate(landing, 'landing'); }, 50);
   }
+
+  // ── Scroll-gate footer ──────────────────────
+  function setupFooterGate(screenEl, key) {
+    var sentinel = getSentinelEl(key);
+    var footer   = getFooterEl(key);
+    if (!sentinel || !footer) return;
+    var sr = sentinel.getBoundingClientRect();
+    var pr = screenEl.getBoundingClientRect();
+    if (sr.top <= pr.bottom + 10) { footer.classList.add('footer-visible'); return; }
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { footer.classList.add('footer-visible'); obs.disconnect(); }
+      });
+    }, { root: screenEl, threshold: 0.1 });
+    obs.observe(sentinel);
+  }
+
+  // ── Init ────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    populateBillDate();
+    updateChrome('landing');
+    // Chip clicks call updatePillarList directly; this covers the typed and
+    // selected fields on the pillar screens.
+    Object.keys(PILLAR_SCREENS).forEach(function(pillar) {
+      var screenEl = getScreenEl(PILLAR_SCREENS[pillar]);
+      screenEl.addEventListener('input', updatePillarList);
+      screenEl.addEventListener('change', updatePillarList);
+    });
+    updatePillarList();
+    setTimeout(function() { setupFooterGate(getScreenEl('landing'), 'landing'); }, 100);
+  });
 </script>
 </body>
 </html>
