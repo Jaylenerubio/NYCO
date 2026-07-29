@@ -840,7 +840,7 @@
   //   part answered    -> "Continue", status shows answered/total
   //   all answered     -> "Apply now", status reads "You're ready to apply"
   function updatePillarList() {
-    Object.keys(PILLAR_SCREENS).forEach(function(pillar) {
+    var rows = Object.keys(PILLAR_SCREENS).map(function(pillar, i) {
       var screenKey = PILLAR_SCREENS[pillar];
       var screenEl  = getScreenEl(screenKey);
       var total = 0, answered = 0;
@@ -863,7 +863,19 @@
       btn.textContent = done ? 'Apply now' : answered > 0 ? 'Continue' : 'Get started';
       // "Apply now" is a stub for now; the other two reopen the form.
       btn.onclick = done ? null : function() { navigate(screenKey); };
+
+      return {
+        card: btn.closest('.pillar-card'),
+        rank: done ? 2 : answered > 0 ? 1 : 0,
+        order: i
+      };
     });
+
+    // Surface the work left to do: untouched first, then in progress, with the
+    // finished programs settling to the bottom. Ties keep their listed order.
+    var list = document.getElementById('pillar-list');
+    rows.sort(function(a, b) { return a.rank - b.rank || a.order - b.order; })
+        .forEach(function(row) { list.appendChild(row.card); });
   }
 
   // ── Medical debt: hospitals by city + bill-date dropdowns ──
