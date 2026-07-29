@@ -208,11 +208,8 @@
     }
     .pillar-btn.start { background: var(--color-white); border: 1px solid var(--border-default); color: var(--color-black); }
     .pillar-btn.start:hover { border-color: var(--color-secondary-base); }
-    .pillar-btn.completed {
-      background: #DCEFD2; border: 1px solid #DCEFD2; color: var(--color-success-text);
-      cursor: default; display: inline-flex; align-items: center; gap: 6px;
-    }
-    .pillar-btn.completed svg { width: 16px; height: 16px; }
+    .pillar-btn.apply { background: var(--color-primary-base); border: 1px solid var(--color-primary-base); color: var(--color-white); }
+    .pillar-btn.apply:hover { background: var(--color-primary-dark); border-color: var(--color-primary-dark); }
 
     /* Scroll-gate footer */
     .screen-footer {
@@ -453,7 +450,6 @@
       <div class="screen-inner">
         <div class="heading-block">
           <h1>Let's get started</h1>
-          <p class="screen-subtext">Select a program below. Click "Start" to answer screening questions.</p>
         </div>
         <div class="pillar-list" id="pillar-list">
           <div class="pillar-card">
@@ -461,21 +457,21 @@
               <span class="pillar-name">Eviction prevention</span>
               <span class="pillar-progress" id="pillar-progress-housing"></span>
             </span>
-            <button class="pillar-btn start" id="pillar-btn-housing" onclick="navigate('housing')">Start</button>
+            <button class="pillar-btn start" id="pillar-btn-housing">Get started</button>
           </div>
           <div class="pillar-card">
             <span class="pillar-info">
               <span class="pillar-name">Food assistance</span>
               <span class="pillar-progress" id="pillar-progress-food"></span>
             </span>
-            <button class="pillar-btn start" id="pillar-btn-food" onclick="navigate('food')">Start</button>
+            <button class="pillar-btn start" id="pillar-btn-food">Get started</button>
           </div>
           <div class="pillar-card">
             <span class="pillar-info">
               <span class="pillar-name">Medical debt relief</span>
               <span class="pillar-progress" id="pillar-progress-medical"></span>
             </span>
-            <button class="pillar-btn start" id="pillar-btn-medical" onclick="navigate('medicaldebt')">Start</button>
+            <button class="pillar-btn start" id="pillar-btn-medical">Get started</button>
           </div>
         </div>
         <div class="scroll-sentinel" id="sentinel-pillars"></div>
@@ -523,7 +519,7 @@
         <div class="scroll-sentinel" id="sentinel-housing"></div>
       </div>
       <div class="screen-footer" id="footer-housing">
-        <button class="btn-primary" onclick="completePillar('housing')">Done</button>
+        <button class="btn-primary" onclick="backToPillars()">Done</button>
       </div>
     </div>
 
@@ -580,7 +576,7 @@
         <div class="scroll-sentinel" id="sentinel-food"></div>
       </div>
       <div class="screen-footer" id="footer-food">
-        <button class="btn-primary" onclick="completePillar('food')">Done</button>
+        <button class="btn-primary" onclick="backToPillars()">Done</button>
       </div>
     </div>
 
@@ -660,7 +656,7 @@
         <div class="scroll-sentinel" id="sentinel-medicaldebt"></div>
       </div>
       <div class="screen-footer" id="footer-medicaldebt">
-        <button class="btn-primary" onclick="completePillar('medical')">Done</button>
+        <button class="btn-primary" onclick="backToPillars()">Done</button>
       </div>
     </div>
 
@@ -669,16 +665,9 @@
 
 <script>
   // ── State ──────────────────────────────────
-  var navHistory       = [];
-  var selectedCards    = new Set();
-  var completedPillars = new Set();
-  var medicalGate      = {};
-
-  var PILLAR_LABELS = {
-    housing: 'Eviction prevention',
-    food:    'Food assistance',
-    medical: 'Medical debt relief'
-  };
+  var navHistory    = [];
+  var selectedCards = new Set();
+  var medicalGate   = {};
 
   function getScreenEl(key)   { return document.getElementById('screen-'   + key); }
   function getFooterEl(key)   { return document.getElementById('footer-'   + key); }
@@ -792,7 +781,7 @@
   function selectSingle(el) {
     el.parentElement.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
     el.classList.add('selected');
-    updatePillarCounts();
+    updatePillarList();
   }
 
   // Medical gate: the detailed bill form only shows for an unpayable NYC hospital bill.
@@ -802,7 +791,7 @@
     var show = medicalGate.hasBills === 'yes' && medicalGate.nycHospital === 'yes';
     var detail = document.getElementById('medical-detail');
     detail.style.display = show ? 'flex' : 'none';
-    updatePillarCounts();
+    updatePillarList();
     // Re-gate the footer: revealing fields makes the screen taller.
     setTimeout(function() { setupFooterGate(getScreenEl('medicaldebt'), 'medicaldebt'); }, 50);
   }
@@ -845,28 +834,36 @@
     return controls.length > 0 || chipSets.length > 0;
   }
 
-  function updatePillarCounts() {
+  // Each pillar row reads from its own answers, so it stays right whether the
+  // user finished the form or wandered off half way:
+  //   nothing answered -> "Get started", no status line
+  //   part answered    -> "Continue", status shows answered/total
+  //   all answered     -> "Apply now", status reads "You're ready to apply"
+  function updatePillarList() {
     Object.keys(PILLAR_SCREENS).forEach(function(pillar) {
-      var screenEl = getScreenEl(PILLAR_SCREENS[pillar]);
+      var screenKey = PILLAR_SCREENS[pillar];
+      var screenEl  = getScreenEl(screenKey);
       var total = 0, answered = 0;
       screenEl.querySelectorAll('.field-group').forEach(function(group) {
         if (!isGroupShown(group, screenEl)) return;
         total++;
         if (isGroupAnswered(group)) answered++;
       });
-      document.getElementById('pillar-progress-' + pillar).textContent = answered + '/' + total;
-    });
-  }
 
-  // ── Pillars ─────────────────────────────────
-  function completePillar(pillar) {
-    completedPillars.add(pillar);
-    var btn = document.getElementById('pillar-btn-' + pillar);
-    btn.classList.remove('start');
-    btn.classList.add('completed');
-    btn.onclick = null;
-    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Completed';
-    backToPillars();
+      var done   = total > 0 && answered === total;
+      var status = document.getElementById('pillar-progress-' + pillar);
+      var btn    = document.getElementById('pillar-btn-' + pillar);
+
+      status.textContent = done ? "You're ready to apply"
+                         : answered > 0 ? answered + '/' + total
+                         : '';
+
+      btn.classList.toggle('apply', done);
+      btn.classList.toggle('start', !done);
+      btn.textContent = done ? 'Apply now' : answered > 0 ? 'Continue' : 'Get started';
+      // "Apply now" is a stub for now; the other two reopen the form.
+      btn.onclick = done ? null : function() { navigate(screenKey); };
+    });
   }
 
   // ── Medical debt: hospitals by city + bill-date dropdowns ──
@@ -907,7 +904,6 @@
   // ── Reset ───────────────────────────────────
   function resetToStart() {
     selectedCards.clear();
-    completedPillars.clear();
     medicalGate = {};
     navHistory  = [];
 
@@ -935,16 +931,7 @@
     });
     document.querySelectorAll('.help-toggle').forEach(function(b) { b.textContent = 'See more'; });
 
-    Object.keys(PILLAR_LABELS).forEach(function(p) {
-      var btn = document.getElementById('pillar-btn-' + p);
-      btn.classList.remove('completed');
-      btn.classList.add('start');
-      btn.textContent = 'Start';
-      btn.onclick = (function(key) {
-        return function() { navigate(key === 'medical' ? 'medicaldebt' : key); };
-      })(p);
-    });
-
+    // The pillar rows rebuild themselves from the (now cleared) answers below.
     document.getElementById('btn-situations-continue').disabled = true;
     document.getElementById('btn-contactpref-continue').disabled = true;
     document.getElementById('lang-input').value = 'English';
@@ -954,7 +941,7 @@
     document.getElementById('consent-fade-wrap').classList.remove('expanded');
     document.getElementById('readmore-btn').textContent = 'Read more';
     document.querySelectorAll('.screen-footer').forEach(function(f) { f.classList.remove('footer-visible'); });
-    updatePillarCounts();
+    updatePillarList();
 
     var cur     = document.querySelector('.screen.active');
     var landing = getScreenEl('landing');
@@ -985,14 +972,14 @@
   document.addEventListener('DOMContentLoaded', function() {
     populateBillDate();
     updateChrome('landing');
-    // Chip clicks call updatePillarCounts directly; this covers the typed and
+    // Chip clicks call updatePillarList directly; this covers the typed and
     // selected fields on the pillar screens.
     Object.keys(PILLAR_SCREENS).forEach(function(pillar) {
       var screenEl = getScreenEl(PILLAR_SCREENS[pillar]);
-      screenEl.addEventListener('input', updatePillarCounts);
-      screenEl.addEventListener('change', updatePillarCounts);
+      screenEl.addEventListener('input', updatePillarList);
+      screenEl.addEventListener('change', updatePillarList);
     });
-    updatePillarCounts();
+    updatePillarList();
     setTimeout(function() { setupFooterGate(getScreenEl('landing'), 'landing'); }, 100);
   });
 </script>
